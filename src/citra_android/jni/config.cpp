@@ -65,7 +65,7 @@ void Config::ReadValues() {
     for (int i = 0; i < Settings::NativeButton::NumButtons; ++i) {
         std::string default_param = InputManager::GenerateButtonParamPackage(default_buttons[i]);
         Settings::values.current_input_profile.buttons[i] =
-            sdl2_config->Get("Controls", Settings::NativeButton::mapping[i], default_param);
+            sdl2_config->GetString("Controls", Settings::NativeButton::mapping[i], default_param);
         if (Settings::values.current_input_profile.buttons[i].empty())
             Settings::values.current_input_profile.buttons[i] = default_param;
     }
@@ -73,20 +73,21 @@ void Config::ReadValues() {
     for (int i = 0; i < Settings::NativeAnalog::NumAnalogs; ++i) {
         std::string default_param = InputManager::GenerateAnalogParamPackage(default_analogs[i]);
         Settings::values.current_input_profile.analogs[i] =
-            sdl2_config->Get("Controls", Settings::NativeAnalog::mapping[i], default_param);
+            sdl2_config->GetString("Controls", Settings::NativeAnalog::mapping[i], default_param);
         if (Settings::values.current_input_profile.analogs[i].empty())
             Settings::values.current_input_profile.analogs[i] = default_param;
     }
 
-    Settings::values.current_input_profile.motion_device =
-        sdl2_config->Get("Controls", "motion_device",
-                         "engine:motion_emu,update_period:100,sensitivity:0.01,tilt_clamp:90.0");
+    Settings::values.current_input_profile.motion_device = sdl2_config->GetString(
+        "Controls", "motion_device",
+        "engine:motion_emu,update_period:100,sensitivity:0.01,tilt_clamp:90.0");
     Settings::values.current_input_profile.touch_device =
-        sdl2_config->Get("Controls", "touch_device", "engine:emu_window");
-    Settings::values.current_input_profile.udp_input_address =
-        sdl2_config->Get("Controls", "udp_input_address", InputCommon::CemuhookUDP::DEFAULT_ADDR);
-    Settings::values.current_input_profile.udp_input_port = static_cast<u16>(sdl2_config->GetInteger(
-        "Controls", "udp_input_port", InputCommon::CemuhookUDP::DEFAULT_PORT));
+        sdl2_config->GetString("Controls", "touch_device", "engine:emu_window");
+    Settings::values.current_input_profile.udp_input_address = sdl2_config->GetString(
+        "Controls", "udp_input_address", InputCommon::CemuhookUDP::DEFAULT_ADDR);
+    Settings::values.current_input_profile.udp_input_port =
+        static_cast<u16>(sdl2_config->GetInteger("Controls", "udp_input_port",
+                                                 InputCommon::CemuhookUDP::DEFAULT_PORT));
 
     // Core
     Settings::values.use_cpu_jit = sdl2_config->GetBoolean("Core", "use_cpu_jit", true);
@@ -102,6 +103,7 @@ void Config::ReadValues() {
     Settings::values.use_shader_jit = sdl2_config->GetBoolean("Renderer", "use_shader_jit", true);
     Settings::values.resolution_factor =
         static_cast<u16>(sdl2_config->GetInteger("Renderer", "resolution_factor", 1));
+    Settings::values.vsync_enabled = sdl2_config->GetBoolean("Renderer", "vsync_enabled", false);
     Settings::values.use_frame_limit = sdl2_config->GetBoolean("Renderer", "use_frame_limit", true);
     Settings::values.frame_limit =
         static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
@@ -110,9 +112,10 @@ void Config::ReadValues() {
     Settings::values.factor_3d =
         static_cast<u8>(sdl2_config->GetInteger("Renderer", "factor_3d", 0));
 
-    Settings::values.bg_red = (float)sdl2_config->GetReal("Renderer", "bg_red", 0.0);
-    Settings::values.bg_green = (float)sdl2_config->GetReal("Renderer", "bg_green", 0.0);
-    Settings::values.bg_blue = (float)sdl2_config->GetReal("Renderer", "bg_blue", 0.0);
+    Settings::values.bg_red = static_cast<float>(sdl2_config->GetReal("Renderer", "bg_red", 0.0));
+    Settings::values.bg_green =
+        static_cast<float>(sdl2_config->GetReal("Renderer", "bg_green", 0.0));
+    Settings::values.bg_blue = static_cast<float>(sdl2_config->GetReal("Renderer", "bg_blue", 0.0));
 
     // Layout
     Settings::values.layout_option =
@@ -137,11 +140,18 @@ void Config::ReadValues() {
         static_cast<u16>(sdl2_config->GetInteger("Layout", "custom_bottom_bottom", 480));
 
     // Audio
-    Settings::values.sink_id = sdl2_config->Get("Audio", "output_engine", "auto");
+    Settings::values.enable_dsp_lle = sdl2_config->GetBoolean("Audio", "enable_dsp_lle", false);
+    Settings::values.enable_dsp_lle_multithread =
+        sdl2_config->GetBoolean("Audio", "enable_dsp_lle_multithread", false);
+    Settings::values.sink_id = sdl2_config->GetString("Audio", "output_engine", "auto");
     Settings::values.enable_audio_stretching =
         sdl2_config->GetBoolean("Audio", "enable_audio_stretching", true);
-    Settings::values.audio_device_id = sdl2_config->Get("Audio", "output_device", "auto");
-    Settings::values.volume = sdl2_config->GetReal("Audio", "volume", 1);
+    Settings::values.audio_device_id = sdl2_config->GetString("Audio", "output_device", "auto");
+    Settings::values.volume = static_cast<float>(sdl2_config->GetReal("Audio", "volume", 1));
+    Settings::values.mic_input_device =
+        sdl2_config->GetString("Audio", "mic_input_device", "Default");
+    Settings::values.mic_input_type =
+        static_cast<Settings::MicInputType>(sdl2_config->GetInteger("Audio", "mic_input_type", 0));
 
     // Data Storage
     Settings::values.use_virtual_sd =
@@ -152,7 +162,7 @@ void Config::ReadValues() {
     Settings::values.region_value =
         sdl2_config->GetInteger("System", "region_value", Settings::REGION_VALUE_AUTO_SELECT);
     Settings::values.init_clock =
-        static_cast<Settings::InitClock>(sdl2_config->GetInteger("System", "init_clock", 0));
+        static_cast<Settings::InitClock>(sdl2_config->GetInteger("System", "init_clock", 1));
     {
         std::tm t;
         t.tm_sec = 1;
@@ -163,7 +173,7 @@ void Config::ReadValues() {
         t.tm_year = 100;
         t.tm_isdst = 0;
         std::istringstream string_stream(
-            sdl2_config->Get("System", "init_time", "2000-01-01 00:00:01"));
+            sdl2_config->GetString("System", "init_time", "2000-01-01 00:00:01"));
         string_stream >> std::get_time(&t, "%Y-%m-%d %H:%M:%S");
         if (string_stream.fail()) {
             LOG_ERROR(Config, "Failed To parse init_time. Using 2000-01-01 00:00:01");
@@ -177,26 +187,26 @@ void Config::ReadValues() {
     // Camera
     using namespace Service::CAM;
     Settings::values.camera_name[OuterRightCamera] =
-        sdl2_config->Get("Camera", "camera_outer_right_name", "blank");
+        sdl2_config->GetString("Camera", "camera_outer_right_name", "blank");
     Settings::values.camera_config[OuterRightCamera] =
-        sdl2_config->Get("Camera", "camera_outer_right_config", "");
+        sdl2_config->GetString("Camera", "camera_outer_right_config", "");
     Settings::values.camera_flip[OuterRightCamera] =
         sdl2_config->GetInteger("Camera", "camera_outer_right_flip", 0);
     Settings::values.camera_name[InnerCamera] =
-        sdl2_config->Get("Camera", "camera_inner_name", "blank");
+        sdl2_config->GetString("Camera", "camera_inner_name", "blank");
     Settings::values.camera_config[InnerCamera] =
-        sdl2_config->Get("Camera", "camera_inner_config", "");
+        sdl2_config->GetString("Camera", "camera_inner_config", "");
     Settings::values.camera_flip[InnerCamera] =
         sdl2_config->GetInteger("Camera", "camera_inner_flip", 0);
     Settings::values.camera_name[OuterLeftCamera] =
-        sdl2_config->Get("Camera", "camera_outer_left_name", "blank");
+        sdl2_config->GetString("Camera", "camera_outer_left_name", "blank");
     Settings::values.camera_config[OuterLeftCamera] =
-        sdl2_config->Get("Camera", "camera_outer_left_config", "");
+        sdl2_config->GetString("Camera", "camera_outer_left_config", "");
     Settings::values.camera_flip[OuterLeftCamera] =
         sdl2_config->GetInteger("Camera", "camera_outer_left_flip", 0);
 
     // Miscellaneous
-    Settings::values.log_filter = sdl2_config->Get("Miscellaneous", "log_filter", "*:Info");
+    Settings::values.log_filter = sdl2_config->GetString("Miscellaneous", "log_filter", "*:Info");
 
     // Debugging
     Settings::values.use_gdbstub = sdl2_config->GetBoolean("Debugging", "use_gdbstub", false);
@@ -210,9 +220,9 @@ void Config::ReadValues() {
 
     // Web Service
     Settings::values.enable_telemetry =
-            sdl2_config->GetBoolean("WebService", "enable_telemetry", true);
+        sdl2_config->GetBoolean("WebService", "enable_telemetry", true);
     Settings::values.web_api_url =
-            sdl2_config->GetString("WebService", "web_api_url", "https://api.citra-emu.org");
+        sdl2_config->GetString("WebService", "web_api_url", "https://api.citra-emu.org");
     Settings::values.citra_username = sdl2_config->GetString("WebService", "citra_username", "");
     Settings::values.citra_token = sdl2_config->GetString("WebService", "citra_token", "");
 }
