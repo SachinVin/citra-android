@@ -12,6 +12,7 @@
 #include <android/native_window_jni.h>
 #include <jni.h>
 
+#include "../../common/file_util.h"
 #include "citra_android/jni/button_manager.h"
 #include "citra_android/jni/config.h"
 #include "citra_android/jni/emu_window/emu_window.h"
@@ -34,7 +35,8 @@
 #include "core/movie.h"
 #include "core/settings.h"
 #include "network/network.h"
-#include "../../common/file_util.h"
+#include "video_core/renderer_base.h"
+#include "video_core/video_core.h"
 
 JavaVM* g_java_vm;
 
@@ -66,8 +68,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
     Log::AddBackend(std::make_unique<Log::ColorConsoleBackend>());
     FileUtil::CreateFullPath(FileUtil::GetUserPath(FileUtil::UserPath::LogDir));
-    Log::AddBackend(
-        std::make_unique<Log::FileBackend>(FileUtil::GetUserPath(FileUtil::UserPath::LogDir) + LOG_FILE));
+    Log::AddBackend(std::make_unique<Log::FileBackend>(
+        FileUtil::GetUserPath(FileUtil::UserPath::LogDir) + LOG_FILE));
 
     LOG_INFO(Frontend, "Logging backend initialised");
 
@@ -191,6 +193,24 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
                                                 "(Ljava/lang/String;Ljava/lang/String;Z)Z");
 }
 
+void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj) {
+    if (Settings::values.layout_option == Settings::LayoutOption::Default) {
+        Settings::values.layout_option = Settings::LayoutOption::SingleScreen;
+    } else if (Settings::values.layout_option == Settings::LayoutOption::SingleScreen) {
+        Settings::values.layout_option = Settings::LayoutOption::LargeScreen;
+    } else if (Settings::values.layout_option == Settings::LayoutOption::LargeScreen) {
+        Settings::values.layout_option = Settings::LayoutOption::SideScreen;
+    } else {
+        Settings::values.layout_option = Settings::LayoutOption::Default;
+    }
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout();
+}
+
+void Java_org_citra_citra_1android_NativeLibrary_SwapScreens(JNIEnv* env, jobject obj) {
+    Settings::values.swap_screen = !Settings::values.swap_screen;
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout();
+}
+
 void Java_org_citra_citra_1android_NativeLibrary_SetUserDirectory(JNIEnv* env, jobject obj,
                                                                   jstring jDirectory) {
     FileUtil::SetCurrentDir(GetJString(env, jDirectory));
@@ -242,7 +262,7 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadAxisEvent(JNIEnv* 
                                                                         jint axis_id,
                                                                         jfloat axis_val) {
     return static_cast<jboolean>(
-            InputManager::ButtonHandler()->AnalogButtonEvent(axis_id,axis_val));
+        InputManager::ButtonHandler()->AnalogButtonEvent(axis_id, axis_val));
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_onTouchEvent(JNIEnv* env, jobject obj, jfloat x,
@@ -448,7 +468,6 @@ jdoubleArray Java_org_citra_citra_1android_NativeLibrary_GetPerfStats(JNIEnv* en
         // Converting the structure into an array makes it easier to pass it to the frontend
         double stats[4] = {results.system_fps, results.game_fps, results.frametime,
                            results.emulation_speed};
-
 
         env->SetDoubleArrayRegion(jstats, 0, 4, stats);
     }
