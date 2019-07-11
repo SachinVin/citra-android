@@ -439,25 +439,6 @@ void Java_org_citra_citra_1android_NativeLibrary_InitGameIni(JNIEnv* env, jclass
     env->ReleaseStringUTFChars(gameID_, gameID);
 }
 
-void Java_org_citra_citra_1android_NativeLibrary_ChangeDisc(JNIEnv* env, jclass type,
-                                                            jstring path_) {
-    const char* path = env->GetStringUTFChars(path_, 0);
-
-    // TODO
-
-    env->ReleaseStringUTFChars(path_, path);
-}
-
-void Java_org_citra_citra_1android_NativeLibrary_RefreshWiimotes(JNIEnv* env, jclass type) {
-
-    // TODO
-}
-
-jint Java_org_citra_citra_1android_NativeLibrary_GetPlatform(JNIEnv* env, jclass type,
-                                                             jstring filename_) {
-    return 0;
-}
-
 jdoubleArray Java_org_citra_citra_1android_NativeLibrary_GetPerfStats(JNIEnv* env, jclass type) {
     auto& core = Core::System::GetInstance();
     jdoubleArray jstats = env->NewDoubleArray(4);
