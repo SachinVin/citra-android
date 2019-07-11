@@ -169,21 +169,6 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetUserSettin
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetUserSetting(
     JNIEnv* env, jclass type, jstring gameID_, jstring Section_, jstring Key_);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_ChangeDisc(JNIEnv* env,
-                                                                              jclass type,
-                                                                              jstring path_);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_RefreshWiimotes(JNIEnv* env,
-                                                                                   jclass type);
-
-JNIEXPORT jint JNICALL Java_org_citra_citra_1android_NativeLibrary_GetPlatform(JNIEnv* env,
-                                                                               jclass type,
-                                                                               jstring filename_);
-
-JNIEXPORT jint JNICALL Java_org_citra_citra_1android_NativeLibrary_GetPlatform(JNIEnv* env,
-                                                                               jclass type,
-                                                                               jstring filename_);
-
 JNIEXPORT jdoubleArray JNICALL
 Java_org_citra_citra_1android_NativeLibrary_GetPerfStats(JNIEnv* env, jclass type);
 
