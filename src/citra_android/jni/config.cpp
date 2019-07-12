@@ -118,8 +118,8 @@ void Config::ReadValues() {
     Settings::values.bg_blue = static_cast<float>(sdl2_config->GetReal("Renderer", "bg_blue", 0.0));
 
     // Layout
-    Settings::values.layout_option =
-        static_cast<Settings::LayoutOption>(sdl2_config->GetInteger("Layout", "layout_option", 0));
+    Settings::values.layout_option = static_cast<Settings::LayoutOption>(sdl2_config->GetInteger(
+        "Layout", "layout_option", static_cast<int>(Settings::LayoutOption::MobilePortrait)));
     Settings::values.swap_screen = sdl2_config->GetBoolean("Layout", "swap_screen", false);
     Settings::values.custom_layout = sdl2_config->GetBoolean("Layout", "custom_layout", false);
     Settings::values.custom_top_left =
