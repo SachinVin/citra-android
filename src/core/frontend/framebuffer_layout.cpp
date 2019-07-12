@@ -117,6 +117,40 @@ FramebufferLayout DefaultFrameLayout(u32 width, u32 height, bool swapped, bool u
     return res;
 }
 
+FramebufferLayout MobilePortraitFrameLayout(u32 width, u32 height, bool swapped) {
+    ASSERT(width > 0);
+    ASSERT(height > 0);
+
+    FramebufferLayout res{width, height, true, true, {}, {}};
+    // Default layout gives equal screen sizes to the top and bottom screen
+    Common::Rectangle<u32> screen_window_area{0, 0, width, height / 2};
+    Common::Rectangle<u32> top_screen = maxRectangle(screen_window_area, TOP_SCREEN_ASPECT_RATIO);
+    Common::Rectangle<u32> bot_screen = maxRectangle(screen_window_area, BOT_SCREEN_ASPECT_RATIO);
+
+    float window_aspect_ratio = static_cast<float>(height) / width;
+    // both screens height are taken into account by multiplying by 2
+    float emulation_aspect_ratio = TOP_SCREEN_ASPECT_RATIO * 2;
+
+    if (window_aspect_ratio < emulation_aspect_ratio) {
+        // Apply borders to the left and right sides of the window.
+        top_screen =
+            top_screen.TranslateX((screen_window_area.GetWidth() - top_screen.GetWidth()) / 2);
+        bot_screen =
+            bot_screen.TranslateX((screen_window_area.GetWidth() - bot_screen.GetWidth()) / 2);
+    } else {
+        // Window is narrower than the emulation content
+        // Recalculate the bottom screen to account for the width difference between top and bottom
+
+        bot_screen = bot_screen.TranslateX((top_screen.GetWidth() - bot_screen.GetWidth()) / 2);
+    }
+
+    // Move the top screen to the bottom if we are swapped.
+    res.top_screen = swapped ? top_screen.TranslateY(bot_screen.GetHeight()) : top_screen;
+    res.bottom_screen = swapped ? bot_screen : bot_screen.TranslateY(top_screen.GetHeight());
+
+    return res;
+}
+
 FramebufferLayout SingleFrameLayout(u32 width, u32 height, bool swapped, bool upright) {
     ASSERT(width > 0);
     ASSERT(height > 0);
@@ -345,6 +379,11 @@ FramebufferLayout FrameLayoutFromResolutionScale(u32 res_scale) {
             }
             layout = SideFrameLayout(width, height, Settings::values.swap_screen,
                                      Settings::values.upright_screen);
+            break;
+        case Settings::LayoutOption::MobilePortrait:
+            width = Core::kScreenTopWidth * res_scale;
+            height = (Core::kScreenTopHeight + Core::kScreenBottomHeight) * res_scale;
+            layout = MobilePortraitFrameLayout(width, height, Settings::values.swap_screen);
             break;
         case Settings::LayoutOption::Default:
         default:

@@ -194,14 +194,14 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj) {
-    if (Settings::values.layout_option == Settings::LayoutOption::Default) {
+    if (Settings::values.layout_option == Settings::LayoutOption::MobilePortrait) {
         Settings::values.layout_option = Settings::LayoutOption::SingleScreen;
     } else if (Settings::values.layout_option == Settings::LayoutOption::SingleScreen) {
         Settings::values.layout_option = Settings::LayoutOption::LargeScreen;
     } else if (Settings::values.layout_option == Settings::LayoutOption::LargeScreen) {
         Settings::values.layout_option = Settings::LayoutOption::SideScreen;
     } else {
-        Settings::values.layout_option = Settings::LayoutOption::Default;
+        Settings::values.layout_option = Settings::LayoutOption::MobilePortrait;
     }
     VideoCore::g_renderer->UpdateCurrentFramebufferLayout();
 }
