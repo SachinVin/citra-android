@@ -1656,11 +1656,13 @@ DISPATCH : {
             goto END;
     }
 
+#ifndef ANDROID
     // Find breakpoint if one exists within the block
     if (GDBStub::IsConnected()) {
         breakpoint_data =
             GDBStub::GetNextBreakpointFromAddress(cpu->Reg[15], GDBStub::BreakpointType::Execute);
     }
+#endif
 
     inst_base = (arm_inst*)&trans_cache_buf[ptr];
     GOTO_NEXT_INST;
