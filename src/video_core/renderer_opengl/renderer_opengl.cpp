@@ -1158,8 +1158,9 @@ VideoCore::ResultStatus RendererOpenGL::Init() {
     }
 
     if (GLAD_GL_KHR_debug) {
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(DebugHandler, nullptr);
+        //glEnable(GL_DEBUG_OUTPUT);
+        //glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        //glDebugMessageCallback(DebugHandler, nullptr);
     }
 
     const char* gl_version{reinterpret_cast<char const*>(glGetString(GL_VERSION))};
