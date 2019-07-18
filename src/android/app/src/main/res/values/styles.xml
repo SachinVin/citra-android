@@ -23,10 +23,17 @@
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
     </style>
 
+    <style name="Citra" parent="CitraBase">
+        <item name="colorAccent">@color/citra_accent</item>
+    </style>
+
+    <style name="CitraSettings" parent="CitraSettingsBase">
+        <item name="colorAccent">@color/citra_accent</item>
+    </style>
+
     <!-- Themes for Dialogs -->
 
     <!-- Inherit from the Base Citra Dialog Theme -->
-
     <style name="CitraEmulationBase" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
@@ -40,6 +47,11 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
     </style>
 
+    <!-- Inherit from the Base Citra Emulation Theme -->
+    <style name="CitraEmulation" parent="CitraEmulationBase">
+        <item name="colorAccent">@color/citra_accent</item>
+    </style>
+
     <style name="CitraEmulationTvBase" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
@@ -51,6 +63,11 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    </style>
+
+    <!-- Inherit from the Base Citra Emulation Theme -->
+    <style name="CitraEmulationTv" parent="CitraEmulationTvBase">
+        <item name="colorAccent">@color/citra_accent</item>
     </style>
 
     <!-- Hax to make Tablayout render icons -->
@@ -69,6 +86,11 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
     </style>
 
+    <style name="CitraTv" parent="CitraTvBase">
+        <item name="colorAccent">@color/citra_accent</item>
+        <item name="browseTitleViewLayout">@layout/titleview</item>
+    </style>
+
     <style name="InGameMenuOption" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
@@ -83,12 +105,30 @@
     </style>
 
     <style name="OverlayInGameMenuOption" parent="InGameMenuOption">
-        <item name="android:textColor">@color/lb_control_button_text</item>
+        <item name="android:textColor">@color/button_text_color</item>
     </style>
+
+    <!-- You can also inherit from NNF_BaseTheme.Light -->
+    <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">
+        <item name="colorPrimary">@color/citra_orange</item>
+        <item name="colorPrimaryDark">@color/citra_orange_dark</item>
+        <item name="colorAccent">@color/citra_accent</item>
+
+        <!--&lt;!&ndash; Setting a divider is entirely optional &ndash;&gt;-->
+        <item name="nnf_list_item_divider">?android:attr/listDivider</item>
+
+        <!-- Need to set this also to style create folder dialog -->
+        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
+
+        <!-- If you want to set a specific toolbar theme, do it here -->
+
+         <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
     <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
-        <item name="colorAccent">@android:color/holo_purple</item>
+        <item name="colorAccent">@color/citra_accent</item>
     </style>
 
 </resources>
