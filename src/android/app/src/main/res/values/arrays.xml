@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- All lists for ListPreference keys/values are placed here -->
+<resources>
+    <string-array name="systemClockNames" translatable="false">
+        <item>Device clock</item>
+        <item>Simulated clock</item>
+    </string-array>
+
+    <integer-array name="systemClockValues" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="regionNames">
+        <item>Auto-select</item>
+        <item>Japan</item>
+        <item>USA</item>
+        <item>Europe</item>
+        <item>Australia</item>
+        <item>China</item>
+        <item>Korea</item>
+        <item>Taiwan</item>
+    </string-array>
+
+    <integer-array name="regionValues">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </integer-array>
+
+    <string-array name="countryNames">
+        <item>Europe</item>
+        <item>Japan</item>
+        <item>USA</item>
+        <item>Australia</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>Italy</item>
+        <item>Korea</item>
+        <item>Netherlands</item>
+        <item>Russia</item>
+        <item>Spain</item>
+        <item>Taiwan</item>
+        <item>Unknown</item>
+    </string-array>
+
+    <string-array name="n3dsButtons">
+        <item>a</item>
+        <item>b</item>
+        <item>x</item>
+        <item>y</item>
+        <item>L</item>
+        <item>R</item>
+        <item>ZL</item>
+        <item>ZR</item>
+        <item>Start</item>
+        <item>Select</item>
+        <item>Home</item>
+        <item>D-Pad</item>
+        <item>Circle Pad</item>
+        <item>C Stick</item>
+    </string-array>
+</resources>
