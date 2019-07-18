@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="game_grid_columns">1</integer>
+
+    <!-- Default N3DS landscape layout -->
+    <integer name="N3DS_BUTTON_A_X">980</integer>
+    <integer name="N3DS_BUTTON_A_Y">540</integer>
+    <integer name="N3DS_BUTTON_B_X">920</integer>
+    <integer name="N3DS_BUTTON_B_Y">640</integer>
+    <integer name="N3DS_BUTTON_X_X">920</integer>
+    <integer name="N3DS_BUTTON_X_Y">440</integer>
+    <integer name="N3DS_BUTTON_Y_X">860</integer>
+    <integer name="N3DS_BUTTON_Y_Y">540</integer>
+    <integer name="N3DS_BUTTON_UP_X">15</integer>
+    <integer name="N3DS_BUTTON_UP_Y">450</integer>
+    <integer name="N3DS_TRIGGER_L_X">13</integer>
+    <integer name="N3DS_TRIGGER_L_Y">180</integer>
+    <integer name="N3DS_BUTTON_ZL_X">13</integer>
+    <integer name="N3DS_BUTTON_ZL_Y">0</integer>
+    <integer name="N3DS_TRIGGER_R_X">907</integer>
+    <integer name="N3DS_TRIGGER_R_Y">180</integer>
+    <integer name="N3DS_BUTTON_ZR_X">907</integer>
+    <integer name="N3DS_BUTTON_ZR_Y">0</integer>
+    <integer name="N3DS_STICK_C_X">735</integer>
+    <integer name="N3DS_STICK_C_Y">650</integer>
+    <integer name="N3DS_STICK_MAIN_X">170</integer>
+    <integer name="N3DS_STICK_MAIN_Y">650</integer>
+    <integer name="N3DS_BUTTON_START_X">517</integer>
+    <integer name="N3DS_BUTTON_START_Y">850</integer>
+    <integer name="N3DS_BUTTON_SELECT_X">557</integer>
+    <integer name="N3DS_BUTTON_SELECT_Y">850</integer>
+    <integer name="N3DS_BUTTON_HOME_X">477</integer>
+    <integer name="N3DS_BUTTON_HOME_Y">850</integer>
+
+    <!-- Default N3DS portrait layout -->
+    <integer name="N3DS_BUTTON_A_PORTRAIT_X">835</integer>
+    <integer name="N3DS_BUTTON_A_PORTRAIT_Y">920</integer>
+    <integer name="N3DS_BUTTON_B_PORTRAIT_X">740</integer>
+    <integer name="N3DS_BUTTON_B_PORTRAIT_Y">980</integer>
+    <integer name="N3DS_BUTTON_X_PORTRAIT_X">740</integer>
+    <integer name="N3DS_BUTTON_X_PORTRAIT_Y">860</integer>
+    <integer name="N3DS_BUTTON_Y_PORTRAIT_X">645</integer>
+    <integer name="N3DS_BUTTON_Y_PORTRAIT_Y">920</integer>
+    <integer name="N3DS_BUTTON_UP_PORTRAIT_X">10</integer>
+    <integer name="N3DS_BUTTON_UP_PORTRAIT_Y">580</integer>
+    <integer name="N3DS_TRIGGER_L_PORTRAIT_X">10</integer>
+    <integer name="N3DS_TRIGGER_L_PORTRAIT_Y">737</integer>
+    <integer name="N3DS_BUTTON_ZL_PORTRAIT_X">0</integer>
+    <integer name="N3DS_BUTTON_ZL_PORTRAIT_Y">0</integer>
+    <integer name="N3DS_TRIGGER_R_PORTRAIT_X">741</integer>
+    <integer name="N3DS_TRIGGER_R_PORTRAIT_Y">737</integer>
+    <integer name="N3DS_BUTTON_ZR_PORTRAIT_X">750</integer>
+    <integer name="N3DS_BUTTON_ZR_PORTRAIT_Y">0</integer>
+    <integer name="N3DS_STICK_C_PORTRAIT_X">710</integer>
+    <integer name="N3DS_STICK_C_PORTRAIT_Y">590</integer>
+    <integer name="N3DS_STICK_MAIN_PORTRAIT_X">40</integer>
+    <integer name="N3DS_STICK_MAIN_PORTRAIT_Y">870</integer>
+    <integer name="N3DS_BUTTON_HOME_PORTRAIT_X">401</integer>
+    <integer name="N3DS_BUTTON_HOME_PORTRAIT_Y">794</integer>
+    <integer name="N3DS_BUTTON_START_PORTRAIT_X">471</integer>
+    <integer name="N3DS_BUTTON_START_PORTRAIT_Y">794</integer>
+    <integer name="N3DS_BUTTON_SELECT_PORTRAIT_X">541</integer>
+    <integer name="N3DS_BUTTON_SELECT_PORTRAIT_Y">794</integer>
+
+</resources>
