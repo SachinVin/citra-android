@@ -1670,7 +1670,10 @@ void RasterizerOpenGL::SamplerInfo::SyncWithConfig(
 
     if (!GLES && lod_bias != config.lod.bias) {
         lod_bias = config.lod.bias;
-        glSamplerParameterf(s, GL_TEXTURE_LOD_BIAS, lod_bias / 256.0f);
+        if (!GLES) {
+            // Can't sample LOD_BIAS on GLES
+            glSamplerParameterf(s, GL_TEXTURE_LOD_BIAS, lod_bias / 256.0f);
+        }
     }
 }
 
