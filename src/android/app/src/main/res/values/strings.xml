@@ -108,7 +108,6 @@
     <string name="vsync">Enable V-Sync</string>
     <string name="hw_renderer">Enable hardware renderer</string>
     <string name="hw_shaders">Enable hardware shader</string>
-    <string name="use_shader_jit">Enable JIT compiler for shaders</string>
     <string name="hw_shaders_descrip">Use hardware to emulate 3DS shaders</string>
     <string name="shaders_accurate_mul">Enable accurate multiplication in hardware shaders</string>>
     <string name="shaders_accurate_gs">Enable accurate geometric shaders in hardware shaders</string>
@@ -132,16 +131,6 @@
     <string name="disable_fog_descrip">Makes distant objects more visible by removing fog, thus increasing the overall detail. Disabling fog will break some games which rely on proper fog emulation.</string>
     <string name="disable_copy_filter">Disable Copy Filter</string>
     <string name="disable_copy_filter_descrip">Disables the blending of adjacent rows when copying the EFB. This is known in some games as \"deflickering\" or \"smoothing\". Disabling the filter is usually safe, and may result in a sharper image.</string>
-    <string name="stereoscopy">Stereoscopy</string>
-    <string name="stereoscopy_descrip">Stereoscopy allows you to get a better feeling of depth if you have the necessary hardware.\nHeavily decreases emulation speed and sometimes causes issues</string>
-    <string name="stereoscopy_mode">Stereoscopy Mode</string>
-    <string name="stereoscopy_mode_descrip">Select the stereoscopic 3D mode.</string>
-    <string name="sterescopy_depth">Depth</string>
-    <string name="sterescopy_depth_descrip">Control the distance between the virtual cameras.\nA higher value creates a stronger feeling of depth while a lower value is more comfortable.</string>
-    <string name="sterescopy_convergence">Convergence</string>
-    <string name="sterescopy_convergence_descrip">Control the distance of the convergence plane, this is the distance at which objects will appear to be in front of the screen.\nA higher value creates stronger out-of-screen effects while a lower value is more comfortable.</string>
-    <string name="sterescopy_swap_eyes">Swap Eyes</string>
-    <string name="sterescopy_swap_eyes_descrip">Swap the left and right eye, mostly useful if you want to view side-by-side cross-eyed.</string>
 
     <string name="hacks">Hacks</string>
     <string name="embedded_frame_buffer">Embedded Frame Buffer</string>
@@ -196,6 +185,10 @@
     <string name="preferences_settings">Settings</string>
     <string name="preferences_game_settings">Game Settings</string>
     <string name="preferences_extensions">Extension Bindings</string>
+    <string name="preferences_general">General</string>
+    <string name="preferences_system">System</string>
+    <string name="preferences_graphics">Graphics</string>
+    <string name="preferences_audio">Audio</string>
 
     <!-- Emulation Menu -->
     <string name="emulation_screenshot">Take Screenshot</string>

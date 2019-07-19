@@ -49,16 +49,10 @@ public final class SettingsFile {
 
     public static final String FILE_NAME_CONFIG = "config";
 
-    public static final String SECTION_CONTROLS = "Controls";
-    public static final String SECTION_CORE = "Core";
-    public static final String SECTION_RENDERER = "Renderer";
-    public static final String SECTION_LAYOUT = "Layout";
-    public static final String SECTION_AUDIO = "Audio";
+    public static final String SECTION_GENERAL = "General";
     public static final String SECTION_SYSTEM = "System";
-    public static final String SECTION_CAMERA = "Camera";
-    public static final String SECTION_MISC = "Miscellaneous";
-    public static final String SECTION_DEBUGGING = "Debugging";
-    public static final String SECTION_WEBSERVICE = "WebService";
+    public static final String SECTION_GRAPHICS = "Graphics";
+    public static final String SECTION_AUDIO = "Audio";
 
     public static final String KEY_CPU_JIT = "use_cpu_jit";
 
