@@ -15,45 +15,40 @@ import org.citra.citra_android.ui.main.MainPresenter;
 import java.io.File;
 import java.util.List;
 
-public final class FileBrowserHelper
-{
-  public static void openDirectoryPicker(FragmentActivity activity)
-  {
-    Intent i = new Intent(activity, CustomFilePickerActivity.class);
+public final class FileBrowserHelper {
+    public static void openDirectoryPicker(FragmentActivity activity) {
+        Intent i = new Intent(activity, CustomFilePickerActivity.class);
 
-    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-    i.putExtra(FilePickerActivity.EXTRA_START_PATH,
-            Environment.getExternalStorageDirectory().getPath());
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                Environment.getExternalStorageDirectory().getPath());
 
-    activity.startActivityForResult(i, MainPresenter.REQUEST_ADD_DIRECTORY);
-  }
-
-  public static void openFilePicker(FragmentActivity activity, int requestCode)
-  {
-    Intent i = new Intent(activity, CustomFilePickerActivity.class);
-
-    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
-    i.putExtra(FilePickerActivity.EXTRA_START_PATH,
-            Environment.getExternalStorageDirectory().getPath());
-
-    activity.startActivityForResult(i, requestCode);
-  }
-
-  @Nullable
-  public static String getSelectedDirectory(Intent result)
-  {
-    // Use the provided utility method to parse the result
-    List<Uri> files = Utils.getSelectedFilesFromResult(result);
-    if (!files.isEmpty())
-    {
-      File file = Utils.getFileForUri(files.get(0));
-      return file.getAbsolutePath();
+        activity.startActivityForResult(i, MainPresenter.REQUEST_ADD_DIRECTORY);
     }
 
-    return null;
-  }
+    public static void openFilePicker(FragmentActivity activity, int requestCode) {
+        Intent i = new Intent(activity, CustomFilePickerActivity.class);
+
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                Environment.getExternalStorageDirectory().getPath());
+
+        activity.startActivityForResult(i, requestCode);
+    }
+
+    @Nullable
+    public static String getSelectedDirectory(Intent result) {
+        // Use the provided utility method to parse the result
+        List<Uri> files = Utils.getSelectedFilesFromResult(result);
+        if (!files.isEmpty()) {
+            File file = Utils.getFileForUri(files.get(0));
+            return file.getAbsolutePath();
+        }
+
+        return null;
+    }
 }
