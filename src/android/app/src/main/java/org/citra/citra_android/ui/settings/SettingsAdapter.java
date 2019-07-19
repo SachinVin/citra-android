@@ -149,6 +149,13 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mDialog = builder.show();
     }
 
+    DialogInterface.OnClickListener defaultCancelListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            closeDialog();
+        }
+    };
+
     public void onDateTimeClick(DateTimeSetting item) {
         mClickedItem = item;
 
@@ -188,15 +195,10 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 closeDialog();
             }
         };
-        DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                closeDialog();
-            }
-        };
+
         builder.setView(view);
-        builder.setPositiveButton("Set", ok);
-        builder.setNegativeButton("Cancel", cancel);
+        builder.setPositiveButton(R.string.ok, ok);
+        builder.setNegativeButton(R.string.cancel, defaultCancelListener);
         mDialog = builder.show();
     }
 
@@ -211,7 +213,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         builder.setTitle(item.getNameId());
         builder.setView(view);
         builder.setPositiveButton(R.string.ok, this);
-        builder.setNegativeButton(R.string.cancel, this);
+        builder.setNegativeButton(R.string.cancel, defaultCancelListener);
         mDialog = builder.show();
 
         mTextSliderValue = view.findViewById(R.id.text_value);
