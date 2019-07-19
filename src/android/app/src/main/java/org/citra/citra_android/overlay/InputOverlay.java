@@ -467,6 +467,10 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         int fingerPositionX = (int) event.getX(pointerIndex);
         int fingerPositionY = (int) event.getY(pointerIndex);
 
+        String orientation =
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
+                        "-Portrait" : "";
+
         // Maybe combine Button and Joystick as subclasses of the same parent?
         // Or maybe create an interface like IMoveableHUDControl?
 
@@ -496,7 +500,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                         // Persist button position by saving new place.
                         saveControlPosition(mButtonBeingConfigured.getId(),
                                 mButtonBeingConfigured.getBounds().left,
-                                mButtonBeingConfigured.getBounds().top);
+                                mButtonBeingConfigured.getBounds().top, orientation);
                         mButtonBeingConfigured = null;
                     }
                     break;
@@ -528,7 +532,8 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                     if (mDpadBeingConfigured == dpad) {
                         // Persist button position by saving new place.
                         saveControlPosition(mDpadBeingConfigured.getId(0),
-                                mDpadBeingConfigured.getBounds().left, mDpadBeingConfigured.getBounds().top);
+                                mDpadBeingConfigured.getBounds().left, mDpadBeingConfigured.getBounds().top,
+                                orientation);
                         mDpadBeingConfigured = null;
                     }
                     break;
@@ -556,7 +561,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                     if (mJoystickBeingConfigured != null) {
                         saveControlPosition(mJoystickBeingConfigured.getId(),
                                 mJoystickBeingConfigured.getBounds().left,
-                                mJoystickBeingConfigured.getBounds().top);
+                                mJoystickBeingConfigured.getBounds().top, orientation);
                         mJoystickBeingConfigured = null;
                     }
                     break;
@@ -670,11 +675,11 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         invalidate();
     }
 
-    private void saveControlPosition(int sharedPrefsId, int x, int y) {
+    private void saveControlPosition(int sharedPrefsId, int x, int y, String orientation) {
         final SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor sPrefsEditor = sPrefs.edit();
-        sPrefsEditor.putFloat(sharedPrefsId + "-X", x);
-        sPrefsEditor.putFloat(sharedPrefsId + "-Y", y);
+        sPrefsEditor.putFloat(sharedPrefsId + orientation + "-X", x);
+        sPrefsEditor.putFloat(sharedPrefsId + orientation + "-Y", y);
         sPrefsEditor.apply();
     }
 
