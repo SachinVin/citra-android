@@ -11,80 +11,69 @@ import org.citra.citra_android.utils.SettingsFile;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public final class MainPresenter
-{
-  public static final int REQUEST_ADD_DIRECTORY = 1;
-  public static final int REQUEST_EMULATE_GAME = 2;
+public final class MainPresenter {
+    public static final int REQUEST_ADD_DIRECTORY = 1;
+    public static final int REQUEST_EMULATE_GAME = 2;
 
-  private final MainView mView;
-  private String mDirToAdd;
+    private final MainView mView;
+    private String mDirToAdd;
 
-  public MainPresenter(MainView view)
-  {
-    mView = view;
-  }
+    public MainPresenter(MainView view) {
+        mView = view;
+    }
 
-  public void onCreate()
-  {
-    String versionName = BuildConfig.VERSION_NAME;
-    mView.setVersionString(versionName);
-  }
+    public void onCreate() {
+        String versionName = BuildConfig.VERSION_NAME;
+        mView.setVersionString(versionName);
+    }
 
-  public void onFabClick()
-  {
-    mView.launchFileListActivity();
-  }
-
-  public boolean handleOptionSelection(int itemId)
-  {
-    switch (itemId)
-    {
-      case R.id.menu_settings_core:
-        mView.launchSettingsActivity(SettingsFile.FILE_NAME_CONFIG);
-        return true;
-
-      case R.id.menu_refresh:
-        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
-        databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
-        mView.refresh();
-        return true;
-
-      case R.id.button_add_directory:
+    public void onFabClick() {
         mView.launchFileListActivity();
-        return true;
     }
 
-    return false;
-  }
+    public boolean handleOptionSelection(int itemId) {
+        switch (itemId) {
+            case R.id.menu_settings_core:
+                mView.launchSettingsActivity(SettingsFile.FILE_NAME_CONFIG);
+                return true;
 
-  public void addDirIfNeeded(AddDirectoryHelper helper)
-  {
-    if (mDirToAdd != null)
-    {
-      helper.addDirectory(mDirToAdd, mView::refresh);
+            case R.id.menu_refresh:
+                GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+                databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
+                mView.refresh();
+                return true;
 
-      mDirToAdd = null;
+            case R.id.button_add_directory:
+                mView.launchFileListActivity();
+                return true;
+        }
+
+        return false;
     }
-  }
 
-  public void onDirectorySelected(String dir)
-  {
-    mDirToAdd = dir;
-  }
+    public void addDirIfNeeded(AddDirectoryHelper helper) {
+        if (mDirToAdd != null) {
+            helper.addDirectory(mDirToAdd, mView::refresh);
 
-  public void refreshFragmentScreenshot(int resultCode)
-  {
-    mView.refreshFragmentScreenshot(resultCode);
-  }
+            mDirToAdd = null;
+        }
+    }
+
+    public void onDirectorySelected(String dir) {
+        mDirToAdd = dir;
+    }
+
+    public void refreshFragmentScreenshot(int resultCode) {
+        mView.refreshFragmentScreenshot(resultCode);
+    }
 
 
-  public void loadGames()
-  {
-    GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+    public void loadGames() {
+        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
 
-    databaseHelper.getGames()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(games -> mView.showGames(games));
-  }
+        databaseHelper.getGames()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(games -> mView.showGames(games));
+    }
 }
