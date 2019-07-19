@@ -40,140 +40,125 @@ import org.citra.citra_android.utils.SettingsFile;
 import java.util.ArrayList;
 
 public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolder>
-		implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
-{
-	private SettingsFragmentView mView;
-	private Context mContext;
-	private ArrayList<SettingsItem> mSettings;
+        implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener {
+    private SettingsFragmentView mView;
+    private Context mContext;
+    private ArrayList<SettingsItem> mSettings;
 
-	private SettingsItem mClickedItem;
-	private int mSeekbarProgress;
+    private SettingsItem mClickedItem;
+    private int mSeekbarProgress;
 
-	private AlertDialog mDialog;
-	private TextView mTextSliderValue;
+    private AlertDialog mDialog;
+    private TextView mTextSliderValue;
 
-	public SettingsAdapter(SettingsFragmentView view, Context context)
-	{
-		mView = view;
-		mContext = context;
-	}
+    public SettingsAdapter(SettingsFragmentView view, Context context) {
+        mView = view;
+        mContext = context;
+    }
 
-	@Override
-	public SettingViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
-		View view;
-		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+    @Override
+    public SettingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-		switch (viewType)
-		{
-			case SettingsItem.TYPE_HEADER:
-				view = inflater.inflate(R.layout.list_item_settings_header, parent, false);
-				return new HeaderViewHolder(view, this);
+        switch (viewType) {
+            case SettingsItem.TYPE_HEADER:
+                view = inflater.inflate(R.layout.list_item_settings_header, parent, false);
+                return new HeaderViewHolder(view, this);
 
-			case SettingsItem.TYPE_CHECKBOX:
-				view = inflater.inflate(R.layout.list_item_setting_checkbox, parent, false);
-				return new CheckBoxSettingViewHolder(view, this);
+            case SettingsItem.TYPE_CHECKBOX:
+                view = inflater.inflate(R.layout.list_item_setting_checkbox, parent, false);
+                return new CheckBoxSettingViewHolder(view, this);
 
-			case SettingsItem.TYPE_SINGLE_CHOICE:
-				view = inflater.inflate(R.layout.list_item_setting, parent, false);
-				return new SingleChoiceViewHolder(view, this);
+            case SettingsItem.TYPE_SINGLE_CHOICE:
+                view = inflater.inflate(R.layout.list_item_setting, parent, false);
+                return new SingleChoiceViewHolder(view, this);
 
-			case SettingsItem.TYPE_SLIDER:
-				view = inflater.inflate(R.layout.list_item_setting, parent, false);
-				return new SliderViewHolder(view, this);
+            case SettingsItem.TYPE_SLIDER:
+                view = inflater.inflate(R.layout.list_item_setting, parent, false);
+                return new SliderViewHolder(view, this);
 
-			case SettingsItem.TYPE_SUBMENU:
-				view = inflater.inflate(R.layout.list_item_setting, parent, false);
-				return new SubmenuViewHolder(view, this);
+            case SettingsItem.TYPE_SUBMENU:
+                view = inflater.inflate(R.layout.list_item_setting, parent, false);
+                return new SubmenuViewHolder(view, this);
 
-			case SettingsItem.TYPE_INPUT_BINDING:
-				view = inflater.inflate(R.layout.list_item_setting, parent, false);
-				return new InputBindingSettingViewHolder(view, this, mContext);
+            case SettingsItem.TYPE_INPUT_BINDING:
+                view = inflater.inflate(R.layout.list_item_setting, parent, false);
+                return new InputBindingSettingViewHolder(view, this, mContext);
 
-			case SettingsItem.TYPE_DATETIME_SETTING:
-                		view = inflater.inflate(R.layout.list_item_setting, parent, false);
-                		return new DateTimeViewHolder(view, this);
+            case SettingsItem.TYPE_DATETIME_SETTING:
+                view = inflater.inflate(R.layout.list_item_setting, parent, false);
+                return new DateTimeViewHolder(view, this);
 
 
-			default:
-				Log.error("[SettingsAdapter] Invalid view type: " + viewType);
-				return null;
-		}
-	}
+            default:
+                Log.error("[SettingsAdapter] Invalid view type: " + viewType);
+                return null;
+        }
+    }
 
-	@Override
-	public void onBindViewHolder(SettingViewHolder holder, int position)
-	{
-		holder.bind(getItem(position));
-	}
+    @Override
+    public void onBindViewHolder(SettingViewHolder holder, int position) {
+        holder.bind(getItem(position));
+    }
 
-	private SettingsItem getItem(int position)
-	{
-		return mSettings.get(position);
-	}
+    private SettingsItem getItem(int position) {
+        return mSettings.get(position);
+    }
 
-	@Override
-	public int getItemCount()
-	{
-		if (mSettings != null)
-		{
-			return mSettings.size();
-		}
-		else
-		{
-			return 0;
-		}
-	}
+    @Override
+    public int getItemCount() {
+        if (mSettings != null) {
+            return mSettings.size();
+        } else {
+            return 0;
+        }
+    }
 
-	@Override
-	public int getItemViewType(int position)
-	{
-		return getItem(position).getType();
-	}
+    @Override
+    public int getItemViewType(int position) {
+        return getItem(position).getType();
+    }
 
-	public void setSettings(ArrayList<SettingsItem> settings)
-	{
-		mSettings = settings;
-		notifyDataSetChanged();
-	}
+    public void setSettings(ArrayList<SettingsItem> settings) {
+        mSettings = settings;
+        notifyDataSetChanged();
+    }
 
-	public void onBooleanClick(CheckBoxSetting item, int position, boolean checked)
-	{
-		IntSetting setting = item.setChecked(checked);
-		notifyItemChanged(position);
+    public void onBooleanClick(CheckBoxSetting item, int position, boolean checked) {
+        IntSetting setting = item.setChecked(checked);
+        notifyItemChanged(position);
 
-		if (setting != null)
-		{
-			mView.putSetting(setting);
-		}
+        if (setting != null) {
+            mView.putSetting(setting);
+        }
 
-		mView.onSettingChanged();
-	}
+        mView.onSettingChanged();
+    }
 
-	public void onSingleChoiceClick(SingleChoiceSetting item)
-	{
-		mClickedItem = item;
+    public void onSingleChoiceClick(SingleChoiceSetting item) {
+        mClickedItem = item;
 
-		int value = getSelectionForSingleChoiceValue(item);
+        int value = getSelectionForSingleChoiceValue(item);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
-		builder.setTitle(item.getNameId());
-		builder.setSingleChoiceItems(item.getChoicesId(), value, this);
+        builder.setTitle(item.getNameId());
+        builder.setSingleChoiceItems(item.getChoicesId(), value, this);
 
-		mDialog = builder.show();
-	}
+        mDialog = builder.show();
+    }
 
-	public void onDateTimeClick(DateTimeSetting item){
-	    mClickedItem = item;
+    public void onDateTimeClick(DateTimeSetting item) {
+        mClickedItem = item;
 
-	    AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
-	    LayoutInflater inflater = LayoutInflater.from(mView.getActivity());
-	    View view = inflater.inflate(R.layout.sysclock_datetime_picker, null);
+        LayoutInflater inflater = LayoutInflater.from(mView.getActivity());
+        View view = inflater.inflate(R.layout.sysclock_datetime_picker, null);
 
-        DatePicker dp = (DatePicker) view.findViewById(R.id.date_picker);
-        TimePicker tp = (TimePicker) view.findViewById(R.id.time_picker);
+        DatePicker dp = view.findViewById(R.id.date_picker);
+        TimePicker tp = view.findViewById(R.id.time_picker);
 
         //set date and time to substrings of settingValue; format = 2018-12-24 04:20:69 (alright maybe not that 69)
         String settingValue = item.getValue();
@@ -188,7 +173,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
             public void onClick(DialogInterface dialog, int which) {
                 //set it
                 int year = dp.getYear();
-                if (year < 2000){
+                if (year < 2000) {
                     year = 2000;
                 }
                 String month = ("00" + (dp.getMonth() + 1)).substring(String.valueOf(dp.getMonth() + 1).length());
@@ -203,200 +188,169 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 closeDialog();
             }
         };
-	    DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 closeDialog();
             }
         };
-	    builder.setView(view);
-	    builder.setPositiveButton("Set", ok);
-	    builder.setNegativeButton("Cancel", cancel);
-	    mDialog = builder.show();
+        builder.setView(view);
+        builder.setPositiveButton("Set", ok);
+        builder.setNegativeButton("Cancel", cancel);
+        mDialog = builder.show();
     }
-	public void onSliderClick(SliderSetting item)
-	{
-		mClickedItem = item;
-		mSeekbarProgress = item.getSelectedValue();
-		AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
-		LayoutInflater inflater = LayoutInflater.from(mView.getActivity());
-		View view = inflater.inflate(R.layout.dialog_seekbar, null);
+    public void onSliderClick(SliderSetting item) {
+        mClickedItem = item;
+        mSeekbarProgress = item.getSelectedValue();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
-		builder.setTitle(item.getNameId());
-		builder.setView(view);
-		builder.setPositiveButton(R.string.ok, this);
-		builder.setNegativeButton(R.string.cancel, this);
-		mDialog = builder.show();
+        LayoutInflater inflater = LayoutInflater.from(mView.getActivity());
+        View view = inflater.inflate(R.layout.dialog_seekbar, null);
 
-		mTextSliderValue = view.findViewById(R.id.text_value);
-		mTextSliderValue.setText(String.valueOf(mSeekbarProgress));
+        builder.setTitle(item.getNameId());
+        builder.setView(view);
+        builder.setPositiveButton(R.string.ok, this);
+        builder.setNegativeButton(R.string.cancel, this);
+        mDialog = builder.show();
 
-		TextView units = view.findViewById(R.id.text_units);
-		units.setText(item.getUnits());
+        mTextSliderValue = view.findViewById(R.id.text_value);
+        mTextSliderValue.setText(String.valueOf(mSeekbarProgress));
 
-		SeekBar seekbar = view.findViewById(R.id.seekbar);
+        TextView units = view.findViewById(R.id.text_units);
+        units.setText(item.getUnits());
 
-		seekbar.setMax(item.getMax());
-		seekbar.setProgress(mSeekbarProgress);
+        SeekBar seekbar = view.findViewById(R.id.seekbar);
 
-		seekbar.setOnSeekBarChangeListener(this);
-	}
+        seekbar.setMax(item.getMax());
+        seekbar.setProgress(mSeekbarProgress);
 
-	public void onSubmenuClick(SubmenuSetting item)
-	{
-		mView.loadSubMenu(item.getMenuKey());
-	}
+        seekbar.setOnSeekBarChangeListener(this);
+    }
 
-	public void onInputBindingClick(final InputBindingSetting item, final int position)
-	{
-		final MotionAlertDialog dialog = new MotionAlertDialog(mContext, item);
-		dialog.setTitle(R.string.input_binding);
-		dialog.setMessage(String.format(mContext.getString(R.string.input_binding_descrip), mContext.getString(item.getNameId())));
-		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(R.string.cancel), this);
-		dialog.setButton(AlertDialog.BUTTON_NEUTRAL, mContext.getString(R.string.clear), (dialogInterface, i) ->
-		{
-			item.setValue("");
+    public void onSubmenuClick(SubmenuSetting item) {
+        mView.loadSubMenu(item.getMenuKey());
+    }
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-			SharedPreferences.Editor editor = sharedPreferences.edit();
-			editor.remove(item.getKey());
-			editor.apply();
-		});
-		dialog.setOnDismissListener(dialog1 ->
-		{
-			StringSetting setting = new StringSetting(item.getKey(), item.getSection(), item.getFile(), item.getValue());
-			notifyItemChanged(position);
+    public void onInputBindingClick(final InputBindingSetting item, final int position) {
+        final MotionAlertDialog dialog = new MotionAlertDialog(mContext, item);
+        dialog.setTitle(R.string.input_binding);
+        dialog.setMessage(String.format(mContext.getString(R.string.input_binding_descrip), mContext.getString(item.getNameId())));
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(R.string.cancel), this);
+        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, mContext.getString(R.string.clear), (dialogInterface, i) ->
+        {
+            item.setValue("");
 
-			if (setting != null)
-			{
-				mView.putSetting(setting);
-			}
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(item.getKey());
+            editor.apply();
+        });
+        dialog.setOnDismissListener(dialog1 ->
+        {
+            StringSetting setting = new StringSetting(item.getKey(), item.getSection(), item.getFile(), item.getValue());
+            notifyItemChanged(position);
 
-			mView.onSettingChanged();
-		});
-		dialog.setCanceledOnTouchOutside(false);
-		dialog.show();
-	}
+            if (setting != null) {
+                mView.putSetting(setting);
+            }
 
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		if (mClickedItem instanceof SingleChoiceSetting)
-		{
-			SingleChoiceSetting scSetting = (SingleChoiceSetting) mClickedItem;
+            mView.onSettingChanged();
+        });
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
 
-			int value = getValueForSingleChoiceSelection(scSetting, which);
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (mClickedItem instanceof SingleChoiceSetting) {
+            SingleChoiceSetting scSetting = (SingleChoiceSetting) mClickedItem;
 
-			// Get the backing Setting, which may be null (if for example it was missing from the file)
-			IntSetting setting = scSetting.setSelectedValue(value);
-			if (setting != null)
-			{
-				mView.putSetting(setting);
-			}
+            int value = getValueForSingleChoiceSelection(scSetting, which);
 
-			closeDialog();
-		}
-		else if (mClickedItem instanceof SliderSetting)
-		{
-			SliderSetting sliderSetting = (SliderSetting) mClickedItem;
-			if (sliderSetting.getSetting() instanceof FloatSetting)
-			{
-				float value;
+            // Get the backing Setting, which may be null (if for example it was missing from the file)
+            IntSetting setting = scSetting.setSelectedValue(value);
+            if (setting != null) {
+                mView.putSetting(setting);
+            }
 
-				if (sliderSetting.getKey().equals(SettingsFile.KEY_FRAME_LIMIT))
-				{
-					value = mSeekbarProgress / 100.0f;
-				}
-				else
-				{
-					value = (float) mSeekbarProgress;
-				}
+            closeDialog();
+        } else if (mClickedItem instanceof SliderSetting) {
+            SliderSetting sliderSetting = (SliderSetting) mClickedItem;
+            if (sliderSetting.getSetting() instanceof FloatSetting) {
+                float value;
 
-				FloatSetting setting = sliderSetting.setSelectedValue(value);
-				if (setting != null)
-				{
-					mView.putSetting(setting);
-				}
-			}
-			else
-			{
-				IntSetting setting = sliderSetting.setSelectedValue(mSeekbarProgress);
-				if (setting != null)
-				{
-					mView.putSetting(setting);
-				}
-			}
-		}
+                if (sliderSetting.getKey().equals(SettingsFile.KEY_FRAME_LIMIT)) {
+                    value = mSeekbarProgress / 100.0f;
+                } else {
+                    value = (float) mSeekbarProgress;
+                }
 
-		mView.onSettingChanged();
-		mClickedItem = null;
-		mSeekbarProgress = -1;
-	}
+                FloatSetting setting = sliderSetting.setSelectedValue(value);
+                if (setting != null) {
+                    mView.putSetting(setting);
+                }
+            } else {
+                IntSetting setting = sliderSetting.setSelectedValue(mSeekbarProgress);
+                if (setting != null) {
+                    mView.putSetting(setting);
+                }
+            }
+        }
 
-	public void closeDialog()
-	{
-		if (mDialog != null)
-		{
-			mDialog.dismiss();
-			mDialog = null;
-		}
-	}
+        mView.onSettingChanged();
+        mClickedItem = null;
+        mSeekbarProgress = -1;
+    }
 
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-	{
-		mSeekbarProgress = progress;
-		mTextSliderValue.setText(String.valueOf(mSeekbarProgress));
-	}
+    public void closeDialog() {
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+    }
 
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar)
-	{
-	}
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        mSeekbarProgress = progress;
+        mTextSliderValue.setText(String.valueOf(mSeekbarProgress));
+    }
 
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar)
-	{
-	}
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
-	private int getValueForSingleChoiceSelection(SingleChoiceSetting item, int which)
-	{
-		int valuesId = item.getValuesId();
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
 
-		if (valuesId > 0)
-		{
-			int[] valuesArray = mContext.getResources().getIntArray(valuesId);
-			return valuesArray[which];
-		}
-		else
-		{
-			return which;
-		}
-	}
+    private int getValueForSingleChoiceSelection(SingleChoiceSetting item, int which) {
+        int valuesId = item.getValuesId();
 
-	private int getSelectionForSingleChoiceValue(SingleChoiceSetting item)
-	{
-		int value = item.getSelectedValue();
-		int valuesId = item.getValuesId();
+        if (valuesId > 0) {
+            int[] valuesArray = mContext.getResources().getIntArray(valuesId);
+            return valuesArray[which];
+        } else {
+            return which;
+        }
+    }
 
-		if (valuesId > 0)
-		{
-			int[] valuesArray = mContext.getResources().getIntArray(valuesId);
-			for (int index = 0; index < valuesArray.length; index++)
-			{
-				int current = valuesArray[index];
-				if (current == value)
-				{
-					return index;
-				}
-			}
-		}
-		else
-		{
-			return value;
-		}
+    private int getSelectionForSingleChoiceValue(SingleChoiceSetting item) {
+        int value = item.getSelectedValue();
+        int valuesId = item.getValuesId();
 
-		return -1;
-	}
+        if (valuesId > 0) {
+            int[] valuesArray = mContext.getResources().getIntArray(valuesId);
+            for (int index = 0; index < valuesArray.length; index++) {
+                int current = valuesArray[index];
+                if (current == value) {
+                    return index;
+                }
+            }
+        } else {
+            return value;
+        }
+
+        return -1;
+    }
 }
