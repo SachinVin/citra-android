@@ -149,20 +149,4 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
     public void onSettingChanged() {
         mActivity.onSettingChanged();
     }
-
-    @Override
-    public void onGcPadSettingChanged(String key, int value) {
-        mActivity.onGcPadSettingChanged(key, value);
-    }
-
-    @Override
-    public void onWiimoteSettingChanged(String section, int value) {
-        mActivity.onWiimoteSettingChanged(section, value);
-    }
-
-    @Override
-    public void onExtensionSettingChanged(String key, int value) {
-        mActivity.onExtensionSettingChanged(key, value);
-    }
-
 }
