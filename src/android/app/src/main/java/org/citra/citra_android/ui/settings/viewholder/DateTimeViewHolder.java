@@ -38,6 +38,6 @@ public final class DateTimeViewHolder extends SettingViewHolder {
 
     @Override
     public void onClick(View clicked) {
-        getAdapter().onDateTimeClick(mItem);
+        getAdapter().onDateTimeClick(mItem, getAdapterPosition());
     }
 }
