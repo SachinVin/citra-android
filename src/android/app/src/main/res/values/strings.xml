@@ -86,10 +86,6 @@
     <string name="cpu_core_desc">%s</string>
     <string name="dual_core">Dual Core</string>
     <string name="dual_core_descrip">Split workload to two CPU cores instead of one. Increases speed.</string>
-    <string name="overclock_enable">Override Emulated CPU Clock Speed</string>
-    <string name="overclock_enable_description">Higher values can make variable-framerate games run at a higher framerate, requiring a powerful device. Lower values make games run at a lower framerate, increasing emulation speed, but reducing the emulated console\'s performance.</string>
-    <string name="overclock_title">Emulated CPU Clock Speed</string>
-    <string name="overclock_warning">WARNING: Changing this from the default (100%) WILL break games and cause glitches. Please do not report bugs that occur with a non-default clock.</string>
     <string name="init_clock">System clock type</string>
     <string name="init_clock_descrip">Set the simulated 3DS\'s clock to either reflect that of your device or start at a fixed point.</string>
     <string name="init_time">System clock starting time override</string>
@@ -111,6 +107,10 @@
     <string name="hw_shaders_descrip">Use hardware to emulate 3DS shaders</string>
     <string name="shaders_accurate_mul">Enable accurate multiplication in hardware shaders</string>>
     <string name="shaders_accurate_gs">Enable accurate geometric shaders in hardware shaders</string>
+    <string name="frame_limit_enable">Enable Limit Speed</string>
+    <string name="frame_limit_enable_description">When enabled, emulation speed will be limited to a specified percentage of normal speed.</string>
+    <string name="frame_limit_slider">Limit Speed Percent</string>
+    <string name="frame_limit_slider_description">Specifies the percentage to limit emulation speed. With the default of 100% emulation will be limited to normal speed. Values higher or lower will increase or decrease the speed limit.</string>
 
     <string name="enhancements">Enhancements</string>
     <string name="internal_resolution">Internal Resolution</string>
