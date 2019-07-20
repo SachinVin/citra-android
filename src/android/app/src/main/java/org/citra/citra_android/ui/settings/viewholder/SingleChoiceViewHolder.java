@@ -1,5 +1,6 @@
 package org.citra.citra_android.ui.settings.viewholder;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,7 +10,7 @@ import org.citra.citra_android.model.settings.view.SingleChoiceSetting;
 import org.citra.citra_android.ui.settings.SettingsAdapter;
 
 public final class SingleChoiceViewHolder extends SettingViewHolder {
-    private SingleChoiceSetting mItem;
+    private SettingsItem mItem;
 
     private TextView mTextSettingName;
     private TextView mTextSettingDescription;
@@ -20,23 +21,37 @@ public final class SingleChoiceViewHolder extends SettingViewHolder {
 
     @Override
     protected void findViews(View root) {
-        mTextSettingName = root.findViewById(R.id.text_setting_name);
-        mTextSettingDescription = root.findViewById(R.id.text_setting_description);
+        mTextSettingName = (TextView) root.findViewById(R.id.text_setting_name);
+        mTextSettingDescription = (TextView) root.findViewById(R.id.text_setting_description);
     }
 
     @Override
     public void bind(SettingsItem item) {
-        mItem = (SingleChoiceSetting) item;
+        mItem = item;
 
         mTextSettingName.setText(item.getNameId());
 
         if (item.getDescriptionId() > 0) {
             mTextSettingDescription.setText(item.getDescriptionId());
+        } else if (item instanceof SingleChoiceSetting) {
+            SingleChoiceSetting setting = (SingleChoiceSetting) item;
+            int selected = setting.getSelectedValue();
+            Resources resMgr = mTextSettingDescription.getContext().getResources();
+            String[] choices = resMgr.getStringArray(setting.getChoicesId());
+            int[] values = resMgr.getIntArray(setting.getValuesId());
+            for (int i = 0; i < values.length; ++i) {
+                if (values[i] == selected) {
+                    mTextSettingDescription.setText(choices[i]);
+                }
+            }
         }
     }
 
     @Override
     public void onClick(View clicked) {
-        getAdapter().onSingleChoiceClick(mItem);
+        int position = getAdapterPosition();
+        if (mItem instanceof SingleChoiceSetting) {
+            getAdapter().onSingleChoiceClick((SingleChoiceSetting) mItem, position);
+        }
     }
 }
