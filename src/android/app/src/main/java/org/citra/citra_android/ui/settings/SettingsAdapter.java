@@ -35,7 +35,6 @@ import org.citra.citra_android.ui.settings.viewholder.SingleChoiceViewHolder;
 import org.citra.citra_android.ui.settings.viewholder.SliderViewHolder;
 import org.citra.citra_android.ui.settings.viewholder.SubmenuViewHolder;
 import org.citra.citra_android.utils.Log;
-import org.citra.citra_android.utils.SettingsFile;
 
 import java.util.ArrayList;
 
@@ -46,6 +45,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
     private ArrayList<SettingsItem> mSettings;
 
     private SettingsItem mClickedItem;
+    private int mClickedPosition;
     private int mSeekbarProgress;
 
     private AlertDialog mDialog;
@@ -54,6 +54,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
     public SettingsAdapter(SettingsFragmentView view, Context context) {
         mView = view;
         mContext = context;
+        mClickedPosition = -1;
     }
 
     @Override
@@ -136,8 +137,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mView.onSettingChanged();
     }
 
-    public void onSingleChoiceClick(SingleChoiceSetting item) {
+    public void onSingleChoiceClick(SingleChoiceSetting item, int position) {
         mClickedItem = item;
+        mClickedPosition = position;
 
         int value = getSelectionForSingleChoiceValue(item);
 
@@ -156,8 +158,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         }
     };
 
-    public void onDateTimeClick(DateTimeSetting item) {
+    public void onDateTimeClick(DateTimeSetting item, int position) {
         mClickedItem = item;
+        mClickedPosition = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
@@ -202,8 +205,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mDialog = builder.show();
     }
 
-    public void onSliderClick(SliderSetting item) {
+    public void onSliderClick(SliderSetting item, int position) {
         mClickedItem = item;
+        mClickedPosition = position;
         mSeekbarProgress = item.getSelectedValue();
         AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
@@ -269,6 +273,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
             SingleChoiceSetting scSetting = (SingleChoiceSetting) mClickedItem;
 
             int value = getValueForSingleChoiceSelection(scSetting, which);
+            if (scSetting.getSelectedValue() != value) {
+                mView.onSettingChanged();
+            }
 
             // Get the backing Setting, which may be null (if for example it was missing from the file)
             IntSetting setting = scSetting.setSelectedValue(value);
@@ -279,10 +286,14 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
             closeDialog();
         } else if (mClickedItem instanceof SliderSetting) {
             SliderSetting sliderSetting = (SliderSetting) mClickedItem;
-            if (sliderSetting.getSetting() instanceof FloatSetting) {
+            if (sliderSetting.getSelectedValue() != mSeekbarProgress) {
+                mView.onSettingChanged();
+            }
+
+            if (sliderSetting.isPercentSetting() || sliderSetting.getSetting() instanceof FloatSetting) {
                 float value;
 
-                if (sliderSetting.getKey().equals(SettingsFile.KEY_FRAME_LIMIT)) {
+                if (sliderSetting.isPercentSetting()) {
                     value = mSeekbarProgress / 100.0f;
                 } else {
                     value = (float) mSeekbarProgress;
@@ -298,15 +309,20 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                     mView.putSetting(setting);
                 }
             }
+
+            closeDialog();
         }
 
-        mView.onSettingChanged();
         mClickedItem = null;
         mSeekbarProgress = -1;
     }
 
     public void closeDialog() {
         if (mDialog != null) {
+            if (mClickedPosition != -1) {
+                notifyItemChanged(mClickedPosition);
+                mClickedPosition = -1;
+            }
             mDialog.dismiss();
             mDialog = null;
         }
