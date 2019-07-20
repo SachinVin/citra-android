@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Title of the app -->
-    <string name="app_name">Citra Emulator</string>
+    <!-- General application strings -->
+    <string name="app_name">Citra</string>
+    <string name="app_disclaimer">This software will run games for the Nintendo 3DS handheld game console. No game titles are included.\n\nBefore you run, please place your rightfully owned 3DS game files onto your device storage.</string>
 
-    <!-- WARNING Do not move these controller entries AT ALL COSTS! They are indexed with ints, and an assumption
-            is made that they are placed together so that we can access them sequentially in a loop. -->
-    <string name="controller_0">GameCube Controller 1</string>
-    <string name="controller_1">GameCube Controller 2</string>
-    <string name="controller_2">GameCube Controller 3</string>
-    <string name="controller_3">GameCube Controller 4</string>
-    <!-- END WARNING -->
-
+    <!-- Input related strings -->
     <string name="controller_control">Control Stick</string>
     <string name="controller_c">C Stick</string>
     <string name="controller_trig">Triggers</string>
@@ -19,7 +13,6 @@
     <string name="modifier_range">Modifier Range</string>
     <string name="analog_radius">Analog Radius (High value = High sensitivity)</string>
     <string name="analog_threshold">Analog Threshold (Low value = High sensitivity)</string>
-
     <string name="input_binding">Input Binding</string>
     <string name="input_binding_descrip">Press or move an input to bind it to %1$s.</string>
 
@@ -48,55 +41,26 @@
     <string name="trigger_left">L</string>
     <string name="trigger_right">R</string>
 
-    <!-- Nunchuk only buttons -->
-    <string name="nunchuk_button_c">C</string>
-
     <!-- Classic only buttons -->
     <string name="classic_button_zl">ZL</string>
     <string name="classic_button_zr">ZR</string>
     <string name="classic_leftstick">Left Stick</string>
     <string name="classic_rightstick">Right Stick</string>
 
-    <!-- Guitar only buttons -->
-    <string name="guitar_frets">Frets</string>
-    <string name="guitar_strum">Strum</string>
-    <string name="guitar_whammy">Whammy</string>
-    <string name="guitar_whammy_bar">Bar</string>
-
-    <!-- Drums only buttons -->
-    <string name="drums_pads">Pads</string>
-    <string name="drums_pad_bass">Bass</string>
-
-    <!-- Turntable only buttons -->
-    <string name="turntable_button_green_left">Green Left</string>
-    <string name="turntable_button_red_left">Red Left</string>
-    <string name="turntable_button_blue_left">Blue Left</string>
-    <string name="turntable_button_green_right">Green Right</string>
-    <string name="turntable_button_red_right">Red Right</string>
-    <string name="turntable_button_blue_right">Blue Right</string>
-    <string name="turntable_button_euphoria">Euphoria</string>
-    <string name="turntable_table_left">Table Left</string>
-    <string name="turntable_table_right">Table Right</string>
-    <string name="turntable_effect">Effect</string>
-    <string name="turntable_effect_dial">Dial</string>
-    <string name="turntable_crossfade">Crossfade</string>
-
-    <!-- CPU Preference Fragment -->
+    <!-- Core settings strings -->
     <string name="cpu_jit">Enable CPU JIT</string>
     <string name="cpu_core_desc">%s</string>
     <string name="dual_core">Dual Core</string>
     <string name="dual_core_descrip">Split workload to two CPU cores instead of one. Increases speed.</string>
     <string name="init_clock">System clock type</string>
     <string name="init_clock_descrip">Set the simulated 3DS\'s clock to either reflect that of your device or start at a fixed point.</string>
+
+    <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>
     <string name="init_time_descrip">If the System clock type is Fixed, this changes at which Date/Time it starts</string>
-    <string name="slot_a_device">GameCube Slot A Device</string>
-    <string name="slot_b_device">GameCube Slot B Device</string>
-    <string name="audio_stretch">Audio Stretching</string>
-    <string name="audio_stretch_description">Stretches audio to reduce stuttering. Increases latency.</string>
     <string name="region">Emulated region</string>
 
-    <!-- Video Preference Fragment -->
+    <!-- Graphics settings strings -->
     <string name="video_backend">Video Backend</string>
     <string name="video_backend_descrip">Select the API used for graphics rendering.</string>
     <string name="show_fps">Show FPS</string>
@@ -111,27 +75,14 @@
     <string name="frame_limit_enable_description">When enabled, emulation speed will be limited to a specified percentage of normal speed.</string>
     <string name="frame_limit_slider">Limit Speed Percent</string>
     <string name="frame_limit_slider_description">Specifies the percentage to limit emulation speed. With the default of 100% emulation will be limited to normal speed. Values higher or lower will increase or decrease the speed limit.</string>
-
-    <string name="enhancements">Enhancements</string>
     <string name="internal_resolution">Internal Resolution</string>
     <string name="internal_resolution_descrip">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games. Use zero(0) for auto scaling</string>
-    <string name="FSAA">Full-scene Anti-aliasing</string>
-    <string name="FSAA_descrip">Reduces the amount of aliasing caused by rasterizing 3D graphics. This makes the rendered picture look less blocky. Heavily decreases emulation speed and sometimes causes issues.</string>
-    <string name="anisotropic_filtering">Anisotropic Filtering</string>
-    <string name="anisotropic_filtering_descrip">Enhances visual quality of textures that are at oblique viewing angles. Might cause issues in a small number of games.</string>
-    <string name="postprocessing_shader">Post Processing Shader</string>
-    <string name="postprocessing_shader_descrip">Apply a post-processing effect after finishing a frame.</string>
-    <string name="scaled_efb_copy">Scaled EFB Copy</string>
-    <string name="scaled_efb_copy_descrip">Greatly increases quality of textures generated using render to texture effects. Raising the internal resolution will improve the effect of this setting. Slightly decreases performance and possibly causes issues (although unlikely).</string>
-    <string name="per_pixel_lighting">Per-Pixel Lighting</string>
-    <string name="per_pixel_lighting_descrip">Calculate lighting of 3D graphics per-pixel rather than per vertex. Decreases emulation speed by some percent (depending on your GPU). This usually is a safe enhancement, but might cause issues sometimes.</string>
-    <string name="force_texture_filtering">Force Texture Filtering</string>
-    <string name="force_texture_filtering_descrip">Force texture filtering even if the emulated game explicitly disabled it. Improves texture quality slightly but causes glitches in some games.</string>
-    <string name="disable_fog">Disable Fog</string>
-    <string name="disable_fog_descrip">Makes distant objects more visible by removing fog, thus increasing the overall detail. Disabling fog will break some games which rely on proper fog emulation.</string>
-    <string name="disable_copy_filter">Disable Copy Filter</string>
-    <string name="disable_copy_filter_descrip">Disables the blending of adjacent rows when copying the EFB. This is known in some games as \"deflickering\" or \"smoothing\". Disabling the filter is usually safe, and may result in a sharper image.</string>
 
+    <!-- Audio settings strings -->
+    <string name="audio_stretch">Audio Stretching</string>
+    <string name="audio_stretch_description">Stretches audio to reduce stuttering. Increases latency.</string>
+
+    <!-- Miscellaneous strings -->
     <string name="hacks">Hacks</string>
     <string name="embedded_frame_buffer">Embedded Frame Buffer</string>
     <string name="skip_efb_access">Skip EFB Access from CPU</string>
