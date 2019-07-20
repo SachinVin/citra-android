@@ -25,6 +25,7 @@ public final class MainPresenter {
     public void onCreate() {
         String versionName = BuildConfig.VERSION_NAME;
         mView.setVersionString(versionName);
+        refeshGameList();
     }
 
     public void onFabClick() {
@@ -38,9 +39,7 @@ public final class MainPresenter {
                 return true;
 
             case R.id.menu_refresh:
-                GameDatabase databaseHelper = DolphinApplication.databaseHelper;
-                databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
-                mView.refresh();
+                refeshGameList();
                 return true;
 
             case R.id.button_add_directory:
@@ -67,13 +66,17 @@ public final class MainPresenter {
         mView.refreshFragmentScreenshot(resultCode);
     }
 
-
     public void loadGames() {
         GameDatabase databaseHelper = DolphinApplication.databaseHelper;
-
         databaseHelper.getGames()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(games -> mView.showGames(games));
+    }
+
+    private void refeshGameList() {
+        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+        databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
+        mView.refresh();
     }
 }
