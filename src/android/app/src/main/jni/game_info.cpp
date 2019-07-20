@@ -14,10 +14,13 @@
 #include "jni/game_info.h"
 
 namespace GameInfo {
+
 std::vector<u8> GetSMDHData(std::string physical_name) {
     std::unique_ptr<Loader::AppLoader> loader = Loader::GetLoader(physical_name);
-    if (!loader)
+    if (!loader) {
         LOG_ERROR(Frontend, "Failed to obtain loader");
+        return {};
+    }
 
     u64 program_id = 0;
     loader->ReadProgramId(program_id);
