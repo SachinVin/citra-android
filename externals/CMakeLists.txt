@@ -31,14 +31,12 @@ target_include_directories(catch-single-include INTERFACE catch/single_include)
 add_subdirectory(cryptopp)
 
 # Dynarmic
-if (ARCHITECTURE_x86_64)
-    # Dynarmic will skip defining xbyak if it's already defined, we then define it below
-    add_library(xbyak INTERFACE)
-    option(DYNARMIC_TESTS OFF)
-    set(DYNARMIC_NO_BUNDLED_FMT ON)
-    set(DYNARMIC_FRONTENDS "A32")
-    add_subdirectory(dynarmic)
-endif()
+# Dynarmic will skip defining xbyak if it's already defined, we then define it below
+add_library(xbyak INTERFACE)
+option(DYNARMIC_TESTS OFF)
+set(DYNARMIC_NO_BUNDLED_FMT ON)
+set(DYNARMIC_FRONTENDS "A32")
+add_subdirectory(dynarmic)
 
 # libfmt
 add_subdirectory(fmt)
