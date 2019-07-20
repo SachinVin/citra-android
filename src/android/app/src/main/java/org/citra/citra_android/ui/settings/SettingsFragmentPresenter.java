@@ -79,13 +79,13 @@ public final class SettingsFragmentPresenter {
             case SettingsFile.FILE_NAME_CONFIG:
                 addConfigSettings(sl);
                 break;
-            case SettingsFile.SECTION_GENERAL:
+            case SettingsFile.SECTION_CORE:
                 addGeneralSettings(sl);
                 break;
             case SettingsFile.SECTION_SYSTEM:
                 addSystemSettings(sl);
                 break;
-            case SettingsFile.SECTION_GRAPHICS:
+            case SettingsFile.SECTION_RENDERER:
                 addGraphicsSettings(sl);
                 break;
             case SettingsFile.SECTION_AUDIO:
@@ -103,9 +103,9 @@ public final class SettingsFragmentPresenter {
     private void addConfigSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_settings);
 
-        sl.add(new SubmenuSetting(null, null, R.string.preferences_general, 0, SettingsFile.SECTION_GENERAL));
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_general, 0, SettingsFile.SECTION_CORE));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_system, 0, SettingsFile.SECTION_SYSTEM));
-        sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, SettingsFile.SECTION_GRAPHICS));
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, SettingsFile.SECTION_RENDERER));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_audio, 0, SettingsFile.SECTION_AUDIO));
     }
 
@@ -115,12 +115,12 @@ public final class SettingsFragmentPresenter {
         Setting useCpuJit = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
-            useCpuJit = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GENERAL).getSetting(SettingsFile.KEY_CPU_JIT);
+            useCpuJit = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CORE).getSetting(SettingsFile.KEY_CPU_JIT);
         } else {
             mView.passSettingsToActivity(mSettings);
         }
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, SettingsFile.SECTION_GENERAL, SettingsFile.SETTINGS_DOLPHIN, R.string.cpu_jit, 0, true, useCpuJit));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, SettingsFile.SECTION_CORE, SettingsFile.SETTINGS_DOLPHIN, R.string.cpu_jit, 0, true, useCpuJit));
     }
 
     private void addSystemSettings(ArrayList<SettingsItem> sl) {
@@ -156,14 +156,14 @@ public final class SettingsFragmentPresenter {
         Setting frameLimitValue = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
-            hardwareRenderer = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_HW_RENDERER);
-            hardwareShader = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_HW_SHADER);
-            shadersAccurateMul = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
-            shadersAccurateGs = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS);
-            resolutionFactor = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
-            vsyncEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_USE_VSYNC);
-            frameLimitEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
-            frameLimitValue = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_FRAME_LIMIT);
+            hardwareRenderer = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_HW_RENDERER);
+            hardwareShader = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_HW_SHADER);
+            shadersAccurateMul = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
+            shadersAccurateGs = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS);
+            resolutionFactor = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
+            vsyncEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_USE_VSYNC);
+            frameLimitEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
+            frameLimitValue = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_FRAME_LIMIT);
         } else {
             mView.passSettingsToActivity(mSettings);
         }
@@ -172,14 +172,14 @@ public final class SettingsFragmentPresenter {
             mView.passSettingsToActivity(mSettings);
         }
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_RENDERER, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_renderer, 0, true, hardwareRenderer));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_shaders, R.string.hw_shaders_descrip, true, hardwareShader));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_mul, 0, false, shadersAccurateMul));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_gs, 0, false, shadersAccurateGs));
-        sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.internal_resolution, R.string.internal_resolution_descrip, 10, "x", 0, resolutionFactor));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.vsync, 0, false, vsyncEnable));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_enable, R.string.frame_limit_enable_description, false, frameLimitEnable));
-        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 500, "%", 100, frameLimitValue));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_RENDERER, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_renderer, 0, true, hardwareRenderer));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_shaders, R.string.hw_shaders_descrip, true, hardwareShader));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_mul, 0, false, shadersAccurateMul));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_gs, 0, false, shadersAccurateGs));
+        sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.internal_resolution, R.string.internal_resolution_descrip, 10, "x", 0, resolutionFactor));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.vsync, 0, false, vsyncEnable));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_enable, R.string.frame_limit_enable_description, false, frameLimitEnable));
+        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 500, "%", 100, frameLimitValue));
     }
 
     private void addAudioSettings(ArrayList<SettingsItem> sl) {
