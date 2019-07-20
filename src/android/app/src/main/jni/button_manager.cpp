@@ -311,6 +311,7 @@ void Init() {
 
 void Shutdown() {
     Input::UnregisterFactory<Input::ButtonDevice>("gamepad");
+    Input::UnregisterFactory<Input::AnalogDevice>("gamepad");
     button.reset();
     analog.reset();
 }
