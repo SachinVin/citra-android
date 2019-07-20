@@ -113,20 +113,14 @@ public final class SettingsFragmentPresenter {
         mView.getActivity().setTitle(R.string.preferences_general);
 
         Setting useCpuJit = null;
-        Setting frameLimitEnable = null;
-        Setting frameLimitValue = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
             useCpuJit = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GENERAL).getSetting(SettingsFile.KEY_CPU_JIT);
-            frameLimitEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GENERAL).getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
-            frameLimitValue = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GENERAL).getSetting(SettingsFile.KEY_FRAME_LIMIT);
         } else {
             mView.passSettingsToActivity(mSettings);
         }
 
         sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, SettingsFile.SECTION_GENERAL, SettingsFile.SETTINGS_DOLPHIN, R.string.cpu_jit, 0, true, useCpuJit));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, SettingsFile.SECTION_GENERAL, SettingsFile.SETTINGS_DOLPHIN, R.string.overclock_enable, 0, false, frameLimitEnable));
-        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, SettingsFile.SECTION_GENERAL, SettingsFile.SETTINGS_DOLPHIN, R.string.overclock_title, R.string.overclock_enable_description, 500, "%", 100, frameLimitValue));
     }
 
     private void addSystemSettings(ArrayList<SettingsItem> sl) {
@@ -158,6 +152,8 @@ public final class SettingsFragmentPresenter {
         Setting shadersAccurateGs = null;
         Setting resolutionFactor = null;
         Setting vsyncEnable = null;
+        Setting frameLimitEnable = null;
+        Setting frameLimitValue = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
             hardwareRenderer = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_HW_RENDERER);
@@ -166,6 +162,8 @@ public final class SettingsFragmentPresenter {
             shadersAccurateGs = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS);
             resolutionFactor = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
             vsyncEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_USE_VSYNC);
+            frameLimitEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
+            frameLimitValue = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_GRAPHICS).getSetting(SettingsFile.KEY_FRAME_LIMIT);
         } else {
             mView.passSettingsToActivity(mSettings);
         }
@@ -180,6 +178,8 @@ public final class SettingsFragmentPresenter {
         sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_GS, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_gs, 0, false, shadersAccurateGs));
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.internal_resolution, R.string.internal_resolution_descrip, 10, "x", 0, resolutionFactor));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.vsync, 0, false, vsyncEnable));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_enable, R.string.frame_limit_enable_description, false, frameLimitEnable));
+        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, SettingsFile.SECTION_GRAPHICS, SettingsFile.SETTINGS_DOLPHIN, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 500, "%", 100, frameLimitValue));
     }
 
     private void addAudioSettings(ArrayList<SettingsItem> sl) {
