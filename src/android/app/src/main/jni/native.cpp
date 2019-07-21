@@ -194,6 +194,8 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
 
 void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj) {
     if (Settings::values.layout_option == Settings::LayoutOption::MobilePortrait) {
+        Settings::values.layout_option = Settings::LayoutOption::MobileLandscape;
+    } else if (Settings::values.layout_option == Settings::LayoutOption::MobileLandscape) {
         Settings::values.layout_option = Settings::LayoutOption::SingleScreen;
     } else if (Settings::values.layout_option == Settings::LayoutOption::SingleScreen) {
         Settings::values.layout_option = Settings::LayoutOption::LargeScreen;
