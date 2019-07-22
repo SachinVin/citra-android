@@ -278,12 +278,17 @@ public final class NativeLibrary {
     /**
      * Switches the screen layout.
      */
-    public static native void SwitchScreenLayout();
+    public static native void SwitchScreenLayout(boolean is_portrait_mode);
+
+    /**
+     * Notifies the core emulation that the orientation has changed.
+     */
+    public static native void NotifyOrientationChange(boolean is_portrait_mode);
 
     /**
      * Swaps the top and bottom screens.
      */
-    public static native void SwapScreens();
+    public static native void SwapScreens(boolean is_portrait_mode);
 
     public static boolean displayAlertMsg(final String caption, final String text,
                                           final boolean yesNo) {

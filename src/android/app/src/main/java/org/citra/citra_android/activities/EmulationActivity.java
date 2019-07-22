@@ -3,6 +3,7 @@ package org.citra.citra_android.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -366,12 +367,12 @@ public final class EmulationActivity extends AppCompatActivity {
 
             // Switch the layout of the screens
             case MENU_ACTION_SWITCH_SCREEN_LAYOUT:
-                NativeLibrary.SwitchScreenLayout();
+                NativeLibrary.SwitchScreenLayout(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
                 return;
 
             // Swap the top and bottom screen locations
             case MENU_ACTION_SWAP_SCREENS:
-                NativeLibrary.SwapScreens();
+                NativeLibrary.SwapScreens(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
                 return;
 
             // Reset overlay placement
