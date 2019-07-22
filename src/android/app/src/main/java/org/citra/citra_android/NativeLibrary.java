@@ -276,14 +276,9 @@ public final class NativeLibrary {
     private static native void CacheClassesAndMethods();
 
     /**
-     * Switches the screen layout.
-     */
-    public static native void SwitchScreenLayout(boolean is_portrait_mode);
-
-    /**
      * Notifies the core emulation that the orientation has changed.
      */
-    public static native void NotifyOrientationChange(boolean is_portrait_mode);
+    public static native void NotifyOrientationChange(int layout_option, boolean is_portrait_mode);
 
     /**
      * Swaps the top and bottom screens.

@@ -344,7 +344,14 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
             joystick.draw(canvas);
         }
 
-        NativeLibrary.NotifyOrientationChange(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+        // This is a convenient place to handle changes to orientation
+        HandleOrientationChange();
+    }
+
+    private void HandleOrientationChange() {
+        final int layoutOption = mPreferences.getInt("LandscapeScreenLayout",5 /*LayoutOption_MobileLandscape*/);
+        final boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        NativeLibrary.NotifyOrientationChange(layoutOption, isPortrait);
     }
 
     @Override
