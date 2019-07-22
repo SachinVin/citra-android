@@ -22,8 +22,14 @@ public final class MenuFragment extends Fragment implements View.OnClickListener
         buttonsActionsMap.append(R.id.menu_emulation_toggle_perf_stats,
                 EmulationActivity.MENU_ACTION_TOGGLE_PREF_STATS);
         buttonsActionsMap.append(R.id.menu_exit, EmulationActivity.MENU_ACTION_EXIT);
-        buttonsActionsMap.append(R.id.menu_emulation_switch_screen_layout,
-                EmulationActivity.MENU_ACTION_SWITCH_SCREEN_LAYOUT);
+        buttonsActionsMap.append(R.id.menu_screen_layout_landscape,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE);
+        buttonsActionsMap.append(R.id.menu_screen_layout_portrait,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_PORTRAIT);
+        buttonsActionsMap.append(R.id.menu_screen_layout_single,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_SINGLE);
+        buttonsActionsMap.append(R.id.menu_screen_layout_sidebyside,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE);
         buttonsActionsMap.append(R.id.menu_emulation_swap_screens,
                 EmulationActivity.MENU_ACTION_SWAP_SCREENS);
     }
@@ -62,9 +68,5 @@ public final class MenuFragment extends Fragment implements View.OnClickListener
     @SuppressWarnings("WrongConstant")
     @Override
     public void onClick(View button) {
-        int action = buttonsActionsMap.get(button.getId());
-        if (action >= 0) {
-            ((EmulationActivity) getActivity()).handleMenuAction(action);
-        }
     }
 }
