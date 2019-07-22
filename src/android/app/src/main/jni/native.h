@@ -139,11 +139,14 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_WriteProfileR
 JNIEXPORT void JNICALL
 Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* env, jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env,
-                                                                                      jobject obj);
+JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(
+    JNIEnv* env, jobject obj, jboolean is_portrait_mode);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwapScreens(JNIEnv* env,
-                                                                               jobject obj);
+JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
+    JNIEnv* env, jobject obj, jboolean is_portrait_mode);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwapScreens(
+    JNIEnv* env, jobject obj, jboolean is_portrait_mode);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_Run__Ljava_lang_String_2(
     JNIEnv* env, jclass type, jstring path_);
