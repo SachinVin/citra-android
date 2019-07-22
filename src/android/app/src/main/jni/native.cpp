@@ -192,7 +192,8 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
                                                 "(Ljava/lang/String;Ljava/lang/String;Z)Z");
 }
 
-void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj) {
+void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj,
+                                                                    jboolean is_portrait_mode) {
     if (Settings::values.layout_option == Settings::LayoutOption::MobilePortrait) {
         Settings::values.layout_option = Settings::LayoutOption::MobileLandscape;
     } else if (Settings::values.layout_option == Settings::LayoutOption::MobileLandscape) {
@@ -204,12 +205,18 @@ void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env,
     } else {
         Settings::values.layout_option = Settings::LayoutOption::MobilePortrait;
     }
-    VideoCore::g_renderer->UpdateCurrentFramebufferLayout();
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
 }
 
-void Java_org_citra_citra_1android_NativeLibrary_SwapScreens(JNIEnv* env, jobject obj) {
+void Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
+    JNIEnv* env, jobject obj, jboolean is_portrait_mode) {
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
+}
+
+void Java_org_citra_citra_1android_NativeLibrary_SwapScreens(JNIEnv* env, jobject obj,
+                                                             jboolean is_portrait_mode) {
     Settings::values.swap_screen = !Settings::values.swap_screen;
-    VideoCore::g_renderer->UpdateCurrentFramebufferLayout();
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SetUserDirectory(JNIEnv* env, jobject obj,
