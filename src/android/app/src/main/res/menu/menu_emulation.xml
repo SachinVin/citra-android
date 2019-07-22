@@ -33,7 +33,27 @@
     <item
         android:id="@+id/menu_emulation_switch_screen_layout"
         app:showAsAction="never"
-        android:title="@string/emulation_switch_screen_layout"/>
+        android:title="@string/emulation_switch_screen_layout">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_screen_layout_landscape"
+                    android:title="@string/emulation_screen_layout_landscape"/>
+
+                <item
+                    android:id="@+id/menu_screen_layout_portrait"
+                    android:title="@string/emulation_screen_layout_portrait"/>
+
+                <item
+                    android:id="@+id/menu_screen_layout_single"
+                    android:title="@string/emulation_screen_layout_single"/>
+
+                <item
+                    android:id="@+id/menu_screen_layout_sidebyside"
+                    android:title="@string/emulation_screen_layout_sidebyside"/>
+            </group>
+        </menu>
+    </item>
 
     <item
         android:id="@+id/menu_emulation_swap_screens"

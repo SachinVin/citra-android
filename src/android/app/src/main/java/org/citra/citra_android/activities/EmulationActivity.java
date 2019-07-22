@@ -57,9 +57,12 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_ADJUST_SCALE = 2;
     public static final int MENU_ACTION_EXIT = 3;
     public static final int MENU_ACTION_TOGGLE_PREF_STATS = 4;
-    public static final int MENU_ACTION_SWITCH_SCREEN_LAYOUT = 5;
-    public static final int MENU_ACTION_SWAP_SCREENS = 6;
-    public static final int MENU_ACTION_RESET_OVERLAY = 7;
+    public static final int MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE = 5;
+    public static final int MENU_ACTION_SCREEN_LAYOUT_PORTRAIT = 6;
+    public static final int MENU_ACTION_SCREEN_LAYOUT_SINGLE = 7;
+    public static final int MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE = 8;
+    public static final int MENU_ACTION_SWAP_SCREENS = 9;
+    public static final int MENU_ACTION_RESET_OVERLAY = 10;
     private static final String BACKSTACK_NAME_MENU = "menu";
     private static final String BACKSTACK_NAME_SUBMENU = "submenu";
     private static SparseIntArray buttonsActionsMap = new SparseIntArray();
@@ -74,8 +77,14 @@ public final class EmulationActivity extends AppCompatActivity {
         buttonsActionsMap.append(R.id.menu_emulation_toggle_perf_stats,
                 EmulationActivity.MENU_ACTION_TOGGLE_PREF_STATS);
         buttonsActionsMap.append(R.id.menu_exit, EmulationActivity.MENU_ACTION_EXIT);
-        buttonsActionsMap.append(R.id.menu_emulation_switch_screen_layout,
-                EmulationActivity.MENU_ACTION_SWITCH_SCREEN_LAYOUT);
+        buttonsActionsMap.append(R.id.menu_screen_layout_landscape,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE);
+        buttonsActionsMap.append(R.id.menu_screen_layout_portrait,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_PORTRAIT);
+        buttonsActionsMap.append(R.id.menu_screen_layout_single,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_SINGLE);
+        buttonsActionsMap.append(R.id.menu_screen_layout_sidebyside,
+                EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE);
         buttonsActionsMap.append(R.id.menu_emulation_swap_screens,
                 EmulationActivity.MENU_ACTION_SWAP_SCREENS);
         buttonsActionsMap
@@ -214,7 +223,6 @@ public final class EmulationActivity extends AppCompatActivity {
         }
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
     }
 
     @Override
@@ -326,10 +334,38 @@ public final class EmulationActivity extends AppCompatActivity {
                 .withEndAction(afterShowingScreenshot);
     }
 
+    // These must match what is defined in src/core/settings.h
+    private static final int LayoutOption_Default = 0;
+    private static final int LayoutOption_SingleScreen = 1;
+    private static final int LayoutOption_LargeScreen = 2;
+    private static final int LayoutOption_SideScreen = 3;
+    private static final int LayoutOption_MobilePortrait = 4;
+    private static final int LayoutOption_MobileLandscape = 5;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_emulation, menu);
+
+
+       // mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int layoutOption = mPreferences.getInt("LandscapeScreenLayout", LayoutOption_MobileLandscape);
+
+        int menuItemId = R.id.menu_screen_layout_landscape;
+        switch (layoutOption) {
+            case LayoutOption_SingleScreen:
+                menuItemId = R.id.menu_screen_layout_single;
+                break;
+            case LayoutOption_SideScreen:
+                menuItemId = R.id.menu_screen_layout_sidebyside;
+                break;
+            case LayoutOption_MobilePortrait:
+                menuItemId = R.id.menu_screen_layout_portrait;
+                break;
+        }
+
+        menu.findItem(menuItemId).setChecked(true);
+
         return true;
     }
 
@@ -337,14 +373,8 @@ public final class EmulationActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int action = buttonsActionsMap.get(item.getItemId(), -1);
-        if (action >= 0) {
-            handleMenuAction(action);
-        }
-        return true;
-    }
 
-    public void handleMenuAction(@MenuAction int menuAction) {
-        switch (menuAction) {
+        switch (action) {
             // Edit the placement of the controls
             case MENU_ACTION_EDIT_CONTROLS_PLACEMENT:
                 editControlsPlacement();
@@ -353,27 +383,42 @@ public final class EmulationActivity extends AppCompatActivity {
             // Enable/Disable specific buttons or the entire input overlay.
             case MENU_ACTION_TOGGLE_CONTROLS:
                 toggleControls();
-                return;
+                break;
 
             // Adjust the scale of the overlay controls.
             case MENU_ACTION_ADJUST_SCALE:
                 adjustScale();
-                return;
+                break;
 
             // Toggle the visibility of the Performance stats TextView
             case MENU_ACTION_TOGGLE_PREF_STATS:
                 mEmulationFragment.togglePerfStatsVisibility();
-                return;
+                break;
 
-            // Switch the layout of the screens
-            case MENU_ACTION_SWITCH_SCREEN_LAYOUT:
-                NativeLibrary.SwitchScreenLayout(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-                return;
+            // Sets the screen layout to Landscape
+            case MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE:
+                changeScreenOrientation(LayoutOption_MobileLandscape, item);
+                break;
+
+            // Sets the screen layout to Portrait
+            case MENU_ACTION_SCREEN_LAYOUT_PORTRAIT:
+                changeScreenOrientation(LayoutOption_MobilePortrait, item);
+                break;
+
+            // Sets the screen layout to Single
+            case MENU_ACTION_SCREEN_LAYOUT_SINGLE:
+                changeScreenOrientation(LayoutOption_SingleScreen, item);
+                break;
+
+            // Sets the screen layout to Side by Side
+            case MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE:
+                changeScreenOrientation(LayoutOption_SideScreen, item);
+                break;
 
             // Swap the top and bottom screen locations
             case MENU_ACTION_SWAP_SCREENS:
                 NativeLibrary.SwapScreens(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-                return;
+                break;
 
             // Reset overlay placement
             case MENU_ACTION_RESET_OVERLAY:
@@ -384,8 +429,21 @@ public final class EmulationActivity extends AppCompatActivity {
                 toggleMenu();  // Hide the menu (it will be showing since we just clicked it)
                 mEmulationFragment.stopEmulation();
                 exitWithAnimation();
-                return;
+                break;
         }
+
+        return true;
+    }
+
+    private void changeScreenOrientation(int layoutOption, MenuItem item) {
+        item.setChecked(true);
+
+        NativeLibrary.NotifyOrientationChange(layoutOption,
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt("LandscapeScreenLayout", layoutOption);
+        editor.apply();
     }
 
     private void editControlsPlacement() {
@@ -560,7 +618,8 @@ public final class EmulationActivity extends AppCompatActivity {
 
     @Retention(SOURCE)
     @IntDef({MENU_ACTION_EDIT_CONTROLS_PLACEMENT, MENU_ACTION_TOGGLE_CONTROLS, MENU_ACTION_ADJUST_SCALE,
-            MENU_ACTION_EXIT, MENU_ACTION_TOGGLE_PREF_STATS, MENU_ACTION_SWITCH_SCREEN_LAYOUT,
+            MENU_ACTION_EXIT, MENU_ACTION_TOGGLE_PREF_STATS, MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE,
+            MENU_ACTION_SCREEN_LAYOUT_PORTRAIT, MENU_ACTION_SCREEN_LAYOUT_SINGLE, MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE,
             MENU_ACTION_SWAP_SCREENS, MENU_ACTION_RESET_OVERLAY})
     public @interface MenuAction {
     }

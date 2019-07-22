@@ -192,24 +192,9 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
                                                 "(Ljava/lang/String;Ljava/lang/String;Z)Z");
 }
 
-void Java_org_citra_citra_1android_NativeLibrary_SwitchScreenLayout(JNIEnv* env, jobject obj,
-                                                                    jboolean is_portrait_mode) {
-    if (Settings::values.layout_option == Settings::LayoutOption::MobilePortrait) {
-        Settings::values.layout_option = Settings::LayoutOption::MobileLandscape;
-    } else if (Settings::values.layout_option == Settings::LayoutOption::MobileLandscape) {
-        Settings::values.layout_option = Settings::LayoutOption::SingleScreen;
-    } else if (Settings::values.layout_option == Settings::LayoutOption::SingleScreen) {
-        Settings::values.layout_option = Settings::LayoutOption::LargeScreen;
-    } else if (Settings::values.layout_option == Settings::LayoutOption::LargeScreen) {
-        Settings::values.layout_option = Settings::LayoutOption::SideScreen;
-    } else {
-        Settings::values.layout_option = Settings::LayoutOption::MobilePortrait;
-    }
-    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
-}
-
 void Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
-    JNIEnv* env, jobject obj, jboolean is_portrait_mode) {
+    JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode) {
+    Settings::values.layout_option = static_cast<Settings::LayoutOption>(layout_option);
     VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
 }
 
