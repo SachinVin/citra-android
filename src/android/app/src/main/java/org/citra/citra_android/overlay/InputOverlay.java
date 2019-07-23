@@ -648,7 +648,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
             overlayButtons.add(initializeOverlayButton(getContext(), R.drawable.button_home,
                     R.drawable.button_home_pressed, ButtonType.BUTTON_HOME, orientation));
         }
-        if (mPreferences.getBoolean("buttonToggle11", false)) {
+        if (mPreferences.getBoolean("buttonToggle11", true)) {
             overlayDpads.add(initializeOverlayDpad(getContext(), R.drawable.dpad,
                     R.drawable.dpad_pressed_one_direction,
                     R.drawable.dpad_pressed_two_directions,
