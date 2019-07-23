@@ -491,7 +491,17 @@ public final class EmulationActivity extends AppCompatActivity {
         builder.setTitle(R.string.emulation_toggle_controls);
 
         for (int i = 0; i < enabledButtons.length; i++) {
-            enabledButtons[i] = mPreferences.getBoolean("buttonToggle" + i, true);
+            // Buttons that are disabled by default
+            boolean defaultValue = true;
+            switch (i) {
+                case 6: // ZL
+                case 7: // ZR
+                case 13: // C-stick
+                    defaultValue = false;
+                    break;
+            }
+
+            enabledButtons[i] = mPreferences.getBoolean("buttonToggle" + i, defaultValue);
         }
         builder.setMultiChoiceItems(R.array.n3dsButtons, enabledButtons,
                 (dialog, indexSelected, isChecked) -> editor
