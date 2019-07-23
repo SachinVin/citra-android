@@ -14,8 +14,6 @@ import org.citra.citra_android.R;
 import org.citra.citra_android.adapters.GameAdapter;
 
 public final class PlatformGamesFragment extends Fragment implements PlatformGamesView {
-    private static final String ARG_PLATFORM = "platform";
-
     private PlatformGamesPresenter mPresenter = new PlatformGamesPresenter(this);
 
     private GameAdapter mAdapter;
@@ -47,7 +45,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(8));
+        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(6));
     }
 
     @Override
