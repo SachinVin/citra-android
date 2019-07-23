@@ -174,7 +174,7 @@ public final class SettingsFile {
             writer.store();
         } catch (IOException e) {
             Log.error("[SettingsFile] File not found: " + fileName + ".ini: " + e.getMessage());
-            view.showToastMessage("Error saving " + fileName + ".ini: " + e.getMessage());
+            view.showToastMessage("Error saving " + fileName + ".ini: " + e.getMessage(), false);
         }
     }
 
