@@ -244,8 +244,10 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadEvent(JNIEnv* env,
 jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadMoveEvent(JNIEnv* env, jobject obj,
                                                                         jstring jDevice, jint Axis,
                                                                         jfloat x, jfloat y) {
+    // Clamp joystick movement to supported minimum and maximum
     // Citra uses an inverted y axis sent by the frontend
-    y = -y;
+    x = std::clamp(x, -1.f, 1.f);
+    y = std::clamp(-y, -1.f, 1.f);
     InputManager::AnalogHandler()->MoveJoystick(Axis, x, y);
     return static_cast<jboolean>(InputManager::AnalogHandler()->MoveJoystick(Axis, x, y));
 }
