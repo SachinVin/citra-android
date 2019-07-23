@@ -136,8 +136,8 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
     }
 
     @Override
-    public void showToastMessage(String message) {
-        mActivity.showToastMessage(message);
+    public void showToastMessage(String message, boolean is_long) {
+        mActivity.showToastMessage(message, is_long);
     }
 
     @Override
