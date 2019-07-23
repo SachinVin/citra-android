@@ -3,6 +3,7 @@ package org.citra.citra_android.adapters;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
     private GameDataSetObserver mObserver;
 
     private boolean mDatasetValid;
+    private long mLastClickTime = 0;
 
     /**
      * Initializes the adapter's observer, which watches for changes to the dataset. The adapter will
@@ -174,6 +176,12 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
      */
     @Override
     public void onClick(View view) {
+        // Double-click prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         GameViewHolder holder = (GameViewHolder) view.getTag();
 
         EmulationActivity.launch((FragmentActivity) view.getContext(),
