@@ -178,23 +178,6 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         DirectoryInitializationService.startService(getActivity());
     }
 
-    public void toggleInputOverlayVisibility() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-
-        // If the overlay is currently set to INVISIBLE
-        if (!mPreferences.getBoolean("showInputOverlay", false)) {
-            // Set it to VISIBLE
-            mInputOverlay.setVisibility(View.VISIBLE);
-            editor.putBoolean("showInputOverlay", true);
-        } else {
-            // Set it to INVISIBLE
-            mInputOverlay.setVisibility(View.GONE);
-            editor.putBoolean("showInputOverlay", false);
-        }
-
-        editor.apply();
-    }
-
     public void refreshInputOverlay() {
         mInputOverlay.refreshControls();
     }
