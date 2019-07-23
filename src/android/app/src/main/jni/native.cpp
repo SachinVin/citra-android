@@ -40,18 +40,20 @@
 JavaVM* g_java_vm;
 
 namespace {
+
 ANativeWindow* s_surf;
 
 jclass s_jni_class;
 jmethodID s_jni_method_alert;
 
-EmuWindow_Android* emu;
+std::unique_ptr<EmuWindow_Android> window;
 
 std::atomic<bool> is_running{false};
 std::atomic<bool> pause_emulation{false};
 
 std::mutex running_mutex;
 std::condition_variable running_cv;
+
 } // Anonymous namespace
 
 /**
@@ -78,8 +80,6 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 static int RunCitra(const std::string& filepath) {
     LOG_INFO(Frontend, "Citra is Starting");
 
-    Config config;
-
     MicroProfileOnThreadCreate("EmuThread");
     SCOPE_EXIT({ MicroProfileShutdown(); });
 
@@ -91,19 +91,19 @@ static int RunCitra(const std::string& filepath) {
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
 
-    Settings::Apply();
-    InputManager::Init();
-    emu = new EmuWindow_Android(s_surf);
     Core::System& system{Core::System::GetInstance()};
 
-    SCOPE_EXIT({
+    // If we have a window from last session, clean up old state
+    if (window) {
         system.Shutdown();
         InputManager::Shutdown();
-        emu->~EmuWindow_Android();
-    });
+    }
 
-    const Core::System::ResultStatus load_result{system.Load(*emu, filepath)};
+    Settings::Apply();
+    InputManager::Init();
+    window = std::make_unique<EmuWindow_Android>(s_surf);
 
+    const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
     switch (load_result) {
     case Core::System::ResultStatus::ErrorGetLoader:
         LOG_CRITICAL(Frontend, "Failed to obtain loader for {}!", filepath);
@@ -121,7 +121,7 @@ static int RunCitra(const std::string& filepath) {
         LOG_CRITICAL(Frontend, "Error while loading ROM: The ROM format is not supported.");
         return -1;
     case Core::System::ResultStatus::ErrorNotInitialized:
-        LOG_CRITICAL(Frontend, "CPUCore not initialized");
+        LOG_CRITICAL(Frontend, "Core not initialized");
         return -1;
     case Core::System::ResultStatus::ErrorSystemMode:
         LOG_CRITICAL(Frontend, "Failed to determine system mode!");
@@ -148,16 +148,16 @@ static int RunCitra(const std::string& filepath) {
         }
     }
 
-    return 0;
+    return {};
 }
 
 static std::string GetJString(JNIEnv* env, jstring jstr) {
-    std::string result = "";
-    if (!jstr)
-        return result;
+    if (!jstr) {
+        return {};
+    }
 
     const char* s = env->GetStringUTFChars(jstr, nullptr);
-    result = s;
+    std::string result = s;
     env->ReleaseStringUTFChars(jstr, s);
     return result;
 }
@@ -167,7 +167,7 @@ void Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env, job
     s_surf = ANativeWindow_fromSurface(env, surf);
 
     if (is_running) {
-        emu->OnSurfaceChanged(s_surf);
+        window->OnSurfaceChanged(s_surf);
     }
 
     LOG_INFO(Frontend, "Surface changed");
@@ -181,10 +181,6 @@ void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* 
 
     // This reference, however, is valid until we delete it.
     s_jni_class = reinterpret_cast<jclass>(env->NewGlobalRef(localClass));
-
-    // TODO Find a place for this.
-    // So we don't leak a reference to NativeLibrary.class.
-    // env->DeleteGlobalRef(s_jni_class);
 
     // Method signature taken from javap -s
     // Source/Android/app/build/intermediates/classes/arm/debug/org/dolphinemu/dolphinemu/NativeLibrary.class
@@ -231,7 +227,7 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_IsRunning(JNIEnv* env, jobj
 jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadEvent(JNIEnv* env, jobject obj,
                                                                     jstring jDevice, jint button,
                                                                     jint pressed) {
-    bool consumed;
+    bool consumed{};
     if (pressed) {
         consumed = InputManager::ButtonHandler()->PressKey(button);
     } else {
@@ -263,13 +259,13 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadAxisEvent(JNIEnv* 
 void Java_org_citra_citra_1android_NativeLibrary_onTouchEvent(JNIEnv* env, jobject obj, jfloat x,
                                                               jfloat y, jboolean pressed) {
     LOG_DEBUG(Frontend, "Touch at x: %d y: %d", (int)x, (int)y);
-    emu->OnTouchEvent((int)x, (int)y, (bool)pressed);
+    window->OnTouchEvent((int)x, (int)y, (bool)pressed);
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_onTouchMoved(JNIEnv* env, jobject obj, jfloat x,
                                                               jfloat y) {
     LOG_DEBUG(Frontend, "Touch at x: %d y: %d", (int)x, (int)y);
-    emu->OnTouchMoved((int)x, (int)y);
+    window->OnTouchMoved((int)x, (int)y);
 }
 
 jintArray Java_org_citra_citra_1android_NativeLibrary_GetBanner(JNIEnv* env, jobject obj,
