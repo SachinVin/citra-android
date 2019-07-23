@@ -507,9 +507,6 @@ public final class EmulationActivity extends AppCompatActivity {
                 (dialog, indexSelected, isChecked) -> editor
                         .putBoolean("buttonToggle" + indexSelected, isChecked));
 
-
-        builder.setNeutralButton(getString(R.string.emulation_toggle_all),
-                (dialogInterface, i) -> mEmulationFragment.toggleInputOverlayVisibility());
         builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
         {
             editor.apply();
