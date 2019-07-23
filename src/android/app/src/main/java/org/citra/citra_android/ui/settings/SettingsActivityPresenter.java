@@ -114,11 +114,11 @@ public final class SettingsActivityPresenter {
                 if (menuTag.equals("Dolphin")) {
                     SettingsFile.saveFile("../GameSettings/" + gameId, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
                 }
-                mView.showToastMessage("Saved settings for " + gameId);
+                mView.showToastMessage("Saved settings for " + gameId, false);
             } else {
                 Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
                 SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
-                mView.showToastMessage("Saved settings to INI files");
+                mView.showToastMessage("Saved settings to INI files", false);
             }
         }
     }
@@ -168,7 +168,7 @@ public final class SettingsActivityPresenter {
                 break;
 
             case 2:
-                mView.showToastMessage("Please make sure Continuous Scanning is enabled in Core Settings.");
+                mView.showToastMessage("Please make sure Continuous Scanning is enabled in Core Settings.", false);
                 break;
         }
     }

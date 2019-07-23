@@ -2,14 +2,26 @@ package org.citra.citra_android.model.settings.view;
 
 import org.citra.citra_android.model.settings.IntSetting;
 import org.citra.citra_android.model.settings.Setting;
+import org.citra.citra_android.ui.settings.SettingsFragmentView;
 
 public final class CheckBoxSetting extends SettingsItem {
     private boolean mDefaultValue;
+    private boolean mShowPerformanceWarning;
+    private SettingsFragmentView mView;
 
     public CheckBoxSetting(String key, String section, int file, int titleId, int descriptionId,
                            boolean defaultValue, Setting setting) {
         super(key, section, file, setting, titleId, descriptionId);
         mDefaultValue = defaultValue;
+        mShowPerformanceWarning = false;
+    }
+
+    public CheckBoxSetting(String key, String section, int file, int titleId, int descriptionId,
+                           boolean defaultValue, Setting setting, boolean show_performance_warning, SettingsFragmentView view) {
+        super(key, section, file, setting, titleId, descriptionId);
+        mDefaultValue = defaultValue;
+        mView = view;
+        mShowPerformanceWarning = show_performance_warning;
     }
 
     public boolean isChecked() {
@@ -29,6 +41,11 @@ public final class CheckBoxSetting extends SettingsItem {
      * @return null if overwritten successfully; otherwise, a newly created BooleanSetting.
      */
     public IntSetting setChecked(boolean checked) {
+        // Show a performance warning if the setting has been disabled
+        if (mShowPerformanceWarning && !checked) {
+            mView.showToastMessage("Turning off this setting will significantly reduce emulation performance! For the best experience, it is recommended that you leave this setting enabled.", true);
+        }
+
         if (getSetting() == null) {
             IntSetting setting = new IntSetting(getKey(), getSection(), getFile(), checked ? 1 : 0);
             setSetting(setting);
