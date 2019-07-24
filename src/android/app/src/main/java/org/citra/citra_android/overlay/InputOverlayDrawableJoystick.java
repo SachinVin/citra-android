@@ -13,6 +13,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.MotionEvent;
 
+import org.citra.citra_android.NativeLibrary.ButtonType;
+
 /**
  * Custom {@link BitmapDrawable} that is capable
  * of storing it's own ID.
@@ -146,6 +148,13 @@ public final class InputOverlayDrawableJoystick {
         int pointerIndex = event.getActionIndex();
         int fingerPositionX = (int) event.getX(pointerIndex);
         int fingerPositionY = (int) event.getY(pointerIndex);
+
+        int scale = 1;
+        if (mJoystickType == ButtonType.STICK_C) {
+            // C-stick is scaled down to be half the size of the circle pad
+            scale = 2;
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mPreviousTouchX = fingerPositionX;
@@ -157,15 +166,15 @@ public final class InputOverlayDrawableJoystick {
                 mControlPositionX += deltaX;
                 mControlPositionY += deltaY;
                 setBounds(new Rect(mControlPositionX, mControlPositionY,
-                        mOuterBitmap.getIntrinsicWidth() + mControlPositionX,
-                        mOuterBitmap.getIntrinsicHeight() + mControlPositionY));
+                        mOuterBitmap.getIntrinsicWidth() / scale + mControlPositionX,
+                        mOuterBitmap.getIntrinsicHeight() / scale + mControlPositionY));
                 setVirtBounds(new Rect(mControlPositionX, mControlPositionY,
-                        mOuterBitmap.getIntrinsicWidth() + mControlPositionX,
-                        mOuterBitmap.getIntrinsicHeight() + mControlPositionY));
+                        mOuterBitmap.getIntrinsicWidth() / scale + mControlPositionX,
+                        mOuterBitmap.getIntrinsicHeight() / scale + mControlPositionY));
                 SetInnerBounds();
                 setOrigBounds(new Rect(new Rect(mControlPositionX, mControlPositionY,
-                        mOuterBitmap.getIntrinsicWidth() + mControlPositionX,
-                        mOuterBitmap.getIntrinsicHeight() + mControlPositionY)));
+                        mOuterBitmap.getIntrinsicWidth() / scale + mControlPositionX,
+                        mOuterBitmap.getIntrinsicHeight() / scale + mControlPositionY)));
                 mPreviousTouchX = fingerPositionX;
                 mPreviousTouchY = fingerPositionY;
                 break;
