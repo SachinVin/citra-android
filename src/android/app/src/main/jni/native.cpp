@@ -99,6 +99,11 @@ static int RunCitra(const std::string& filepath) {
         InputManager::Shutdown();
     }
 
+    {
+        // Forces a config reload on game boot, if the user changed settings in the UI
+        Config config;
+    }
+
     Settings::Apply();
     InputManager::Init();
     window = std::make_unique<EmuWindow_Android>(s_surf);
