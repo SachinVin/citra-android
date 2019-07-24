@@ -36,7 +36,7 @@ public final class StartupHandler {
             // Prompt user with standard first boot disclaimer
             AlertDialog.Builder builder = new AlertDialog.Builder(parent);
             builder.setTitle(R.string.app_name);
-            builder.setIcon(R.drawable.ic_citra);
+            builder.setIcon(R.drawable.ic_launcher);
             builder.setMessage(parent.getResources().getString(R.string.app_disclaimer));
             builder.setPositiveButton("OK", null);
 
