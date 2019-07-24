@@ -159,6 +159,8 @@
     <string name="emulation_screen_layout_sidebyside">Side by Side Screens</string>
     <string name="emulation_swap_screens">Swap Screens</string>
     <string name="emulation_touch_overlay_reset">Reset Overlay</string>
+    <string name="emulation_close_game">Close Game</string>
+    <string name="emulation_close_game_message">Are you sure that you would like to close the current game?</string>
 
     <string name="write_permission_needed">You need to allow write access to external storage for the emulator to work</string>
     <string name="load_settings">Loading Settings...</string>
