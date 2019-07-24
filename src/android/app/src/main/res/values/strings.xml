@@ -14,7 +14,7 @@
     <string name="analog_radius">Analog Radius (High value = High sensitivity)</string>
     <string name="analog_threshold">Analog Threshold (Low value = High sensitivity)</string>
     <string name="input_binding">Input Binding</string>
-    <string name="input_binding_descrip">Press or move an input to bind it to %1$s.</string>
+    <string name="input_binding_description">Press or move an input to bind it to %1$s.</string>
 
     <!-- Generic buttons (Shared with lots of stuff) -->
     <string name="generic_buttons">Buttons</string>
@@ -49,67 +49,38 @@
 
     <!-- Core settings strings -->
     <string name="cpu_jit">Enable CPU JIT</string>
-    <string name="cpu_core_desc">%s</string>
-    <string name="dual_core">Dual Core</string>
-    <string name="dual_core_descrip">Split workload to two CPU cores instead of one. Increases speed.</string>
+    <string name="cpu_jit_description">Uses the Just-in-Time (JIT) compiler for CPU emulation. When enabled, game performance will be significantly improved.</string>
     <string name="init_clock">System clock type</string>
-    <string name="init_clock_descrip">Set the simulated 3DS\'s clock to either reflect that of your device or start at a fixed point.</string>
+    <string name="init_clock_description">Set the emulated 3DS clock to either reflect that of your device or start at a simulated date and time.</string>
 
     <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>
-    <string name="init_time_descrip">If the System clock type is Fixed, this changes at which Date/Time it starts</string>
+    <string name="init_time_description">If the \"System clock type\" setting is set to \"Simulated clock\", this changes the fixed date and time to start at.</string>
     <string name="region">Emulated region</string>
 
     <!-- Graphics settings strings -->
-    <string name="video_backend">Video Backend</string>
-    <string name="video_backend_descrip">Select the API used for graphics rendering.</string>
     <string name="show_fps">Show FPS</string>
-    <string name="show_fps_descrip">Show the number of frames rendered per second as a measure of emulation speed.</string>
+    <string name="show_fps_description">Show the number of frames rendered per second as a measure of emulation speed.</string>
     <string name="vsync">Enable V-Sync</string>
+    <string name="vsync_description">Synchronizes the game frame rate to the refresh rate of your device.</string>
     <string name="hw_renderer">Enable hardware renderer</string>
+    <string name="hw_renderer_description">Uses hardware to emulate 3DS graphics. When enabled, game performance will be significantly improved.</string>
     <string name="hw_shaders">Enable hardware shader</string>
-    <string name="hw_shaders_descrip">Use hardware to emulate 3DS shaders</string>
-    <string name="shaders_accurate_mul">Enable accurate multiplication in hardware shaders</string>>
-    <string name="shaders_accurate_gs">Enable accurate geometric shaders in hardware shaders</string>
-    <string name="frame_limit_enable">Enable Limit Speed</string>
+    <string name="hw_shaders_description">Uses hardware to emulate 3DS shaders. When enabled, game performance will be significantly improved.</string>
+    <string name="shaders_accurate_mul">Enable accurate shader multiplication</string>
+    <string name="shaders_accurate_mul_description">Uses more accurate multiplication in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>>
+    <string name="shaders_accurate_gs">Enable accurate geometric shaders</string>
+    <string name="shaders_accurate_gs_description">Uses more accurate geometry shaders in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>>
+    <string name="frame_limit_enable">Enable limit speed</string>
     <string name="frame_limit_enable_description">When enabled, emulation speed will be limited to a specified percentage of normal speed.</string>
-    <string name="frame_limit_slider">Limit Speed Percent</string>
+    <string name="frame_limit_slider">Limit speed percent</string>
     <string name="frame_limit_slider_description">Specifies the percentage to limit emulation speed. With the default of 100% emulation will be limited to normal speed. Values higher or lower will increase or decrease the speed limit.</string>
-    <string name="internal_resolution">Internal Resolution</string>
-    <string name="internal_resolution_descrip">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games. Use zero(0) for auto scaling</string>
+    <string name="internal_resolution">Internal resolution</string>
+    <string name="internal_resolution_description">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games. Use zero(0) for auto scaling.</string>
 
     <!-- Audio settings strings -->
-    <string name="audio_stretch">Audio Stretching</string>
-    <string name="audio_stretch_description">Stretches audio to reduce stuttering. Increases latency.</string>
-
-    <!-- Miscellaneous strings -->
-    <string name="hacks">Hacks</string>
-    <string name="embedded_frame_buffer">Embedded Frame Buffer</string>
-    <string name="skip_efb_access">Skip EFB Access from CPU</string>
-    <string name="skip_efb_access_descrip">Ignore any requests from the CPU to read/write to the EFB.</string>
-    <string name="ignore_format_changes">Ignore Format Changes</string>
-    <string name="ignore_format_changes_descrip">Ignore any changes to the EFB format.</string>
-    <string name="efb_copy_method">Store EFB Copies to Texture Only</string>
-    <string name="efb_copy_method_descrip">Stores EFB Copies exclusively on the GPU, bypassing system memory. Causes graphical defects in a small number of games. If unsure, leave this checked.</string>
-    <string name="texture_cache">Texture Cache</string>
-    <string name="texture_cache_accuracy">Texture Cache Accuracy</string>
-    <string name="texture_cache_accuracy_descrip">The safer the selection, the less likely the emulator will be missing any texture updates from RAM.</string>
-    <string name="gpu_texture_decoding">GPU Texture Decoding</string>
-    <string name="gpu_texture_decoding_descrip">Decodes textures on the GPU using compute shaders where supported. May improve performance in some scenarios.</string>
-    <string name="external_frame_buffer">External Frame Buffer</string>
-    <string name="xfb_copy_method">Store XFB Copies to Texture Only</string>
-    <string name="xfb_copy_method_descrip">Stores XFB Copies exclusively on the GPU, bypassing system memory. Causes graphical defects in a small number of games that need to readback from memory. If unsure, leave this checked.</string>
-    <string name="immediate_xfb">Immediately Present XFB</string>
-    <string name="immediate_xfb_descrip">Displays the XFB copies as soon as they are created, without waiting for scanout. Causes graphical defects in some games but reduces latency. If unsure, leave this unchecked.</string>
-    <string name="disable_destination_alpha">Disable Destination Alpha</string>
-    <string name="disable_destination_alpha_descrip">Disables emulation of a hardware feature called destination alpha, which is used in many games for various effects.</string>
-    <string name="fast_depth_calculation">Fast Depth Calculation</string>
-    <string name="fast_depth_calculation_descrip">Uses a less accurate algorithm to calculate depth values.</string>
-    <string name="aspect_ratio">Aspect Ratio</string>
-    <string name="aspect_ratio_descrip">Select what aspect ratio to use when rendering</string>
-    <string name="shader_compilation_mode">Shader Compilation Mode</string>
-    <string name="shader_compilation_mode_descrip">Specifies when to use Ubershaders. Disabled - Never, Hybrid - Use ubershaders while compiling specialized shaders. Exclusive - Use only ubershaders, largest performance impact. Skip Drawing - Do not draw objects while shaders are compiling, will cause broken effects.</string>
-    <string name="wait_for_shaders">Compile Shaders Before Starting</string>
+    <string name="audio_stretch">Enable audio stretching</string>
+    <string name="audio_stretch_description">Stretches audio to reduce stuttering. When enabled, increases audio latency and slightly reduces performance.</string>
 
     <!-- Miscellaneous -->
     <string name="yes">Yes</string>
