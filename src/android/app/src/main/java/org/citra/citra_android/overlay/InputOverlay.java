@@ -141,16 +141,16 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
             case ButtonType.BUTTON_HOME:
             case ButtonType.BUTTON_START:
             case ButtonType.BUTTON_SELECT:
-                scale = 0.0625f;
+                scale = 0.08f;
                 break;
             case ButtonType.TRIGGER_L:
             case ButtonType.TRIGGER_R:
             case ButtonType.BUTTON_ZL:
             case ButtonType.BUTTON_ZR:
-                scale = 0.25f;
+                scale = 0.18f;
                 break;
             default:
-                scale = 0.125f;
+                scale = 0.11f;
                 break;
         }
 
@@ -218,16 +218,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         final SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Decide scale based on button ID and user preference
-        float scale;
-
-        switch (buttonUp) {
-            case ButtonType.DPAD_UP:
-                scale = 0.275f;
-                break;
-            default:
-                scale = 0.2125f;
-                break;
-        }
+        float scale = 0.22f;
 
         scale *= (sPrefs.getInt("controlScale", 50) + 50);
         scale /= 100;
@@ -299,22 +290,16 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         int drawableY = (int) sPrefs.getFloat(joystick + orientation + "-Y", 0f);
 
         // Decide inner scale based on joystick ID
-        float innerScale;
-
-        switch (joystick) {
-            case ButtonType.STICK_C:
-                innerScale = 1.833f;
-                break;
-            default:
-                innerScale = 1.375f;
-                break;
+        float outerScale = 1.f;
+        if (joystick == ButtonType.STICK_C) {
+            outerScale = 2.f;
         }
 
         // Now set the bounds for the InputOverlayDrawableJoystick.
         // This will dictate where on the screen (and the what the size) the InputOverlayDrawableJoystick will be.
         int outerSize = bitmapOuter.getWidth();
-        Rect outerRect = new Rect(drawableX, drawableY, drawableX + outerSize, drawableY + outerSize);
-        Rect innerRect = new Rect(0, 0, (int) (outerSize / innerScale), (int) (outerSize / innerScale));
+        Rect outerRect = new Rect(drawableX, drawableY, drawableX + (int) (outerSize / outerScale), drawableY + (int) (outerSize / outerScale));
+        Rect innerRect = new Rect(0, 0, (int) (outerSize / outerScale), (int) (outerSize / outerScale));
 
         // Send the drawableId to the joystick so it can be referenced when saving control position.
         final InputOverlayDrawableJoystick overlayDrawable
@@ -349,7 +334,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
     }
 
     private void HandleOrientationChange() {
-        final int layoutOption = mPreferences.getInt("LandscapeScreenLayout",5 /*LayoutOption_MobileLandscape*/);
+        final int layoutOption = mPreferences.getInt("LandscapeScreenLayout", 5 /*LayoutOption_MobileLandscape*/);
         final boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         NativeLibrary.NotifyOrientationChange(layoutOption, isPortrait);
     }
@@ -661,7 +646,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                     ButtonType.STICK_LEFT, orientation));
         }
         if (mPreferences.getBoolean("buttonToggle13", false)) {
-            overlayJoysticks.add(initializeOverlayJoystick(getContext(), R.drawable.stick_main_range,
+            overlayJoysticks.add(initializeOverlayJoystick(getContext(), R.drawable.stick_c_range,
                     R.drawable.stick_c, R.drawable.stick_c_pressed, ButtonType.STICK_C, orientation));
         }
     }
