@@ -496,7 +496,7 @@ public final class EmulationActivity extends AppCompatActivity {
             switch (i) {
                 case 6: // ZL
                 case 7: // ZR
-                case 13: // C-stick
+                case 12: // C-stick
                     defaultValue = false;
                     break;
             }
