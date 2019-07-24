@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -100,7 +99,6 @@ public final class EmulationActivity extends AppCompatActivity {
     private int mPosition;
     private boolean mDeviceHasTouchScreen;
     private boolean mMenuVisible;
-    private boolean mBackPressedOnce;
     private boolean activityRecreated;
     private String mScreenPath;
     private String mSelectedTitle;
@@ -250,22 +248,24 @@ public final class EmulationActivity extends AppCompatActivity {
                 toggleMenu();
             }
         } else {
-            if (mBackPressedOnce) {
-                mEmulationFragment.stopEmulation();
-                exitWithAnimation();
-            } else {
-                mBackPressedOnce = true;
-                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-            }
-
-            Handler mHandler = new Handler();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mBackPressedOnce = false;
-                    mHandler.removeCallbacks(this);
-                }
-            }, 2000);
+            NativeLibrary.PauseEmulation();
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.emulation_close_game)
+                    .setMessage(R.string.emulation_close_game_message)
+                    .setIcon(R.drawable.ic_launcher)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i) ->
+                    {
+                        mEmulationFragment.stopEmulation();
+                        exitWithAnimation();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) ->
+                    {
+                    }).setOnDismissListener(dialogInterface ->
+                    {
+                        NativeLibrary.UnPauseEmulation();
+                    })
+                    .create()
+                    .show();
         }
     }
 
@@ -348,7 +348,7 @@ public final class EmulationActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_emulation, menu);
 
 
-       // mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        // mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         int layoutOption = mPreferences.getInt("LandscapeScreenLayout", LayoutOption_MobileLandscape);
 
         int menuItemId = R.id.menu_screen_layout_landscape;
