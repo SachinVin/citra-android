@@ -26,7 +26,7 @@ public class CustomFilePickerActivity extends FilePickerActivity {
                 mode, allowMultiple, allowCreateDir, allowExistingFile, singleClick);
 
         Intent intent = getIntent();
-        String title = intent == null ? null : intent.getStringExtra(EXTRA_TITLE);
+        int title = intent == null ? 0 : intent.getIntExtra(EXTRA_TITLE, 0);
         fragment.setTitle(title);
         return fragment;
     }
