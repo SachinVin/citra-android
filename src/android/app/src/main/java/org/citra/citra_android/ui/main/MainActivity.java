@@ -114,7 +114,8 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void launchFileListActivity() {
-        FileBrowserHelper.openDirectoryPicker(this);
+        FileBrowserHelper.openDirectoryPicker(this, MainPresenter.REQUEST_ADD_DIRECTORY,
+                "Select game folder");
     }
 
     @Override
