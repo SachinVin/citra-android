@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.List;
 
 public final class FileBrowserHelper {
-    public static void openDirectoryPicker(FragmentActivity activity, int requestCode, String title) {
+    public static void openDirectoryPicker(FragmentActivity activity, int requestCode, int title) {
         Intent i = new Intent(activity, CustomFilePickerActivity.class);
 
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
@@ -28,7 +28,7 @@ public final class FileBrowserHelper {
         activity.startActivityForResult(i, requestCode);
     }
 
-    public static void openFilePicker(FragmentActivity activity, int requestCode, String title) {
+    public static void openFilePicker(FragmentActivity activity, int requestCode, int title) {
         Intent i = new Intent(activity, CustomFilePickerActivity.class);
 
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
