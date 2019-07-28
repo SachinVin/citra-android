@@ -10,13 +10,12 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import org.citra.citra_android.activities.CustomFilePickerActivity;
-import org.citra.citra_android.ui.main.MainPresenter;
 
 import java.io.File;
 import java.util.List;
 
 public final class FileBrowserHelper {
-    public static void openDirectoryPicker(FragmentActivity activity) {
+    public static void openDirectoryPicker(FragmentActivity activity, int requestCode, String title) {
         Intent i = new Intent(activity, CustomFilePickerActivity.class);
 
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
@@ -24,11 +23,12 @@ public final class FileBrowserHelper {
         i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
         i.putExtra(FilePickerActivity.EXTRA_START_PATH,
                 Environment.getExternalStorageDirectory().getPath());
+        i.putExtra(CustomFilePickerActivity.EXTRA_TITLE, title);
 
-        activity.startActivityForResult(i, MainPresenter.REQUEST_ADD_DIRECTORY);
+        activity.startActivityForResult(i, requestCode);
     }
 
-    public static void openFilePicker(FragmentActivity activity, int requestCode) {
+    public static void openFilePicker(FragmentActivity activity, int requestCode, String title) {
         Intent i = new Intent(activity, CustomFilePickerActivity.class);
 
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
@@ -36,6 +36,7 @@ public final class FileBrowserHelper {
         i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
         i.putExtra(FilePickerActivity.EXTRA_START_PATH,
                 Environment.getExternalStorageDirectory().getPath());
+        i.putExtra(CustomFilePickerActivity.EXTRA_TITLE, title);
 
         activity.startActivityForResult(i, requestCode);
     }
