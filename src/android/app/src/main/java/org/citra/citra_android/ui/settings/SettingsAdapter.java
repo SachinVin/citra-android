@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v17.leanback.widget.picker.TimePicker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -174,9 +174,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         String settingValue = item.getValue();
         dp.updateDate(Integer.parseInt(settingValue.substring(0, 4)), Integer.parseInt(settingValue.substring(5, 7)) - 1, Integer.parseInt(settingValue.substring(8, 10)));
 
-        tp.setIs24Hour(true);
-        tp.setHour(Integer.parseInt(settingValue.substring(11, 12)));
-        tp.setMinute(Integer.parseInt(settingValue.substring(14, 15)));
+        tp.setIs24HourView(true);
+        tp.setCurrentHour(Integer.parseInt(settingValue.substring(11, 12)));
+        tp.setCurrentMinute(Integer.parseInt(settingValue.substring(14, 15)));
 
         DialogInterface.OnClickListener ok = new DialogInterface.OnClickListener() {
             @Override
