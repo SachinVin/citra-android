@@ -16,7 +16,7 @@ import org.citra.citra_android.R;
 import java.io.File;
 
 public class CustomFilePickerFragment extends FilePickerFragment {
-    private String mTitle;
+    private int mTitle;
 
     @NonNull
     @Override
@@ -30,7 +30,7 @@ public class CustomFilePickerFragment extends FilePickerFragment {
     @Override
     protected View inflateRootView(LayoutInflater inflater, ViewGroup container) {
         View view = super.inflateRootView(inflater, container);
-        if (mTitle != null) {
+        if (mTitle != 0) {
             Toolbar toolbar = view.findViewById(com.nononsenseapps.filepicker.R.id.nnf_picker_toolbar);
             ViewGroup parent = (ViewGroup) toolbar.getParent();
             int index = parent.indexOfChild(toolbar);
@@ -43,7 +43,7 @@ public class CustomFilePickerFragment extends FilePickerFragment {
         return view;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(int title) {
         mTitle = title;
     }
 }
