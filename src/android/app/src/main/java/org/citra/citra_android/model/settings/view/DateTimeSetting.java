@@ -22,9 +22,15 @@ public final class DateTimeSetting extends SettingsItem {
     }
 
     public StringSetting setSelectedValue(String datetime) {
-        StringSetting setting = new StringSetting(getKey(), getSection(), getFile(), datetime);
-        setSetting(setting);
-        return setting;
+        if (getSetting() == null) {
+            StringSetting setting = new StringSetting(getKey(), getSection(), getFile(), datetime);
+            setSetting(setting);
+            return setting;
+        } else {
+            StringSetting setting = (StringSetting) getSetting();
+            setting.setValue(datetime);
+            return null;
+        }
     }
 
     @Override

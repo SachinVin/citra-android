@@ -175,8 +175,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         dp.updateDate(Integer.parseInt(settingValue.substring(0, 4)), Integer.parseInt(settingValue.substring(5, 7)) - 1, Integer.parseInt(settingValue.substring(8, 10)));
 
         tp.setIs24HourView(true);
-        tp.setCurrentHour(Integer.parseInt(settingValue.substring(11, 12)));
-        tp.setCurrentMinute(Integer.parseInt(settingValue.substring(14, 15)));
+        tp.setCurrentHour(Integer.parseInt(settingValue.substring(11, 13)));
+        tp.setCurrentMinute(Integer.parseInt(settingValue.substring(14, 16)));
 
         DialogInterface.OnClickListener ok = new DialogInterface.OnClickListener() {
             @Override
@@ -188,13 +188,18 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 }
                 String month = ("00" + (dp.getMonth() + 1)).substring(String.valueOf(dp.getMonth() + 1).length());
                 String day = ("00" + dp.getDayOfMonth()).substring(String.valueOf(dp.getDayOfMonth()).length());
-                String hr = ("00" + tp.getHour()).substring(String.valueOf(tp.getHour()).length());
-                String min = ("00" + tp.getMinute()).substring(String.valueOf(tp.getMinute()).length());
+                String hr = ("00" + tp.getCurrentHour()).substring(String.valueOf(tp.getCurrentHour()).length());
+                String min = ("00" + tp.getCurrentMinute()).substring(String.valueOf(tp.getCurrentMinute()).length());
                 String datetime = year + "-" + month + "-" + day + " " + hr + ":" + min + ":01";
-                mView.putSetting(new StringSetting(item.getKey(), item.getSection(), item.getFile(), datetime));
+
+                StringSetting setting = item.setSelectedValue(datetime);
+                if (setting != null) {
+                    mView.putSetting(setting);
+                }
+
                 mView.onSettingChanged();
+
                 mClickedItem = null;
-                mSeekbarProgress = -1;
                 closeDialog();
             }
         };
