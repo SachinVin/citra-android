@@ -167,10 +167,6 @@ public final class SettingsFragmentPresenter {
             mView.passSettingsToActivity(mSettings);
         }
 
-        if (mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
-            mView.passSettingsToActivity(mSettings);
-        }
-
         sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_RENDERER, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_renderer, R.string.hw_renderer_description, true, hardwareRenderer, true, mView));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_shaders, R.string.hw_shaders_description, true, hardwareShader, true, mView));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, true, shadersAccurateMul));
