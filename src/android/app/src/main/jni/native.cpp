@@ -249,7 +249,6 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadMoveEvent(JNIEnv* 
     // Citra uses an inverted y axis sent by the frontend
     x = std::clamp(x, -1.f, 1.f);
     y = std::clamp(-y, -1.f, 1.f);
-    InputManager::AnalogHandler()->MoveJoystick(Axis, x, y);
     return static_cast<jboolean>(InputManager::AnalogHandler()->MoveJoystick(Axis, x, y));
 }
 
@@ -263,13 +262,11 @@ jboolean Java_org_citra_citra_1android_NativeLibrary_onGamePadAxisEvent(JNIEnv* 
 
 void Java_org_citra_citra_1android_NativeLibrary_onTouchEvent(JNIEnv* env, jobject obj, jfloat x,
                                                               jfloat y, jboolean pressed) {
-    LOG_DEBUG(Frontend, "Touch at x: %d y: %d", (int)x, (int)y);
     window->OnTouchEvent((int)x, (int)y, (bool)pressed);
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_onTouchMoved(JNIEnv* env, jobject obj, jfloat x,
                                                               jfloat y) {
-    LOG_DEBUG(Frontend, "Touch at x: %d y: %d", (int)x, (int)y);
     window->OnTouchMoved((int)x, (int)y);
 }
 
