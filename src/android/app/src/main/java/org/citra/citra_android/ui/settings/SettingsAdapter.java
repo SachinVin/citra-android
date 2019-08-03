@@ -219,10 +219,16 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         LayoutInflater inflater = LayoutInflater.from(mView.getActivity());
         View view = inflater.inflate(R.layout.dialog_seekbar, null);
 
+        SeekBar seekbar = view.findViewById(R.id.seekbar);
+
         builder.setTitle(item.getNameId());
         builder.setView(view);
         builder.setPositiveButton(R.string.ok, this);
         builder.setNegativeButton(R.string.cancel, defaultCancelListener);
+        builder.setNeutralButton(R.string.slider_default, (DialogInterface dialog, int which) -> {
+            seekbar.setProgress(item.getDefaultValue());
+            onClick(dialog, which);
+        });
         mDialog = builder.show();
 
         mTextSliderValue = view.findViewById(R.id.text_value);
@@ -230,8 +236,6 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
 
         TextView units = view.findViewById(R.id.text_units);
         units.setText(item.getUnits());
-
-        SeekBar seekbar = view.findViewById(R.id.seekbar);
 
         seekbar.setMax(item.getMax());
         seekbar.setProgress(mSeekbarProgress);
