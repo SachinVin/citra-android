@@ -6,15 +6,31 @@
     <string name="app_disclaimer">This software will run games for the Nintendo 3DS handheld game console. No game titles are included.\n\nBefore you run, please place your rightfully owned 3DS game files onto your device storage.</string>
 
     <!-- Input related strings -->
-    <string name="controller_control">Control Stick</string>
-    <string name="controller_c">C Stick</string>
-    <string name="controller_trig">Triggers</string>
+    <string name="controller_circlepad">Circle Pad</string>
+    <string name="controller_c">C-Stick</string>
+    <string name="controller_triggers">Triggers</string>
     <string name="controller_dpad">D-Pad</string>
+    <string name="controller_axis_vertical">Up/Down Axis</string>
+    <string name="controller_axis_horizontal">Left/Right Axis</string>
     <string name="modifier_range">Modifier Range</string>
     <string name="analog_radius">Analog Radius (High value = High sensitivity)</string>
     <string name="analog_threshold">Analog Threshold (Low value = High sensitivity)</string>
     <string name="input_binding">Input Binding</string>
     <string name="input_binding_description">Press or move an input to bind it to %1$s.</string>
+    <string name="input_binding_description_vertical_axis">Move your joystick up or down.</string>
+    <string name="input_binding_description_horizontal_axis">Move your joystick left or right.</string>
+    <string name="button_a">A</string>
+    <string name="button_b">B</string>
+    <string name="button_select">SELECT</string>
+    <string name="button_start">START</string>
+    <string name="button_x">X</string>
+    <string name="button_y">Y</string>
+    <string name="button_l">L</string>
+    <string name="button_r">R</string>
+    <string name="button_zl">ZL</string>
+    <string name="button_zr">ZR</string>
+    <string name="input_message_analog_only">This control must be bound to a gamepad analog stick or D-pad axis!</string>
+    <string name="input_message_button_only">This control must be bound to a gamepad button!</string>
 
     <!-- Generic buttons (Shared with lots of stuff) -->
     <string name="generic_buttons">Buttons</string>
@@ -22,30 +38,6 @@
     <string name="generic_down">Down</string>
     <string name="generic_left">Left</string>
     <string name="generic_right">Right</string>
-    <string name="generic_forward">Forward</string>
-    <string name="generic_backward">Backward</string>
-    <string name="generic_stick">Stick</string>
-    <string name="generic_green">Green</string>
-    <string name="generic_red">Red</string>
-    <string name="generic_yellow">Yellow</string>
-    <string name="generic_blue">Blue</string>
-    <string name="generic_orange">Orange</string>
-
-    <!-- GameCube buttons (May be shared with other stuff too) -->
-    <string name="button_a">A</string>
-    <string name="button_b">B</string>
-    <string name="button_start">START</string>
-    <string name="button_x">X</string>
-    <string name="button_y">Y</string>
-    <string name="button_z">Z</string>
-    <string name="trigger_left">L</string>
-    <string name="trigger_right">R</string>
-
-    <!-- Classic only buttons -->
-    <string name="classic_button_zl">ZL</string>
-    <string name="classic_button_zr">ZR</string>
-    <string name="classic_leftstick">Left Stick</string>
-    <string name="classic_rightstick">Right Stick</string>
 
     <!-- Core settings strings -->
     <string name="cpu_jit">Enable CPU JIT</string>
@@ -110,6 +102,7 @@
     <string name="preferences_extensions">Extension Bindings</string>
     <string name="preferences_general">General</string>
     <string name="preferences_system">System</string>
+    <string name="preferences_controls">Controls</string>
     <string name="preferences_graphics">Graphics</string>
     <string name="preferences_audio">Audio</string>
 
