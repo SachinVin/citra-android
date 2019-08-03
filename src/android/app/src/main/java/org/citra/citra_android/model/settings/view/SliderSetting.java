@@ -24,6 +24,10 @@ public final class SliderSetting extends SettingsItem {
         return mMax;
     }
 
+    public int getDefaultValue() {
+        return mDefaultValue;
+    }
+
     public int getSelectedValue() {
         Setting setting = getSetting();
 
