@@ -51,6 +51,7 @@ public final class SettingsFile {
 
     public static final String SECTION_CORE = "Core";
     public static final String SECTION_SYSTEM = "System";
+    public static final String SECTION_CONTROLS = "Controls";
     public static final String SECTION_RENDERER = "Renderer";
     public static final String SECTION_AUDIO = "Audio";
 
@@ -84,6 +85,35 @@ public final class SettingsFile {
     public static final String KEY_REGION_VALUE = "region_value";
     public static final String KEY_INIT_CLOCK = "init_clock";
     public static final String KEY_INIT_TIME = "init_time";
+
+    public static final String KEY_BUTTON_A = "button_a";
+    public static final String KEY_BUTTON_B = "button_b";
+    public static final String KEY_BUTTON_X = "button_x";
+    public static final String KEY_BUTTON_Y = "button_y";
+    public static final String KEY_BUTTON_SELECT = "button_select";
+    public static final String KEY_BUTTON_START = "button_start";
+    public static final String KEY_BUTTON_UP = "button_up";
+    public static final String KEY_BUTTON_DOWN = "button_down";
+    public static final String KEY_BUTTON_LEFT = "button_left";
+    public static final String KEY_BUTTON_RIGHT = "button_right";
+    public static final String KEY_BUTTON_L = "button_l";
+    public static final String KEY_BUTTON_R = "button_r";
+    public static final String KEY_BUTTON_ZL = "button_zl";
+    public static final String KEY_BUTTON_ZR = "button_zr";
+    public static final String KEY_CIRCLEPAD_AXIS_VERTICAL = "circlepad_axis_vertical";
+    public static final String KEY_CIRCLEPAD_AXIS_HORIZONTAL = "circlepad_axis_horizontal";
+    public static final String KEY_CSTICK_AXIS_VERTICAL = "cstick_axis_vertical";
+    public static final String KEY_CSTICK_AXIS_HORIZONTAL = "cstick_axis_horizontal";
+    public static final String KEY_DPAD_AXIS_VERTICAL = "dpad_axis_vertical";
+    public static final String KEY_DPAD_AXIS_HORIZONTAL = "dpad_axis_horizontal";
+    public static final String KEY_CIRCLEPAD_UP = "circlepad_up";
+    public static final String KEY_CIRCLEPAD_DOWN = "circlepad_down";
+    public static final String KEY_CIRCLEPAD_LEFT = "circlepad_left";
+    public static final String KEY_CIRCLEPAD_RIGHT = "circlepad_right";
+    public static final String KEY_CSTICK_UP = "cstick_up";
+    public static final String KEY_CSTICK_DOWN = "cstick_down";
+    public static final String KEY_CSTICK_LEFT = "cstick_left";
+    public static final String KEY_CSTICK_RIGHT = "cstick_right";
 
     public static final String KEY_CAMERA_OUTER_RIGHT_NAME = "camera_outer_right_name";
     public static final String KEY_CAMERA_OUTER_RIGHT_CONFIG = "camera_outer_right_config";
