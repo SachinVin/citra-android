@@ -60,7 +60,6 @@ public final class SettingsFile {
     public static final String KEY_HW_RENDERER = "use_hw_renderer";
     public static final String KEY_HW_SHADER = "use_hw_shader";
     public static final String KEY_SHADERS_ACCURATE_MUL = "shaders_accurate_mul";
-    public static final String KEY_SHADERS_ACCURATE_GS = "shaders_accurate_gs";
     public static final String KEY_USE_SHADER_JIT = "use_shader_jit";
     public static final String KEY_USE_VSYNC = "use_vsync";
     public static final String KEY_RESOLUTION_FACTOR = "resolution_factor";
@@ -69,7 +68,6 @@ public final class SettingsFile {
     public static final String KEY_BACKGROUND_RED = "bg_red";
     public static final String KEY_BACKGROUND_BLUE = "bg_blue";
     public static final String KEY_BACKGROUND_GREEN = "bg_green";
-    public static final String KEY_STEREOSCOPY = "toggle_3d";
     public static final String KEY_FACTOR_3D = "factor_3d";
 
     public static final String KEY_LAYOUT_OPTION = "layout_option";
