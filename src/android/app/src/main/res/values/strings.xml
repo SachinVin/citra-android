@@ -61,8 +61,6 @@
     <string name="hw_shaders_description">Uses hardware to emulate 3DS shaders. When enabled, game performance will be significantly improved.</string>
     <string name="shaders_accurate_mul">Enable accurate shader multiplication</string>
     <string name="shaders_accurate_mul_description">Uses more accurate multiplication in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>>
-    <string name="shaders_accurate_gs">Enable accurate geometric shaders</string>
-    <string name="shaders_accurate_gs_description">Uses more accurate geometry shaders in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>>
     <string name="frame_limit_enable">Enable limit speed</string>
     <string name="frame_limit_enable_description">When enabled, emulation speed will be limited to a specified percentage of normal speed.</string>
     <string name="frame_limit_slider">Limit speed percent</string>
