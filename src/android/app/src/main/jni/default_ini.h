@@ -108,10 +108,6 @@ use_hw_shader =
 # 0: Off (Default. Faster, but causes issues in some games) 1: On (Slower, but correct)
 shaders_accurate_mul =
 
-# Whether to fallback to software for geometry shaders
-# 0: Off (Faster, but causes issues in some games) 1: On (Default. Slower, but correct)
-shaders_accurate_gs =
-
 # Whether to use the Just-In-Time (JIT) compiler for shader emulation
 # 0: Interpreter (slow), 1 (default): JIT (fast)
 use_shader_jit =
@@ -138,10 +134,6 @@ frame_limit =
 bg_red =
 bg_blue =
 bg_green =
-
-# Toggles Stereoscopic 3D
-# 0 (default): Off, 1: On
-toggle_3d =
 
 # Change 3D Intensity
 # 0 - 100: Intensity. 0 (default)
