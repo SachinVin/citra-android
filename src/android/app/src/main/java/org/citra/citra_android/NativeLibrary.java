@@ -390,6 +390,7 @@ public final class NativeLibrary {
         public static final int STICK_C_RIGHT = 772;
         public static final int TRIGGER_L = 773;
         public static final int TRIGGER_R = 774;
+        public static final int DPAD = 780;
     }
 
     /**
