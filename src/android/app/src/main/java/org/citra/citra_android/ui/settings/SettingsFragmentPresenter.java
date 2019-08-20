@@ -7,6 +7,8 @@ import org.citra.citra_android.model.settings.Setting;
 import org.citra.citra_android.model.settings.SettingSection;
 import org.citra.citra_android.model.settings.view.CheckBoxSetting;
 import org.citra.citra_android.model.settings.view.DateTimeSetting;
+import org.citra.citra_android.model.settings.view.HeaderSetting;
+import org.citra.citra_android.model.settings.view.InputBindingSetting;
 import org.citra.citra_android.model.settings.view.SettingsItem;
 import org.citra.citra_android.model.settings.view.SingleChoiceSetting;
 import org.citra.citra_android.model.settings.view.SliderSetting;
@@ -84,6 +86,9 @@ public final class SettingsFragmentPresenter {
             case SettingsFile.SECTION_SYSTEM:
                 addSystemSettings(sl);
                 break;
+            case SettingsFile.SECTION_CONTROLS:
+                addInputSettings(sl);
+                break;
             case SettingsFile.SECTION_RENDERER:
                 addGraphicsSettings(sl);
                 break;
@@ -104,6 +109,7 @@ public final class SettingsFragmentPresenter {
 
         sl.add(new SubmenuSetting(null, null, R.string.preferences_general, 0, SettingsFile.SECTION_CORE));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_system, 0, SettingsFile.SECTION_SYSTEM));
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_controls, 0, SettingsFile.SECTION_CONTROLS));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, SettingsFile.SECTION_RENDERER));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_audio, 0, SettingsFile.SECTION_AUDIO));
     }
@@ -147,6 +153,87 @@ public final class SettingsFragmentPresenter {
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_REGION_VALUE, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.region, 0, R.array.regionNames, R.array.regionValues, -1, region));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_INIT_CLOCK, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.init_clock, R.string.init_clock_description, R.array.systemClockNames, R.array.systemClockValues, 0, systemClock));
         sl.add(new DateTimeSetting(SettingsFile.KEY_INIT_TIME, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.init_time, R.string.init_time_description, "2000-01-01 00:00:01", dateTime));
+    }
+
+
+    private void addInputSettings(ArrayList<SettingsItem> sl) {
+        mView.getActivity().setTitle(R.string.preferences_controls);
+
+        Setting buttonA = null;
+        Setting buttonB = null;
+        Setting buttonX = null;
+        Setting buttonY = null;
+        Setting buttonSelect = null;
+        Setting buttonStart = null;
+        Setting circlepadAxisVert = null;
+        Setting circlepadAxisHoriz = null;
+        Setting cstickAxisVert = null;
+        Setting cstickAxisHoriz = null;
+        Setting dpadAxisVert = null;
+        Setting dpadAxisHoriz = null;
+        Setting buttonUp = null;
+        Setting buttonDown = null;
+        Setting buttonLeft = null;
+        Setting buttonRight = null;
+        Setting buttonL = null;
+        Setting buttonR = null;
+        Setting buttonZL = null;
+        Setting buttonZR = null;
+
+        if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
+            buttonA = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_A);
+            buttonB = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_B);
+            buttonX = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_X);
+            buttonY = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_Y);
+            buttonSelect = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_SELECT);
+            buttonStart = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_START);
+            circlepadAxisVert = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_CIRCLEPAD_AXIS_VERTICAL);
+            circlepadAxisHoriz = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_CIRCLEPAD_AXIS_HORIZONTAL);
+            cstickAxisVert = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_CSTICK_AXIS_VERTICAL);
+            cstickAxisHoriz = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_CSTICK_AXIS_HORIZONTAL);
+            dpadAxisVert = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_DPAD_AXIS_VERTICAL);
+            dpadAxisHoriz = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_DPAD_AXIS_HORIZONTAL);
+            buttonUp = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_UP);
+            buttonDown = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_DOWN);
+            buttonLeft = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_LEFT);
+            buttonRight = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_RIGHT);
+            buttonL = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_L);
+            buttonR = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_R);
+            buttonZL = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_ZL);
+            buttonZR = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_CONTROLS).getSetting(SettingsFile.KEY_BUTTON_ZR);
+        } else {
+            mView.passSettingsToActivity(mSettings);
+        }
+
+        sl.add(new HeaderSetting(null, null, R.string.generic_buttons, 0));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_A, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_a, buttonA));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_B, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_b, buttonB));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_X, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_x, buttonX));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_Y, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_y, buttonY));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_SELECT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_select, buttonSelect));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_START, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_start, buttonStart));
+
+        sl.add(new HeaderSetting(null, null, R.string.controller_circlepad, 0));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_CIRCLEPAD_AXIS_VERTICAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_vertical, circlepadAxisVert));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_CIRCLEPAD_AXIS_HORIZONTAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_horizontal, circlepadAxisHoriz));
+
+        sl.add(new HeaderSetting(null, null, R.string.controller_c, 0));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_CSTICK_AXIS_VERTICAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_vertical, cstickAxisVert));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_CSTICK_AXIS_HORIZONTAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_horizontal, cstickAxisHoriz));
+
+        sl.add(new HeaderSetting(null, null, R.string.controller_dpad, 0));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_DPAD_AXIS_VERTICAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_vertical, dpadAxisVert));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_DPAD_AXIS_HORIZONTAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_horizontal, dpadAxisHoriz));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_UP, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_up, buttonUp));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_DOWN, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_down, buttonDown));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_LEFT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_left, buttonLeft));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_RIGHT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_right, buttonRight));
+
+        sl.add(new HeaderSetting(null, null, R.string.controller_triggers, 0));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_L, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_l, buttonL));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_R, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_r, buttonR));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_ZL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_zl, buttonZL));
+        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_ZR, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_zr, buttonZR));
     }
 
     private void addGraphicsSettings(ArrayList<SettingsItem> sl) {
