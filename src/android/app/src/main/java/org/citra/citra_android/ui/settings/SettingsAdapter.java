@@ -250,16 +250,22 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
     public void onInputBindingClick(final InputBindingSetting item, final int position) {
         final MotionAlertDialog dialog = new MotionAlertDialog(mContext, item);
         dialog.setTitle(R.string.input_binding);
-        dialog.setMessage(String.format(mContext.getString(R.string.input_binding_description), mContext.getString(item.getNameId())));
+
+        int messageResId = R.string.input_binding_description;
+        if (item.IsAxisMappingSupported() && !item.IsTrigger()) {
+            // Use specialized message for axis left/right or up/down
+            if (item.IsHorizontalOrientation()) {
+                messageResId = R.string.input_binding_description_horizontal_axis;
+            } else {
+                messageResId = R.string.input_binding_description_vertical_axis;
+            }
+        }
+
+        dialog.setMessage(String.format(mContext.getString(messageResId), mContext.getString(item.getNameId())));
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(R.string.cancel), this);
         dialog.setButton(AlertDialog.BUTTON_NEUTRAL, mContext.getString(R.string.clear), (dialogInterface, i) ->
         {
-            item.setValue("");
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(item.getKey());
-            editor.apply();
+            item.removeOldMapping();
         });
         dialog.setOnDismissListener(dialog1 ->
         {
