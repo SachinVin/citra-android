@@ -69,6 +69,7 @@ public final class SettingsFile {
     public static final String KEY_BACKGROUND_BLUE = "bg_blue";
     public static final String KEY_BACKGROUND_GREEN = "bg_green";
     public static final String KEY_FACTOR_3D = "factor_3d";
+    public static final String KEY_FILTER_MODE = "filter_mode";
 
     public static final String KEY_LAYOUT_OPTION = "layout_option";
     public static final String KEY_SWAP_SCREEN = "swap_screen";

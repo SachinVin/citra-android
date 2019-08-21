@@ -55,6 +55,8 @@
     <string name="show_fps_description">Show the number of frames rendered per second as a measure of emulation speed.</string>
     <string name="vsync">Enable V-Sync</string>
     <string name="vsync_description">Synchronizes the game frame rate to the refresh rate of your device.</string>
+    <string name="linear_filtering">Enable linear filtering</string>
+    <string name="linear_filtering_description">Enables linear filtering, which causes game visuals to appear smoother.</string>
     <string name="hw_renderer">Enable hardware renderer</string>
     <string name="hw_renderer_description">Uses hardware to emulate 3DS graphics. When enabled, game performance will be significantly improved.</string>
     <string name="hw_shaders">Enable hardware shader</string>
