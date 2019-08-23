@@ -280,7 +280,7 @@ jintArray Java_org_citra_citra_1android_NativeLibrary_GetBanner(JNIEnv* env, job
     }
 
     jintArray Banner = env->NewIntArray(icon_data.size());
-    env->SetIntArrayRegion(Banner, 0, icon_data.size(), reinterpret_cast<jint*>(icon_data.data()));
+    env->SetIntArrayRegion(Banner, 0, env->GetArrayLength(Banner), reinterpret_cast<jint*>(icon_data.data()));
 
     return Banner;
 }
