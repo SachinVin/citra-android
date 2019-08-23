@@ -97,6 +97,7 @@ static int RunCitra(const std::string& filepath) {
     if (window) {
         system.Shutdown();
         InputManager::Shutdown();
+        window.reset();
     }
 
     {
