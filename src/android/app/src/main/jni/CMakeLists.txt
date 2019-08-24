@@ -10,6 +10,8 @@ add_library(main SHARED
     emu_window/emu_window.h
     game_info.cpp
     game_info.h
+    id_cache.cpp
+    id_cache.h
     native.cpp
     native.h
 )
