@@ -12,10 +12,7 @@
 #include <android/native_window_jni.h>
 #include <jni.h>
 
-#include "common/common_paths.h"
 #include "common/file_util.h"
-#include "common/logging/backend.h"
-#include "common/logging/filter.h"
 #include "common/logging/log.h"
 #include "common/scm_rev.h"
 #include "common/scope_exit.h"
@@ -32,12 +29,11 @@
 #include "jni/config.h"
 #include "jni/emu_window/emu_window.h"
 #include "jni/game_info.h"
+#include "jni/id_cache.h"
 #include "jni/native.h"
 #include "network/network.h"
 #include "video_core/renderer_base.h"
 #include "video_core/video_core.h"
-
-JavaVM* g_java_vm;
 
 namespace {
 
@@ -55,27 +51,6 @@ std::mutex running_mutex;
 std::condition_variable running_cv;
 
 } // Anonymous namespace
-
-/**
- * Cache the JavaVM so that we can call into it later.
- */
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    g_java_vm = vm;
-
-    // Initialise Logger
-    Log::Filter log_filter;
-    log_filter.ParseFilterString(Settings::values.log_filter);
-    Log::SetGlobalFilter(log_filter);
-
-    Log::AddBackend(std::make_unique<Log::ColorConsoleBackend>());
-    FileUtil::CreateFullPath(FileUtil::GetUserPath(FileUtil::UserPath::LogDir));
-    Log::AddBackend(std::make_unique<Log::FileBackend>(
-        FileUtil::GetUserPath(FileUtil::UserPath::LogDir) + LOG_FILE));
-
-    LOG_INFO(Frontend, "Logging backend initialised");
-
-    return JNI_VERSION_1_6;
-}
 
 static int RunCitra(const std::string& filepath) {
     LOG_INFO(Frontend, "Citra is Starting");
@@ -180,19 +155,6 @@ void Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env, job
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SurfaceDestroyed(JNIEnv* env, jobject obj) {}
-
-void Java_org_citra_citra_1android_NativeLibrary_CacheClassesAndMethods(JNIEnv* env, jobject obj) {
-    // This class reference is only valid for the lifetime of this method.
-    jclass localClass = env->FindClass("org/citra/citra_android/NativeLibrary");
-
-    // This reference, however, is valid until we delete it.
-    s_jni_class = reinterpret_cast<jclass>(env->NewGlobalRef(localClass));
-
-    // Method signature taken from javap -s
-    // Source/Android/app/build/intermediates/classes/arm/debug/org/dolphinemu/dolphinemu/NativeLibrary.class
-    s_jni_method_alert = env->GetStaticMethodID(s_jni_class, "displayAlertMsg",
-                                                "(Ljava/lang/String;Ljava/lang/String;Z)Z");
-}
 
 void Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
     JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode) {

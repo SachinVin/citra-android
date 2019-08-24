@@ -32,8 +32,6 @@ public final class NativeLibrary {
         } catch (UnsatisfiedLinkError ex) {
             Log.error("[NativeLibrary] " + ex.toString());
         }
-
-        CacheClassesAndMethods();
     }
 
     private NativeLibrary() {
@@ -267,13 +265,6 @@ public final class NativeLibrary {
      * Returns the performance stats for the current game
      **/
     public static native double[] GetPerfStats();
-
-    /**
-     * The methods C++ uses to find references to Java classes and methods
-     * are really expensive. Rather than calling them every time we want to
-     * run them, do it once when we load the native library.
-     */
-    private static native void CacheClassesAndMethods();
 
     /**
      * Notifies the core emulation that the orientation has changed.
