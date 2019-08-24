@@ -70,8 +70,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
     public void onBindViewHolder(GameViewHolder holder, int position) {
         if (mDatasetValid) {
             if (mCursor.moveToPosition(position)) {
-                String screenPath = mCursor.getString(GameDatabase.GAME_COLUMN_SCREENSHOT_PATH);
-                PicassoUtils.loadGameBanner(holder.imageScreenshot, screenPath,
+                PicassoUtils.loadGameBanner(holder.imageScreenshot,
                         mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
 
                 holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE));

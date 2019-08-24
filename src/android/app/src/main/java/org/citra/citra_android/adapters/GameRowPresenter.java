@@ -39,10 +39,8 @@ public final class GameRowPresenter extends Presenter {
         TvGameViewHolder holder = (TvGameViewHolder) viewHolder;
         Game game = (Game) item;
 
-        String screenPath = game.getScreenshotPath();
-
         holder.imageScreenshot.setImageDrawable(null);
-        PicassoUtils.loadGameBanner(holder.imageScreenshot, screenPath, game.getPath());
+        PicassoUtils.loadGameBanner(holder.imageScreenshot, game.getPath());
 
         holder.cardParent.setTitleText(game.getTitle());
         holder.cardParent.setContentText(game.getCompany());
