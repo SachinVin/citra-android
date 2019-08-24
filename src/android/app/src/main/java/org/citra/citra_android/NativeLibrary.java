@@ -7,6 +7,8 @@
 package org.citra.citra_android;
 
 import android.app.AlertDialog;
+import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 import android.view.Surface;
 
 import org.citra.citra_android.activities.EmulationActivity;
@@ -275,6 +277,16 @@ public final class NativeLibrary {
      * Swaps the top and bottom screens.
      */
     public static native void SwapScreens(boolean is_portrait_mode);
+
+    public static boolean isPortraitMode() {
+        return DolphinApplication.getAppContext().getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public static int landscapeScreenLayout() {
+        return PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext())
+                .getInt("LandscapeScreenLayout", EmulationActivity.LayoutOption_MobileLandscape);
+    }
 
     public static boolean displayAlertMsg(final String caption, final String text,
                                           final boolean yesNo) {
