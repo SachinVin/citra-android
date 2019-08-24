@@ -193,7 +193,7 @@ public final class EmulationActivity extends AppCompatActivity {
             // the animation until we say so.
             postponeEnterTransition();
 
-            Picasso.with(this)
+            Picasso.get()
                     .load(mScreenPath)
                     .noFade()
                     .noPlaceholder()
@@ -202,9 +202,8 @@ public final class EmulationActivity extends AppCompatActivity {
                         public void onSuccess() {
                             supportStartPostponedEnterTransition();
                         }
-
                         @Override
-                        public void onError() {
+                        public void onError(Exception ex) {
                             // Still have to do this, or else the app will crash.
                             supportStartPostponedEnterTransition();
                         }
@@ -309,10 +308,10 @@ public final class EmulationActivity extends AppCompatActivity {
     public void exitWithAnimation() {
         runOnUiThread(() ->
         {
-            Picasso.with(EmulationActivity.this)
+            Picasso.get()
                     .invalidate(mScreenPath);
 
-            Picasso.with(EmulationActivity.this)
+            Picasso.get()
                     .load(mScreenPath)
                     .noFade()
                     .noPlaceholder()
@@ -323,7 +322,7 @@ public final class EmulationActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError() {
+                        public void onError(Exception ex) {
                             finish();
                         }
                     });
