@@ -335,12 +335,12 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     // These must match what is defined in src/core/settings.h
-    private static final int LayoutOption_Default = 0;
-    private static final int LayoutOption_SingleScreen = 1;
-    private static final int LayoutOption_LargeScreen = 2;
-    private static final int LayoutOption_SideScreen = 3;
-    private static final int LayoutOption_MobilePortrait = 4;
-    private static final int LayoutOption_MobileLandscape = 5;
+    public static final int LayoutOption_Default = 0;
+    public static final int LayoutOption_SingleScreen = 1;
+    public static final int LayoutOption_LargeScreen = 2;
+    public static final int LayoutOption_SideScreen = 3;
+    public static final int LayoutOption_MobilePortrait = 4;
+    public static final int LayoutOption_MobileLandscape = 5;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
