@@ -15,6 +15,7 @@
 #include "input_common/main.h"
 #include "input_common/motion_emu.h"
 #include "jni/button_manager.h"
+#include "jni/id_cache.h"
 #include "jni/emu_window/emu_window.h"
 #include "jni/ndk_helper/GLContext.h"
 #include "network/network.h"
@@ -35,11 +36,32 @@ void EmuWindow_Android::OnTouchMoved(int x, int y) {
     TouchMoved((unsigned)std::max(x, 0), (unsigned)std::max(y, 0));
 }
 
+static bool IsPortraitMode()
+{
+    JNIEnv* env = IDCache::GetEnvForThread();
+
+    // Execute the Java method.
+    jboolean result = env->CallStaticBooleanMethod(
+            IDCache::GetNativeLibraryClass(), IDCache::GetIsPortraitMode());
+
+    return result != JNI_FALSE;
+}
+
+static void UpdateLandscapeScreenLayout()
+{
+    JNIEnv* env = IDCache::GetEnvForThread();
+
+    // Execute the Java method.
+    Settings::values.layout_option = static_cast<Settings::LayoutOption>(env->CallStaticIntMethod(
+            IDCache::GetNativeLibraryClass(), IDCache::GetLandscapeScreenLayout()));
+}
+
 void EmuWindow_Android::OnFramebufferSizeChanged() {
     int width, height;
     width = gl_context->GetScreenWidth();
     height = gl_context->GetScreenHeight();
-    UpdateCurrentFramebufferLayout(width, height);
+    UpdateLandscapeScreenLayout();
+    UpdateCurrentFramebufferLayout(width, height, IsPortraitMode());
 }
 
 EmuWindow_Android::EmuWindow_Android(ANativeWindow* surface) {

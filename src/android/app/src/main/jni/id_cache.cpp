@@ -17,6 +17,8 @@ static JavaVM* s_java_vm;
 
 static jclass s_native_library_class;
 static jmethodID s_display_alert_msg;
+static jmethodID s_is_portrait_mode;
+static jmethodID s_landscape_screen_layout;
 
 namespace IDCache {
 
@@ -47,6 +49,14 @@ jmethodID GetDisplayAlertMsg() {
     return s_display_alert_msg;
 }
 
+jmethodID GetIsPortraitMode() {
+    return s_is_portrait_mode;
+}
+
+jmethodID GetLandscapeScreenLayout() {
+    return s_landscape_screen_layout;
+}
+
 } // namespace IDCache
 
 #ifdef __cplusplus
@@ -75,6 +85,9 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_native_library_class = reinterpret_cast<jclass>(env->NewGlobalRef(native_library_class));
     s_display_alert_msg = env->GetStaticMethodID(s_native_library_class, "displayAlertMsg",
                                                  "(Ljava/lang/String;Ljava/lang/String;Z)Z");
+    s_is_portrait_mode = env->GetStaticMethodID(s_native_library_class, "isPortraitMode", "()Z");
+    s_landscape_screen_layout =
+        env->GetStaticMethodID(s_native_library_class, "landscapeScreenLayout", "()I");
 
     return JNI_VERSION;
 }
