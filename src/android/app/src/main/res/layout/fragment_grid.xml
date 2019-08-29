@@ -4,12 +4,18 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid_games"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_grid_games"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        tools:listitem="@layout/card_game"/>
+        android:layout_height="wrap_content">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid_games"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            tools:listitem="@layout/card_game"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>
