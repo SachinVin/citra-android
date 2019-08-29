@@ -118,7 +118,7 @@ public final class SettingsActivityPresenter {
             } else {
                 Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
                 SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
-                mView.showToastMessage("Saved settings to INI files", false);
+                mView.showToastMessage("Saved settings", false);
             }
         }
     }
