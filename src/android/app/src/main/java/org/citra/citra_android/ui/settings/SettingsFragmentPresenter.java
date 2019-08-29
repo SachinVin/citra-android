@@ -224,10 +224,12 @@ public final class SettingsFragmentPresenter {
         sl.add(new HeaderSetting(null, null, R.string.controller_dpad, 0));
         sl.add(new InputBindingSetting(SettingsFile.KEY_DPAD_AXIS_VERTICAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_vertical, dpadAxisVert));
         sl.add(new InputBindingSetting(SettingsFile.KEY_DPAD_AXIS_HORIZONTAL, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.controller_axis_horizontal, dpadAxisHoriz));
-        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_UP, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_up, buttonUp));
-        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_DOWN, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_down, buttonDown));
-        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_LEFT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_left, buttonLeft));
-        sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_RIGHT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_right, buttonRight));
+
+        // TODO(bunnei): Figure out what to do with these. Configuring is functional, but removing for MVP because they are confusing.
+        // sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_UP, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_up, buttonUp));
+        // sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_DOWN, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_down, buttonDown));
+        // sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_LEFT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_left, buttonLeft));
+        // sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_RIGHT, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.generic_right, buttonRight));
 
         sl.add(new HeaderSetting(null, null, R.string.controller_triggers, 0));
         sl.add(new InputBindingSetting(SettingsFile.KEY_BUTTON_L, SettingsFile.SECTION_CONTROLS, SettingsFile.SETTINGS_DOLPHIN, R.string.button_l, buttonL));
