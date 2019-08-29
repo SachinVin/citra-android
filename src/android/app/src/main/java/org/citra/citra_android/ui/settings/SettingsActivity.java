@@ -50,6 +50,16 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
         String gameID = launcher.getStringExtra(ARG_GAME_ID);
 
         mPresenter.onCreate(savedInstanceState, filename, gameID);
+
+        // Show "Back" button in the action bar for navigation
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+
+        return true;
     }
 
     @Override
