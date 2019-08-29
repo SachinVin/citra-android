@@ -103,7 +103,7 @@
     <string name="preferences_extensions">Extension Bindings</string>
     <string name="preferences_general">General</string>
     <string name="preferences_system">System</string>
-    <string name="preferences_controls">Controls</string>
+    <string name="preferences_controls">Gamepad</string>
     <string name="preferences_graphics">Graphics</string>
     <string name="preferences_audio">Audio</string>
 
