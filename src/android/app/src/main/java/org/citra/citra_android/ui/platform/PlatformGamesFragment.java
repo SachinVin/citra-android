@@ -4,14 +4,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.citra.citra_android.DolphinApplication;
 import org.citra.citra_android.R;
 import org.citra.citra_android.adapters.GameAdapter;
+import org.citra.citra_android.model.GameDatabase;
 
 public final class PlatformGamesFragment extends Fragment implements PlatformGamesView {
     private PlatformGamesPresenter mPresenter = new PlatformGamesPresenter(this);
@@ -46,6 +49,18 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(6));
+
+        // Add swipe down to refresh gesture
+        final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.refresh_grid_games);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+                databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
+                refresh();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
     }
 
     @Override

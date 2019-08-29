@@ -226,10 +226,6 @@ public final class TvMainActivity extends FragmentActivity implements MainView {
                 R.drawable.ic_add_tv,
                 R.string.add_directory_title));
 
-        rowItems.add(new TvSettingsItem(R.id.menu_refresh,
-                R.drawable.ic_refresh_tv,
-                R.string.grid_menu_refresh));
-
         // Create a header for this row.
         HeaderItem header =
                 new HeaderItem(R.string.preferences_settings, getString(R.string.preferences_settings));
