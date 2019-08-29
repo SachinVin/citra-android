@@ -38,10 +38,6 @@ public final class MainPresenter {
                 mView.launchSettingsActivity(SettingsFile.FILE_NAME_CONFIG);
                 return true;
 
-            case R.id.menu_refresh:
-                refeshGameList();
-                return true;
-
             case R.id.button_add_directory:
                 mView.launchFileListActivity();
                 return true;
