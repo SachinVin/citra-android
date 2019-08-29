@@ -137,12 +137,6 @@ public final class SettingsActivityPresenter {
     }
 
     public boolean handleOptionsItem(int itemId) {
-        switch (itemId) {
-            case R.id.menu_save_exit:
-                mView.finish();
-                return true;
-        }
-
         return false;
     }
 
