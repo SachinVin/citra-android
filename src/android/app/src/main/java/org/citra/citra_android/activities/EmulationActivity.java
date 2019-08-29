@@ -252,7 +252,6 @@ public final class EmulationActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.emulation_close_game)
                     .setMessage(R.string.emulation_close_game_message)
-                    .setIcon(R.drawable.ic_launcher)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) ->
                     {
                         mEmulationFragment.stopEmulation();
