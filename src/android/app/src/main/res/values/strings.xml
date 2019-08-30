@@ -75,10 +75,6 @@
     <string name="audio_stretch_description">Stretches audio to reduce stuttering. When enabled, increases audio latency and slightly reduces performance.</string>
 
     <!-- Miscellaneous -->
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
     <string name="disabled">Disabled</string>
     <string name="other">Other</string>
