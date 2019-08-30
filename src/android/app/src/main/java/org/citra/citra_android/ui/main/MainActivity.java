@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -46,21 +47,25 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         setSupportActionBar(mToolbar);
 
         mFrameLayoutId = R.id.games_platform_frame;
-
-        // Set up the FAB.
         mFab.setOnClickListener(view -> mPresenter.onFabClick());
-
         mPresenter.onCreate();
 
-        // Stuff in this block only happens when this activity is newly created (i.e. not a rotation)
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             StartupHandler.HandleInit(this);
-
-        if (PermissionsHandler.hasWriteAccess(this)) {
-            mPlatformGamesFragment = new PlatformGamesFragment();
-            getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
-                    .commit();
+            if (PermissionsHandler.hasWriteAccess(this)) {
+                mPlatformGamesFragment = new PlatformGamesFragment();
+                getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
+                        .commit();
+            }
+        } else {
+            mPlatformGamesFragment = (PlatformGamesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "mPlatformGamesFragment");
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "mPlatformGamesFragment", mPlatformGamesFragment);
     }
 
     @Override
