@@ -30,7 +30,8 @@
         android:longClickable="false"
         android:shadowColor="@android:color/black"
         android:text="TextView"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/done_control_config"
