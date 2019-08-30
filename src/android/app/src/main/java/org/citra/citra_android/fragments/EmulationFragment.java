@@ -185,6 +185,11 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     }
 
     public void resetInputOverlay() {
+        // Reset button scale
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt("controlScale", 50);
+        editor.apply();
+
         mInputOverlay.resetButtonPlacement();
     }
 
