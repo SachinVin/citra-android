@@ -47,12 +47,16 @@ std::unique_ptr<EmuWindow_Android> window;
 std::atomic<bool> is_running{false};
 std::atomic<bool> pause_emulation{false};
 
+std::mutex paused_mutex;
 std::mutex running_mutex;
 std::condition_variable running_cv;
 
 } // Anonymous namespace
 
 static int RunCitra(const std::string& filepath) {
+    // Citra core only supports a single running instance
+    std::lock_guard<std::mutex> lock(running_mutex);
+
     LOG_INFO(Frontend, "Citra is Starting");
 
     MicroProfileOnThreadCreate("EmuThread");
@@ -63,26 +67,24 @@ static int RunCitra(const std::string& filepath) {
         return -1;
     }
 
+    Core::System& system{Core::System::GetInstance()};
+    SCOPE_EXIT({ system.Shutdown(); });
+
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
-
-    Core::System& system{Core::System::GetInstance()};
-
-    // If we have a window from last session, clean up old state
-    if (window) {
-        system.Shutdown();
-        InputManager::Shutdown();
-        window.reset();
-    }
+    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>(env));
 
     {
         // Forces a config reload on game boot, if the user changed settings in the UI
         Config config;
+        Settings::Apply();
     }
 
-    Settings::Apply();
     InputManager::Init();
+    SCOPE_EXIT({ InputManager::Shutdown(); });
+
     window = std::make_unique<EmuWindow_Android>(s_surf);
+    SCOPE_EXIT({ window.reset(); });
 
     const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
     switch (load_result) {
@@ -124,7 +126,12 @@ static int RunCitra(const std::string& filepath) {
         if (!pause_emulation) {
             system.RunLoop();
         } else {
-            std::unique_lock<std::mutex> lock(running_mutex);
+            // Ensure no audio bleeds out while game is paused
+            const float volume = Settings::values.volume;
+            SCOPE_EXIT({ Settings::values.volume = volume; });
+            Settings::values.volume = 0;
+
+            std::unique_lock<std::mutex> lock(paused_mutex);
             running_cv.wait(lock, [] { return !pause_emulation || !is_running; });
         }
     }
