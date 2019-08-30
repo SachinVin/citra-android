@@ -548,12 +548,18 @@ public final class EmulationActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.emulation_control_scale);
         builder.setView(view);
-        builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
+        builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> { });
+        builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
         {
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putInt("controlScale", seekbar.getProgress());
             editor.apply();
-
+            mEmulationFragment.refreshInputOverlay();
+        });
+        builder.setNeutralButton(R.string.slider_default, (dialogInterface, i) -> {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putInt("controlScale", 50);
+            editor.apply();
             mEmulationFragment.refreshInputOverlay();
         });
 
