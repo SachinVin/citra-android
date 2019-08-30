@@ -47,8 +47,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(6));
+        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(8));
 
         // Add swipe down to refresh gesture
         final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.refresh_grid_games);
