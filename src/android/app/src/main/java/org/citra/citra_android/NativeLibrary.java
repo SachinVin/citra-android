@@ -307,7 +307,7 @@ public final class NativeLibrary {
             if (!yesNo) {
                 builder
                         .setCancelable(false)
-                        .setPositiveButton("OK", (dialog, whichButton) ->
+                        .setPositiveButton(android.R.string.ok, (dialog, whichButton) ->
                         {
                             dialog.dismiss();
                             synchronized (lock) {
@@ -318,7 +318,7 @@ public final class NativeLibrary {
                 alertResult = false;
 
                 builder
-                        .setPositiveButton("Yes", (dialog, whichButton) ->
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) ->
                         {
                             alertResult = true;
                             dialog.dismiss();
@@ -326,7 +326,7 @@ public final class NativeLibrary {
                                 lock.notify();
                             }
                         })
-                        .setNegativeButton("No", (dialog, whichButton) ->
+                        .setNegativeButton(android.R.string.no, (dialog, whichButton) ->
                         {
                             alertResult = false;
                             dialog.dismiss();
