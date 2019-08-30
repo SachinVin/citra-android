@@ -14,7 +14,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/image_game_screen"
@@ -34,7 +34,7 @@
             style="@android:style/TextAppearance.Material.Subhead"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:baselineAligned="false"
             android:ellipsize="end"
             android:gravity="center_vertical"
