@@ -252,12 +252,12 @@ public final class EmulationActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.emulation_close_game)
                     .setMessage(R.string.emulation_close_game_message)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) ->
+                    .setPositiveButton(android.R.string.yes, (dialogInterface, i) ->
                     {
                         mEmulationFragment.stopEmulation();
                         exitWithAnimation();
                     })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) ->
+                    .setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
                     {
                     }).setOnDismissListener(dialogInterface ->
                     {
@@ -507,7 +507,7 @@ public final class EmulationActivity extends AppCompatActivity {
                 (dialog, indexSelected, isChecked) -> editor
                         .putBoolean("buttonToggle" + indexSelected, isChecked));
 
-        builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
+        builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
         {
             editor.apply();
 
@@ -529,17 +529,13 @@ public final class EmulationActivity extends AppCompatActivity {
         seekbar.setMax(150);
         seekbar.setProgress(mPreferences.getInt("controlScale", 50));
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Do nothing
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { }
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 value.setText(String.valueOf(progress + 50));
             }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // Do nothing
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) { }
         });
 
         value.setText(String.valueOf(seekbar.getProgress() + 50));
@@ -570,13 +566,8 @@ public final class EmulationActivity extends AppCompatActivity {
     private void resetOverlay() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.emulation_touch_overlay_reset))
-                .setPositiveButton(R.string.yes, (dialogInterface, i) ->
-                {
-                    mEmulationFragment.resetInputOverlay();
-                })
-                .setNegativeButton(R.string.cancel, (dialogInterface, i) ->
-                {
-                })
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> mEmulationFragment.resetInputOverlay())
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> { })
                 .create()
                 .show();
     }
