@@ -205,8 +205,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         };
 
         builder.setView(view);
-        builder.setPositiveButton(R.string.ok, ok);
-        builder.setNegativeButton(R.string.cancel, defaultCancelListener);
+        builder.setPositiveButton(android.R.string.ok, ok);
+        builder.setNegativeButton(android.R.string.cancel, defaultCancelListener);
         mDialog = builder.show();
     }
 
@@ -223,8 +223,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
 
         builder.setTitle(item.getNameId());
         builder.setView(view);
-        builder.setPositiveButton(R.string.ok, this);
-        builder.setNegativeButton(R.string.cancel, defaultCancelListener);
+        builder.setPositiveButton(android.R.string.ok, this);
+        builder.setNegativeButton(android.R.string.cancel, defaultCancelListener);
         builder.setNeutralButton(R.string.slider_default, (DialogInterface dialog, int which) -> {
             seekbar.setProgress(item.getDefaultValue());
             onClick(dialog, which);
@@ -262,7 +262,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         }
 
         dialog.setMessage(String.format(mContext.getString(messageResId), mContext.getString(item.getNameId())));
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(R.string.cancel), this);
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(android.R.string.cancel), this);
         dialog.setButton(AlertDialog.BUTTON_NEUTRAL, mContext.getString(R.string.clear), (dialogInterface, i) ->
         {
             item.removeOldMapping();
