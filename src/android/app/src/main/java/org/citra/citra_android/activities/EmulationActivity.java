@@ -237,6 +237,9 @@ public final class EmulationActivity extends AppCompatActivity {
         mSelectedTitle = savedInstanceState.getString(EXTRA_SELECTED_TITLE);
         mScreenPath = savedInstanceState.getString(EXTRA_SCREEN_PATH);
         mPosition = savedInstanceState.getInt(EXTRA_GRID_POSITION);
+
+        // If an alert prompt was in progress when state was restored, retry displaying it
+        NativeLibrary.retryDisplayAlertPrompt();
     }
 
     @Override
