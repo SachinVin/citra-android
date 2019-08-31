@@ -11,6 +11,8 @@ namespace IDCache {
 JNIEnv* GetEnvForThread();
 jclass GetNativeLibraryClass();
 jmethodID GetDisplayAlertMsg();
+jmethodID GetDisplayAlertPrompt();
+jmethodID GetAlertPromptButton();
 jmethodID GetIsPortraitMode();
 jmethodID GetLandscapeScreenLayout();
 
