@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import org.citra.citra_android.NativeLibrary;
 import org.citra.citra_android.R;
-import org.citra.citra_android.DolphinApplication;
+import org.citra.citra_android.CitraApplication;
 import org.citra.citra_android.model.settings.Setting;
 import org.citra.citra_android.model.settings.StringSetting;
 import org.citra.citra_android.utils.SettingsFile;
@@ -207,7 +207,7 @@ public final class InputBindingSetting extends SettingsItem {
      */
     public void removeOldMapping() {
         // Get preferences editor
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         // Try remove all possible keys we wrote for this setting
@@ -256,7 +256,7 @@ public final class InputBindingSetting extends SettingsItem {
      */
     private void WriteButtonMapping(String key) {
         // Get preferences editor
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         // Remove mapping for another setting using this input
@@ -284,7 +284,7 @@ public final class InputBindingSetting extends SettingsItem {
      */
     private void WriteAxisMapping(int axis, int value) {
         // Get preferences editor
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         // Cleanup old mapping
@@ -309,7 +309,7 @@ public final class InputBindingSetting extends SettingsItem {
     public void onKeyInput(KeyEvent keyEvent)
     {
         if (!IsButtonMappingSupported()) {
-            Toast.makeText(DolphinApplication.getAppContext(), R.string.input_message_analog_only, Toast.LENGTH_LONG).show();
+            Toast.makeText(CitraApplication.getAppContext(), R.string.input_message_analog_only, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -332,11 +332,11 @@ public final class InputBindingSetting extends SettingsItem {
                               char axisDir)
     {
         if (!IsAxisMappingSupported()) {
-             Toast.makeText(DolphinApplication.getAppContext(), R.string.input_message_button_only, Toast.LENGTH_LONG).show();
+             Toast.makeText(CitraApplication.getAppContext(), R.string.input_message_button_only, Toast.LENGTH_LONG).show();
              return;
          }
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         int button;
@@ -362,7 +362,7 @@ public final class InputBindingSetting extends SettingsItem {
      * Sets the string to use in the configuration UI for the gamepad input.
      */
     private StringSetting setUiString(String ui) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         if (getSetting() == null) {
