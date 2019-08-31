@@ -10,6 +10,9 @@ import android.app.AlertDialog;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.view.Surface;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import org.citra.citra_android.activities.EmulationActivity;
 import org.citra.citra_android.utils.Log;
@@ -26,7 +29,15 @@ public final class NativeLibrary {
      */
     public static final String TouchScreenDevice = "Touchscreen";
     public static WeakReference<EmulationActivity> sEmulationActivity = new WeakReference<>(null);
+
     private static boolean alertResult = false;
+    private static String alertPromptResult = "";
+    private static int alertPromptButton = 0;
+    private static final Object alertPromptLock = new Object();
+    private static boolean alertPromptInProgress = false;
+    private static String alertPromptCaption = "";
+    private static int alertPromptButtonConfig = 0;
+    private static EditText alertPromptEditText = null;
 
     static {
         try {
@@ -351,6 +362,86 @@ public final class NativeLibrary {
                 result = alertResult;
         }
         return result;
+    }
+
+    public static void retryDisplayAlertPrompt() {
+        if (!alertPromptInProgress) {
+            return;
+        }
+        displayAlertPromptImpl(alertPromptCaption, alertPromptEditText.getText().toString(), alertPromptButtonConfig).show();
+    }
+
+    public static String displayAlertPrompt(String caption, String text, int buttonConfig) {
+        alertPromptCaption = caption;
+        alertPromptButtonConfig = buttonConfig;
+        alertPromptInProgress = true;
+
+        // Show the AlertDialog on the main thread
+        sEmulationActivity.get().runOnUiThread(() -> displayAlertPromptImpl(alertPromptCaption, text, alertPromptButtonConfig).show());
+
+        // Wait for the lock to notify that it is complete
+        synchronized (alertPromptLock) {
+            try {
+                alertPromptLock.wait();
+            } catch (Exception e) {
+            }
+        }
+        alertPromptInProgress = false;
+
+        return alertPromptResult;
+    }
+
+    public static AlertDialog.Builder displayAlertPromptImpl(String caption, String text, int buttonConfig) {
+        final EmulationActivity emulationActivity = sEmulationActivity.get();
+        alertPromptResult = "";
+        alertPromptButton = 0;
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = params.rightMargin = CitraApplication.getAppContext().getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+
+        // Set up the input
+        alertPromptEditText = new EditText(DolphinApplication.getAppContext());
+        alertPromptEditText.setText(text);
+        alertPromptEditText.setSingleLine();
+        alertPromptEditText.setLayoutParams(params);
+
+        FrameLayout container = new FrameLayout(emulationActivity);
+        container.addView(alertPromptEditText);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
+            .setTitle(caption)
+            .setView(container)
+            .setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
+                {
+                    alertPromptButton = buttonConfig;
+                    alertPromptResult = alertPromptEditText.getText().toString();
+                    synchronized (alertPromptLock) {
+                        alertPromptLock.notifyAll();
+                    }
+                })
+            .setOnDismissListener(dialogInterface ->
+            {
+                alertPromptResult = "";
+                synchronized (alertPromptLock) {
+                    alertPromptLock.notifyAll();
+                }
+            });
+
+        if (buttonConfig > 0) {
+            builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
+            {
+                alertPromptResult = "";
+                synchronized (alertPromptLock) {
+                    alertPromptLock.notifyAll();
+                }
+            });
+        }
+
+        return builder;
+    }
+
+    public static int alertPromptButton() {
+        return alertPromptButton;
     }
 
     public static void setEmulationActivity(EmulationActivity emulationActivity) {

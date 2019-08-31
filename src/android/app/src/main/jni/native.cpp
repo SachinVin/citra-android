@@ -1,3 +1,7 @@
+// Copyright 2019 Citra Emulator Project
+// Licensed under GPLv2 or any later version
+// Refer to the license.txt file included.
+
 #include <iostream>
 #include <memory>
 #include <regex>
@@ -53,6 +57,58 @@ std::condition_variable running_cv;
 
 } // Anonymous namespace
 
+static std::string GetJString(JNIEnv* env, jstring jstr) {
+    if (!jstr) {
+        return {};
+    }
+
+    const char* s = env->GetStringUTFChars(jstr, nullptr);
+    std::string result = s;
+    env->ReleaseStringUTFChars(jstr, s);
+    return result;
+}
+
+static bool DisplayAlertMessage(const char* caption, const char* text, bool yes_no) {
+    JNIEnv* env = IDCache::GetEnvForThread();
+
+    // Execute the Java method.
+    jboolean result = env->CallStaticBooleanMethod(
+        IDCache::GetNativeLibraryClass(), IDCache::GetDisplayAlertMsg(), env->NewStringUTF(caption),
+        env->NewStringUTF(text), yes_no ? JNI_TRUE : JNI_FALSE);
+
+    return result != JNI_FALSE;
+}
+
+static std::string DisplayAlertPrompt(const char* caption, const char* text, int buttonConfig) {
+    JNIEnv* env = IDCache::GetEnvForThread();
+
+    jstring value = reinterpret_cast<jstring>(env->CallStaticObjectMethod(
+        IDCache::GetNativeLibraryClass(), IDCache::GetDisplayAlertPrompt(),
+        env->NewStringUTF(caption), env->NewStringUTF(text), buttonConfig));
+
+    return GetJString(env, value);
+}
+
+static int AlertPromptButton() {
+    JNIEnv* env = IDCache::GetEnvForThread();
+
+    // Execute the Java method.
+    return static_cast<int>(env->CallStaticIntMethod(IDCache::GetNativeLibraryClass(),
+                                                     IDCache::GetAlertPromptButton()));
+}
+
+class AndroidKeyboard final : public Frontend::SoftwareKeyboard {
+public:
+    void Execute(const Frontend::KeyboardConfig& config) override {
+        SoftwareKeyboard::Execute(config);
+        Finalize(DisplayAlertPrompt("Enter text", config.hint_text.c_str(),
+                                    static_cast<int>(this->config.button_config)),
+                 AlertPromptButton());
+    }
+
+    void ShowError(const std::string& error) override {}
+};
+
 static int RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
@@ -72,7 +128,7 @@ static int RunCitra(const std::string& filepath) {
 
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
-    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>(env));
+    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>());
 
     {
         // Forces a config reload on game boot, if the user changed settings in the UI
@@ -137,17 +193,6 @@ static int RunCitra(const std::string& filepath) {
     }
 
     return {};
-}
-
-static std::string GetJString(JNIEnv* env, jstring jstr) {
-    if (!jstr) {
-        return {};
-    }
-
-    const char* s = env->GetStringUTFChars(jstr, nullptr);
-    std::string result = s;
-    env->ReleaseStringUTFChars(jstr, s);
-    return result;
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env, jobject obj,
@@ -250,7 +295,8 @@ jintArray Java_org_citra_citra_1android_NativeLibrary_GetBanner(JNIEnv* env, job
     }
 
     jintArray Banner = env->NewIntArray(icon_data.size());
-    env->SetIntArrayRegion(Banner, 0, env->GetArrayLength(Banner), reinterpret_cast<jint*>(icon_data.data()));
+    env->SetIntArrayRegion(Banner, 0, env->GetArrayLength(Banner),
+                           reinterpret_cast<jint*>(icon_data.data()));
 
     return Banner;
 }
