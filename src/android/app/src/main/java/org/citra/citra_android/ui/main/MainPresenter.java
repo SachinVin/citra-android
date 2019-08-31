@@ -2,7 +2,7 @@ package org.citra.citra_android.ui.main;
 
 
 import org.citra.citra_android.BuildConfig;
-import org.citra.citra_android.DolphinApplication;
+import org.citra.citra_android.CitraApplication;
 import org.citra.citra_android.R;
 import org.citra.citra_android.model.GameDatabase;
 import org.citra.citra_android.utils.AddDirectoryHelper;
@@ -63,7 +63,7 @@ public final class MainPresenter {
     }
 
     public void loadGames() {
-        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+        GameDatabase databaseHelper = CitraApplication.databaseHelper;
         databaseHelper.getGames()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -71,7 +71,7 @@ public final class MainPresenter {
     }
 
     private void refeshGameList() {
-        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+        GameDatabase databaseHelper = CitraApplication.databaseHelper;
         databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
         mView.refresh();
     }
