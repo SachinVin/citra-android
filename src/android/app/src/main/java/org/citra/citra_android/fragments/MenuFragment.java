@@ -19,8 +19,8 @@ public final class MenuFragment extends Fragment implements View.OnClickListener
     private static SparseIntArray buttonsActionsMap = new SparseIntArray();
 
     static {
-        buttonsActionsMap.append(R.id.menu_emulation_toggle_perf_stats,
-                EmulationActivity.MENU_ACTION_TOGGLE_PREF_STATS);
+        buttonsActionsMap.append(R.id.menu_emulation_show_fps,
+                EmulationActivity.MENU_ACTION_SHOW_FPS);
         buttonsActionsMap.append(R.id.menu_exit, EmulationActivity.MENU_ACTION_EXIT);
         buttonsActionsMap.append(R.id.menu_screen_layout_landscape,
                 EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE);
@@ -32,6 +32,8 @@ public final class MenuFragment extends Fragment implements View.OnClickListener
                 EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE);
         buttonsActionsMap.append(R.id.menu_emulation_swap_screens,
                 EmulationActivity.MENU_ACTION_SWAP_SCREENS);
+        buttonsActionsMap.append(R.id.menu_emulation_show_overlay,
+                EmulationActivity.MENU_ACTION_SHOW_OVERLAY);
     }
 
     public static MenuFragment newInstance(String title) {

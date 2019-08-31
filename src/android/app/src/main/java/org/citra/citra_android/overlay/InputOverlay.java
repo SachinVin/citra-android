@@ -29,6 +29,7 @@ import org.citra.citra_android.NativeLibrary;
 import org.citra.citra_android.NativeLibrary.ButtonState;
 import org.citra.citra_android.NativeLibrary.ButtonType;
 import org.citra.citra_android.R;
+import org.citra.citra_android.utils.EmulationMenuSettings;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -648,8 +649,8 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
                         "-Portrait" : "";
 
-        if (mPreferences.getBoolean("showInputOverlay", true)) {
-            // Add all the enabled overlay items back to the HashSet.
+        // Add all the enabled overlay items back to the HashSet.
+        if (EmulationMenuSettings.getShowOverlay()) {
             addOverlayControls(orientation);
         }
 
