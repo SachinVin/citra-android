@@ -124,7 +124,6 @@ void Config::ReadValues() {
     // Layout
     Settings::values.layout_option = static_cast<Settings::LayoutOption>(sdl2_config->GetInteger(
         "Layout", "layout_option", static_cast<int>(Settings::LayoutOption::MobileLandscape)));
-    Settings::values.swap_screen = sdl2_config->GetBoolean("Layout", "swap_screen", false);
     Settings::values.custom_layout = sdl2_config->GetBoolean("Layout", "custom_layout", false);
     Settings::values.custom_top_left =
         static_cast<u16>(sdl2_config->GetInteger("Layout", "custom_top_left", 0));

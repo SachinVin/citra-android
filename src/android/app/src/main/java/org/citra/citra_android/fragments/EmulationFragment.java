@@ -27,6 +27,7 @@ import org.citra.citra_android.overlay.InputOverlay;
 import org.citra.citra_android.services.DirectoryInitializationService;
 import org.citra.citra_android.services.DirectoryInitializationService.DirectoryInitializationState;
 import org.citra.citra_android.utils.DirectoryStateReceiver;
+import org.citra.citra_android.utils.EmulationMenuSettings;
 import org.citra.citra_android.utils.Log;
 
 public final class EmulationFragment extends Fragment implements SurfaceHolder.Callback {
@@ -97,30 +98,17 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         surfaceView.getHolder().addCallback(this);
 
         mInputOverlay = contents.findViewById(R.id.surface_input_overlay);
-        if (mInputOverlay != null) {
-            // If the input overlay was previously disabled, then don't show it.
-            if (!mPreferences.getBoolean("showInputOverlay", true)) {
-                mInputOverlay.setVisibility(View.GONE);
-            }
-        }
+        mPerfStats = contents.findViewById(R.id.show_fps_text);
 
         Button doneButton = contents.findViewById(R.id.done_control_config);
         if (doneButton != null) {
             doneButton.setOnClickListener(v -> stopConfiguringControls());
         }
 
-        mPerfStats = contents.findViewById(R.id.perf_stats_text);
-        if (mPerfStats != null) {
-            // If the overlay was previously disabled, then don't show it.
-            if (!mPreferences.getBoolean("showPerfStats", true)) {
-                mPerfStats.setVisibility(View.GONE);
-            } else {
-                updatePerfStats();
-            }
-        }
+        // Show/hide the "Show FPS" overlay
+        updateShowFpsOverlay();
 
         // The new Surface created here will get passed to the native code via onSurfaceChanged.
-
         return contents;
     }
 
@@ -193,46 +181,31 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         mInputOverlay.resetButtonPlacement();
     }
 
-    public void togglePerfStatsVisibility() {
-        SharedPreferences.Editor editor = mPreferences.edit();
+    public void updateShowFpsOverlay() {
+        if (EmulationMenuSettings.getShowFps()) {
+            final int SYSTEM_FPS = 0;
+            final int FPS = 1;
+            final int FRAMETIME = 2;
+            final int SPEED = 3;
 
-        // If the overlay is currently set to INVISIBLE
-        if (!mPreferences.getBoolean("showPerfStats", false)) {
-            updatePerfStats();
-            // Set it to VISIBLE
+            perfStatsUpdater = () ->
+            {
+                final DecimalFormat df = new DecimalFormat("#.#");
+                double[] perfStats = NativeLibrary.GetPerfStats();
+                mPerfStats.setText(String.format("FPS: %s Speed: %s%%", df.format(perfStats[FPS]),
+                        df.format(perfStats[SPEED] * 100.0)));
+
+                perfStatsUpdateHandler.postDelayed(perfStatsUpdater, 2000 /* 1s */);
+            };
+            perfStatsUpdateHandler.post(perfStatsUpdater);
+
             mPerfStats.setVisibility(View.VISIBLE);
-            editor.putBoolean("showPerfStats", true);
         } else {
-            stopPerfStatsUpdates();
-            // Set it to INVISIBLE
+            if (perfStatsUpdater != null) {
+                perfStatsUpdateHandler.removeCallbacks(perfStatsUpdater);
+            }
+
             mPerfStats.setVisibility(View.GONE);
-            editor.putBoolean("showPerfStats", false);
-        }
-
-        editor.apply();
-    }
-
-    private void updatePerfStats() {
-        final int SYSTEM_FPS = 0;
-        final int FPS = 1;
-        final int FRAMETIME = 2;
-        final int SPEED = 3;
-
-        perfStatsUpdater = () ->
-        {
-            final DecimalFormat df = new DecimalFormat("#.#");
-            double[] perfStats = NativeLibrary.GetPerfStats();
-            mPerfStats.setText(String.format("FPS: %s Speed: %s%%", df.format(perfStats[FPS]),
-                    df.format(perfStats[SPEED] * 100.0)));
-
-            perfStatsUpdateHandler.postDelayed(perfStatsUpdater, 2000 /* 1s */);
-        };
-        perfStatsUpdateHandler.post(perfStatsUpdater);
-    }
-
-    private void stopPerfStatsUpdates() {
-        if (perfStatsUpdater != null) {
-            perfStatsUpdateHandler.removeCallbacks(perfStatsUpdater);
         }
     }
 
