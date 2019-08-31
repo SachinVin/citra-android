@@ -290,12 +290,12 @@ public final class NativeLibrary {
     public static native void SwapScreens(boolean is_portrait_mode);
 
     public static boolean isPortraitMode() {
-        return DolphinApplication.getAppContext().getResources().getConfiguration().orientation ==
+        return CitraApplication.getAppContext().getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT;
     }
 
     public static int landscapeScreenLayout() {
-        return PreferenceManager.getDefaultSharedPreferences(DolphinApplication.getAppContext())
+        return PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext())
                 .getInt("LandscapeScreenLayout", EmulationActivity.LayoutOption_MobileLandscape);
     }
 
@@ -400,7 +400,7 @@ public final class NativeLibrary {
         params.leftMargin = params.rightMargin = CitraApplication.getAppContext().getResources().getDimensionPixelSize(R.dimen.dialog_margin);
 
         // Set up the input
-        alertPromptEditText = new EditText(DolphinApplication.getAppContext());
+        alertPromptEditText = new EditText(CitraApplication.getAppContext());
         alertPromptEditText.setText(text);
         alertPromptEditText.setSingleLine();
         alertPromptEditText.setLayoutParams(params);

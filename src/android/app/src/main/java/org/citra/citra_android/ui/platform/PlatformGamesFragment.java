@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.citra.citra_android.DolphinApplication;
+import org.citra.citra_android.CitraApplication;
 import org.citra.citra_android.R;
 import org.citra.citra_android.adapters.GameAdapter;
 import org.citra.citra_android.model.GameDatabase;
@@ -54,7 +54,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+                GameDatabase databaseHelper = CitraApplication.databaseHelper;
                 databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
                 refresh();
                 pullToRefresh.setRefreshing(false);
