@@ -4,6 +4,10 @@
     <!-- General application strings -->
     <string name="app_name">Citra</string>
     <string name="app_disclaimer">This software will run games for the Nintendo 3DS handheld game console. No game titles are included.\n\nBefore you run, please place your rightfully owned 3DS game files onto your device storage.</string>
+    <string name="app_notification_channel_name">Citra</string>
+    <string name="app_notification_channel_id">Citra</string>
+    <string name="app_notification_channel_description">Citra 3DS emulator notifications</string>
+    <string name="app_notification_running">Citra is running</string>
 
     <!-- Input related strings -->
     <string name="controller_circlepad">Circle Pad</string>
