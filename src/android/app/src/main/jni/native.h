@@ -1,9 +1,8 @@
-// Copyright 2013 Dolphin Emulator Project
+// Copyright 2019 Citra Emulator Project
 // Licensed under GPLv2 or any later version
 // Refer to the license.txt file included.
 
-// Initialise and run the emulator
-static int RunCitra(const std::string& path);
+#pragma once
 
 // Function calls from the Java side
 #ifdef __cplusplus
