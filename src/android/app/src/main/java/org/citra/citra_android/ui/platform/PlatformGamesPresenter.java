@@ -1,7 +1,7 @@
 package org.citra.citra_android.ui.platform;
 
 
-import org.citra.citra_android.DolphinApplication;
+import org.citra.citra_android.CitraApplication;
 import org.citra.citra_android.model.GameDatabase;
 import org.citra.citra_android.utils.Log;
 
@@ -27,7 +27,7 @@ public final class PlatformGamesPresenter {
     private void loadGames() {
         Log.debug("[PlatformGamesPresenter] : Loading games...");
 
-        GameDatabase databaseHelper = DolphinApplication.databaseHelper;
+        GameDatabase databaseHelper = CitraApplication.databaseHelper;
 
         databaseHelper.getGames()
                 .subscribeOn(Schedulers.io())
