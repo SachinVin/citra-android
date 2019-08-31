@@ -12,6 +12,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.view.InputDevice;
@@ -63,6 +65,8 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_SCREEN_LAYOUT_SIDEBYSIDE = 8;
     public static final int MENU_ACTION_SWAP_SCREENS = 9;
     public static final int MENU_ACTION_RESET_OVERLAY = 10;
+
+    private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
     private static final String BACKSTACK_NAME_MENU = "menu";
     private static final String BACKSTACK_NAME_SUBMENU = "submenu";
     private static SparseIntArray buttonsActionsMap = new SparseIntArray();
@@ -130,6 +134,27 @@ public final class EmulationActivity extends AppCompatActivity {
         //noinspection RestrictedApi
         activity.startActivityForResult(launcher, MainPresenter.REQUEST_EMULATE_GAME,
                 options.toBundle());
+    }
+
+    private void showRunningNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.app_notification_channel_id))
+                .setSmallIcon(R.drawable.ic_stat_notification_logo)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.app_notification_running))
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setOngoing(true);
+
+        NotificationManagerCompat.from(this).notify(EMULATION_RUNNING_NOTIFICATION, builder.build());
+    }
+
+    public static void tryDismissRunningNotification(Activity activity) {
+        NotificationManagerCompat.from(activity).cancel(EMULATION_RUNNING_NOTIFICATION);
+    }
+
+    @Override
+    protected void onDestroy() {
+        tryDismissRunningNotification(this);
+        super.onDestroy();
     }
 
     @Override
@@ -221,6 +246,8 @@ public final class EmulationActivity extends AppCompatActivity {
         }
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        showRunningNotification();
     }
 
     @Override
@@ -308,6 +335,8 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     public void exitWithAnimation() {
+        tryDismissRunningNotification(this);
+
         runOnUiThread(() ->
         {
             Picasso.get()
