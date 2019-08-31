@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.citra.citra_android.R;
+import org.citra.citra_android.activities.EmulationActivity;
 import org.citra.citra_android.model.GameProvider;
 import org.citra.citra_android.services.DirectoryInitializationService;
 import org.citra.citra_android.ui.platform.PlatformGamesFragment;
@@ -60,6 +60,9 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         } else {
             mPlatformGamesFragment = (PlatformGamesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "mPlatformGamesFragment");
         }
+
+        // Dismiss previous notifications (should not happen unless a crash occurred)
+        EmulationActivity.tryDismissRunningNotification(this);
     }
 
     @Override
@@ -190,5 +193,11 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     @Nullable
     private PlatformGamesView getPlatformGamesView() {
         return (PlatformGamesView) getSupportFragmentManager().findFragmentById(mFrameLayoutId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EmulationActivity.tryDismissRunningNotification(this);
+        super.onDestroy();
     }
 }
