@@ -139,7 +139,7 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_NotifyOrienta
     JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwapScreens(
-    JNIEnv* env, jobject obj, jboolean is_portrait_mode);
+    JNIEnv* env, jobject obj, jboolean swap_screens, jboolean is_portrait_mode);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_Run__Ljava_lang_String_2(
     JNIEnv* env, jclass type, jstring path_);

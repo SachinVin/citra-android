@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import org.citra.citra_android.activities.EmulationActivity;
+import org.citra.citra_android.utils.EmulationMenuSettings;
 import org.citra.citra_android.utils.Log;
 
 import java.lang.ref.WeakReference;
@@ -287,7 +288,7 @@ public final class NativeLibrary {
     /**
      * Swaps the top and bottom screens.
      */
-    public static native void SwapScreens(boolean is_portrait_mode);
+    public static native void SwapScreens(boolean swap_screens, boolean is_portrait_mode);
 
     public static boolean isPortraitMode() {
         return CitraApplication.getAppContext().getResources().getConfiguration().orientation ==
@@ -295,8 +296,7 @@ public final class NativeLibrary {
     }
 
     public static int landscapeScreenLayout() {
-        return PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext())
-                .getInt("LandscapeScreenLayout", EmulationActivity.LayoutOption_MobileLandscape);
+        return EmulationMenuSettings.getLandscapeScreenLayout();
     }
 
     public static boolean displayAlertMsg(final String caption, final String text,
