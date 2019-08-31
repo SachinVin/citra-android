@@ -278,6 +278,6 @@ public final class SettingsFragmentPresenter {
             mView.passSettingsToActivity(mSettings);
         }
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, SettingsFile.SECTION_AUDIO, SettingsFile.SETTINGS_DOLPHIN, R.string.audio_stretch, R.string.audio_stretch_description, true, audioStretch));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, SettingsFile.SECTION_AUDIO, SettingsFile.SETTINGS_DOLPHIN, R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
     }
 }
