@@ -55,8 +55,6 @@
     <string name="region">Emulated region</string>
 
     <!-- Graphics settings strings -->
-    <string name="show_fps">Show FPS</string>
-    <string name="show_fps_description">Show the number of frames rendered per second as a measure of emulation speed.</string>
     <string name="vsync">Enable V-Sync</string>
     <string name="vsync_description">Synchronizes the game frame rate to the refresh rate of your device.</string>
     <string name="linear_filtering">Enable linear filtering</string>
@@ -110,11 +108,12 @@
     <!-- Emulation Menu -->
     <string name="emulation_screenshot">Take Screenshot</string>
     <string name="emulation_exit">Exit</string>
-    <string name="emulation_toggle_perf_stats">Toggle Perf Stats</string>
+    <string name="emulation_show_fps">Show FPS</string>
     <string name="emulation_configure_controls">Configure Controls</string>
     <string name="emulation_edit_layout">Edit Layout</string>
     <string name="emulation_done">Done</string>
     <string name="emulation_toggle_controls">Toggle Controls</string>
+    <string name="emulation_toggle_all">Toggle All</string>
     <string name="emulation_control_scale">Adjust Scale</string>
     <string name="emulation_choose_controller">Choose Controller</string>
     <string name="emulation_controller_changed">You may have to reload the game after changing extensions.</string>
@@ -125,6 +124,7 @@
     <string name="emulation_screen_layout_sidebyside">Side by Side Screens</string>
     <string name="emulation_swap_screens">Swap Screens</string>
     <string name="emulation_touch_overlay_reset">Reset Overlay</string>
+    <string name="emulation_show_overlay">Show Overlay</string>
     <string name="emulation_close_game">Close Game</string>
     <string name="emulation_close_game_message">Are you sure that you would like to close the current game?</string>
 

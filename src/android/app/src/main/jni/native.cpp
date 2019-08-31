@@ -215,9 +215,12 @@ void Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SwapScreens(JNIEnv* env, jobject obj,
+                                                             jboolean swap_screens,
                                                              jboolean is_portrait_mode) {
-    Settings::values.swap_screen = !Settings::values.swap_screen;
-    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
+    Settings::values.swap_screen = swap_screens;
+    if (VideoCore::g_renderer) {
+        VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
+    }
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SetUserDirectory(JNIEnv* env, jobject obj,
