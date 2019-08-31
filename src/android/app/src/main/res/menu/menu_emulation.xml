@@ -26,11 +26,6 @@
     </item>
 
     <item
-        android:id="@+id/menu_emulation_toggle_perf_stats"
-        app:showAsAction="never"
-        android:title="@string/emulation_toggle_perf_stats"/>
-
-    <item
         android:id="@+id/menu_emulation_switch_screen_layout"
         app:showAsAction="never"
         android:title="@string/emulation_switch_screen_layout">
@@ -58,6 +53,19 @@
     <item
         android:id="@+id/menu_emulation_swap_screens"
         app:showAsAction="never"
-        android:title="@string/emulation_swap_screens"/>
+        android:title="@string/emulation_swap_screens"
+        android:checkable="true"/>
+
+    <item
+        android:id="@+id/menu_emulation_show_fps"
+        app:showAsAction="never"
+        android:title="@string/emulation_show_fps"
+        android:checkable="true"/>
+
+    <item
+        android:id="@+id/menu_emulation_show_overlay"
+        app:showAsAction="never"
+        android:title="@string/emulation_show_overlay"
+        android:checkable="true"/>
 
 </menu>
