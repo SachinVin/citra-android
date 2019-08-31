@@ -7,17 +7,23 @@ import org.citra.citra_android.utils.Log;
 import org.citra.citra_android.utils.SettingsFile;
 
 public final class SliderSetting extends SettingsItem {
+    private int mMin;
     private int mMax;
     private int mDefaultValue;
 
     private String mUnits;
 
     public SliderSetting(String key, String section, int file, int titleId, int descriptionId,
-                         int max, String units, int defaultValue, Setting setting) {
+                         int min, int max, String units, int defaultValue, Setting setting) {
         super(key, section, file, setting, titleId, descriptionId);
+        mMin = min;
         mMax = max;
         mUnits = units;
         mDefaultValue = defaultValue;
+    }
+
+    public int getMin() {
+        return mMin;
     }
 
     public int getMax() {
