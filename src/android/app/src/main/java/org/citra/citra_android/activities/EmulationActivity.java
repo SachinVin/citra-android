@@ -2,6 +2,7 @@ package org.citra.citra_android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -137,12 +138,18 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     private void showRunningNotification() {
+        // Intent is used to resume emulation if the notification is clicked
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, EmulationActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.app_notification_channel_id))
                 .setSmallIcon(R.drawable.ic_stat_notification_logo)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.app_notification_running))
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setOngoing(true);
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setVibrate(null)
+                .setSound(null)
+                .setContentIntent(contentIntent);
 
         NotificationManagerCompat.from(this).notify(EMULATION_RUNNING_NOTIFICATION, builder.build());
     }

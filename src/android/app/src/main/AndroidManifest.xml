@@ -58,7 +58,8 @@
 
         <activity
             android:name=".activities.EmulationActivity"
-            android:theme="@style/CitraEmulation"/>
+            android:theme="@style/CitraEmulation"
+            android:launchMode="singleInstance"/>
 
         <activity
             android:name=".activities.CustomFilePickerActivity"
