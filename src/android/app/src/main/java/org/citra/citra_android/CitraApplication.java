@@ -24,9 +24,10 @@ public class CitraApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.app_notification_channel_name);
             String description = getString(R.string.app_notification_channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(getString(R.string.app_notification_channel_id), name, importance);
+            NotificationChannel channel = new NotificationChannel(getString(R.string.app_notification_channel_id), name, NotificationManager.IMPORTANCE_LOW);
             channel.setDescription(description);
+            channel.setSound(null, null);
+            channel.setVibrationPattern(null);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
