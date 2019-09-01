@@ -83,10 +83,7 @@
     <string name="slider_default">Default</string>
 
     <!-- Game Grid Screen-->
-    <string name="grid_menu_core_settings">CPU Settings</string>
-    <string name="grid_menu_video_settings">Video Settings</string>
-    <string name="grid_menu_gcpad_settings">GameCube Input</string>
-    <string name="grid_menu_refresh">Refresh Library</string>
+    <string name="grid_menu_core_settings">Settings</string>
 
     <!-- Add Directory Screen-->
     <string name="select_game_folder">Select Game Folder</string>
