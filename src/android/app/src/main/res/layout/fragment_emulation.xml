@@ -29,7 +29,6 @@
         android:linksClickable="false"
         android:longClickable="false"
         android:shadowColor="@android:color/black"
-        android:text="TextView"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
 

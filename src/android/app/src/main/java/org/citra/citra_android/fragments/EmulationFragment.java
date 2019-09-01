@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
-
 import org.citra.citra_android.NativeLibrary;
 import org.citra.citra_android.R;
 import org.citra.citra_android.activities.EmulationActivity;
@@ -190,12 +188,13 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
 
             perfStatsUpdater = () ->
             {
-                final DecimalFormat df = new DecimalFormat("#.#");
-                double[] perfStats = NativeLibrary.GetPerfStats();
-                mPerfStats.setText(String.format("FPS: %s Speed: %s%%", df.format(perfStats[FPS]),
-                        df.format(perfStats[SPEED] * 100.0)));
+                final double[] perfStats = NativeLibrary.GetPerfStats();
+                if (perfStats[FPS] > 0) {
+                    mPerfStats.setText(String.format("FPS: %d Speed: %d%%", (int)(perfStats[FPS] + 0.5),
+                            (int)(perfStats[SPEED] * 100.0 + 0.5)));
+                }
 
-                perfStatsUpdateHandler.postDelayed(perfStatsUpdater, 2000 /* 1s */);
+                perfStatsUpdateHandler.postDelayed(perfStatsUpdater, 3000);
             };
             perfStatsUpdateHandler.post(perfStatsUpdater);
 
