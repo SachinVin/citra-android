@@ -47,7 +47,13 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         setSupportActionBar(mToolbar);
 
         mFrameLayoutId = R.id.games_platform_frame;
-        mFab.setOnClickListener(view -> mPresenter.onFabClick());
+        mFab.setOnClickListener(view -> {
+            if (PermissionsHandler.hasWriteAccess(this)) {
+                mPresenter.onFabClick();
+            } else {
+                PermissionsHandler.checkWritePermission(this);
+            }
+        });
         mPresenter.onCreate();
 
         if (savedInstanceState == null) {
@@ -117,7 +123,11 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void launchSettingsActivity(String menuTag) {
-        SettingsActivity.launch(this, menuTag, "");
+        if (PermissionsHandler.hasWriteAccess(this)) {
+            SettingsActivity.launch(this, menuTag, "");
+        } else {
+            PermissionsHandler.checkWritePermission(this);
+        }
     }
 
     @Override
@@ -162,6 +172,9 @@ public final class MainActivity extends AppCompatActivity implements MainView {
                     mPlatformGamesFragment = new PlatformGamesFragment();
                     getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
                             .commit();
+
+                    // Immediately prompt user to select a game directory on first boot
+                    findViewById(R.id.button_add_directory).callOnClick();
                 } else {
                     Toast.makeText(this, R.string.write_permission_needed, Toast.LENGTH_SHORT)
                             .show();
