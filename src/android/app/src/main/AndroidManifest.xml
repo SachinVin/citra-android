@@ -27,6 +27,8 @@
         android:isGame="true"
         android:banner="@mipmap/ic_launcher">
 
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/Citra">
