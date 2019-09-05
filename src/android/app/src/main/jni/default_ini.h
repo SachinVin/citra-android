@@ -125,8 +125,8 @@ vsync_enabled =
 # 0: Off, 1: On (default)
 use_frame_limit =
 
-# Limits the speed of the game to run no faster than this value as a percentage of target speed
-# 1 - 9999: Speed limit as a percentage of target game speed. 100 (default)
+# Limits the speed of the game to run no faster than this value as a multiplier of target speed
+# 0.0 - 10.0: Speed limit as a multiplier of target game speed. 1.0 (default)
 frame_limit =
 
 # The clear color for the renderer. What shows up on the sides of the bottom screen.
