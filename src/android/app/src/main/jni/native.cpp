@@ -126,15 +126,15 @@ static int RunCitra(const std::string& filepath) {
     Core::System& system{Core::System::GetInstance()};
     SCOPE_EXIT({ system.Shutdown(); });
 
-    // Register frontend applets
-    Frontend::RegisterDefaultApplets();
-    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>());
-
     {
         // Forces a config reload on game boot, if the user changed settings in the UI
         Config config;
         Settings::Apply();
     }
+
+    // Register frontend applets
+    Frontend::RegisterDefaultApplets();
+    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>());
 
     InputManager::Init();
     SCOPE_EXIT({ InputManager::Shutdown(); });
