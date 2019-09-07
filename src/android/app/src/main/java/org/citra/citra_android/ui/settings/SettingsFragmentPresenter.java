@@ -139,18 +139,21 @@ public final class SettingsFragmentPresenter {
         mView.getActivity().setTitle(R.string.preferences_system);
 
         Setting region = null;
+        Setting language = null;
         Setting systemClock = null;
         Setting dateTime = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
             region = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_SYSTEM).getSetting(SettingsFile.KEY_REGION_VALUE);
+            language = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_SYSTEM).getSetting(SettingsFile.KEY_LANGUAGE);
             systemClock = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_SYSTEM).getSetting(SettingsFile.KEY_INIT_CLOCK);
             dateTime = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_SYSTEM).getSetting(SettingsFile.KEY_INIT_TIME);
         } else {
             mView.passSettingsToActivity(mSettings);
         }
 
-        sl.add(new SingleChoiceSetting(SettingsFile.KEY_REGION_VALUE, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.region, 0, R.array.regionNames, R.array.regionValues, -1, region));
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_REGION_VALUE, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.emulated_region, 0, R.array.regionNames, R.array.regionValues, -1, region));
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_LANGUAGE, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.emulated_language, 0, R.array.languageNames, R.array.languageValues, 1, language));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_INIT_CLOCK, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.init_clock, R.string.init_clock_description, R.array.systemClockNames, R.array.systemClockValues, 0, systemClock));
         sl.add(new DateTimeSetting(SettingsFile.KEY_INIT_TIME, SettingsFile.SECTION_SYSTEM, SettingsFile.SETTINGS_DOLPHIN, R.string.init_time, R.string.init_time_description, "2000-01-01 00:00:01", dateTime));
     }
