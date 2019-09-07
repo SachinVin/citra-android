@@ -220,6 +220,11 @@ is_new_3ds =
 # -1: Auto-select (default), 0: Japan, 1: USA, 2: Europe, 3: Australia, 4: China, 5: Korea, 6: Taiwan
 region_value =
 
+# The system language that Citra will use during emulation
+# 0: Japanese, 1: English (default), 2: French, 3: German, 4: Italian, 5: Spanish,
+# 6: Simplified Chinese, 7: Korean, 8: Dutch, 9: Portuguese, 10: Russian, 11: Traditional Chinese
+language =
+
 # The clock to use when citra starts
 # 0: System clock (default), 1: fixed time
 init_clock =
