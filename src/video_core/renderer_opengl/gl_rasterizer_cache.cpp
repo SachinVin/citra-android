@@ -103,7 +103,7 @@ static inline void GetTexImageOES(GLenum target, GLint level, GLenum format, GLe
     GLenum texture_binding = GL_NONE;
     switch (target) {
     case GL_TEXTURE_2D:
-        texture_binding = GL_TEXTURE_BINDING_2D;
+        texture_binding = cur_state.texture_units[0].texture_2d;
         break;
     case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
     case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
@@ -111,11 +111,11 @@ static inline void GetTexImageOES(GLenum target, GLint level, GLenum format, GLe
     case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
     case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
     case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        texture_binding = GL_TEXTURE_BINDING_CUBE_MAP;
+        texture_binding = cur_state.texture_cube_unit.texture_cube;
         break;
-    case GL_TEXTURE_3D_OES:
-        texture_binding = GL_TEXTURE_BINDING_3D_OES;
     default:
+        LOG_CRITICAL(Render_OpenGL, "Unexpected target {:x}", target);
+        UNIMPLEMENTED();
         return;
     }
 
@@ -884,8 +884,17 @@ void CachedSurface::UploadGLTexture(Common::Rectangle<u32> rect, GLuint read_fb_
 MICROPROFILE_DEFINE(OpenGL_TextureDL, "OpenGL", "Texture Download", MP_RGB(128, 192, 64));
 void CachedSurface::DownloadGLTexture(const Common::Rectangle<u32>& rect, GLuint read_fb_handle,
                                       GLuint draw_fb_handle) {
-    if (type == SurfaceType::Fill)
+    if (type == SurfaceType::Fill) {
         return;
+    }
+
+    if (GLES) {
+        if (type == SurfaceType::Depth || type == SurfaceType::DepthStencil) {
+            // TODO(bunnei): This is unsupported on GLES right now, fixme
+            LOG_WARNING(Render_OpenGL, "Unsupported depth/stencil surface download");
+            return;
+        }
+    }
 
     MICROPROFILE_SCOPE(OpenGL_TextureDL);
 
