@@ -11,6 +11,8 @@
 #include "common/file_util.h"
 #include "common/logging/log.h"
 #include "common/param_package.h"
+#include "core/core.h"
+#include "core/hle/service/cfg/cfg.h"
 #include "core/hle/service/service.h"
 #include "core/settings.h"
 #include "input_common/main.h"
@@ -59,6 +61,13 @@ static const std::array<int, Settings::NativeAnalog::NumAnalogs> default_analogs
     InputManager::N3DS_CIRCLEPAD,
     InputManager::N3DS_STICK_C,
 }};
+
+void Config::UpdateCFG() {
+    std::shared_ptr<Service::CFG::Module> cfg = std::make_shared<Service::CFG::Module>();
+    cfg->SetSystemLanguage(static_cast<Service::CFG::SystemLanguage>(
+        sdl2_config->GetInteger("System", "language", Service::CFG::SystemLanguage::LANGUAGE_EN)));
+    cfg->UpdateConfigNANDSavegame();
+}
 
 void Config::ReadValues() {
     // Controls
@@ -230,6 +239,9 @@ void Config::ReadValues() {
         sdl2_config->GetString("WebService", "web_api_url", "https://api.citra-emu.org");
     Settings::values.citra_username = sdl2_config->GetString("WebService", "citra_username", "");
     Settings::values.citra_token = sdl2_config->GetString("WebService", "citra_token", "");
+
+    // Update CFG file based on settings
+    UpdateCFG();
 }
 
 void Config::Reload() {
