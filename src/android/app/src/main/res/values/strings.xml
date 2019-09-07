@@ -52,7 +52,8 @@
     <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>
     <string name="init_time_description">If the \"System clock type\" setting is set to \"Simulated clock\", this changes the fixed date and time to start at.</string>
-    <string name="region">Emulated region</string>
+    <string name="emulated_region">Emulated region</string>
+    <string name="emulated_language">Emulated language</string>
 
     <!-- Graphics settings strings -->
     <string name="vsync">Enable V-Sync</string>
