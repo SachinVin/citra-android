@@ -8,11 +8,13 @@ package org.citra.citra_android;
 
 import android.app.AlertDialog;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Surface;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.citra.citra_android.activities.EmulationActivity;
 import org.citra.citra_android.utils.EmulationMenuSettings;
@@ -442,6 +444,46 @@ public final class NativeLibrary {
 
     public static int alertPromptButton() {
         return alertPromptButton;
+    }
+
+    public static void exitEmulationActivity(int resultCode) {
+        final int Success = 0;
+        final int ErrorNotInitialized = 1;
+        final int ErrorGetLoader = 2;
+        final int ErrorSystemMode = 3;
+        final int ErrorLoader = 4;
+        final int ErrorLoader_ErrorEncrypted = 5;
+        final int ErrorLoader_ErrorInvalidFormat = 6;
+        final int ErrorSystemFiles = 7;
+        final int ErrorVideoCore = 8;
+        final int ErrorVideoCore_ErrorGenericDrivers = 9;
+        final int ErrorVideoCore_ErrorBelowGL33 = 10;
+        final int ShutdownRequested = 11;
+        final int ErrorUnknown = 12;
+
+        final EmulationActivity emulationActivity = sEmulationActivity.get();
+        if (emulationActivity == null) {
+            Log.warning("[NativeLibrary] EmulationActivity is null, can't exit.");
+            return;
+        }
+
+        int captionId = R.string.loader_error_invalid_format;
+        if (resultCode == ErrorLoader_ErrorEncrypted) {
+            captionId = R.string.loader_error_encrypted;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
+                .setTitle(captionId)
+                .setMessage(Html.fromHtml("Please follow the guides to redump your <a href=\"https://citra-emu.org/wiki/dumping-game-cartridges/\">game cartidges</a> or <a href=\"https://citra-emu.org/wiki/dumping-installed-titles/\">installed titles</a>."))
+                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> emulationActivity.exitWithAnimation())
+                .setOnDismissListener(dialogInterface -> emulationActivity.exitWithAnimation());
+        emulationActivity.runOnUiThread(() -> {
+            AlertDialog alert = builder.create();
+            alert.show();
+            ((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+        });
+
+        return;
     }
 
     public static void setEmulationActivity(EmulationActivity emulationActivity) {
