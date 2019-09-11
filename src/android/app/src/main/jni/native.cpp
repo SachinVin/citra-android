@@ -109,7 +109,7 @@ public:
     void ShowError(const std::string& error) override {}
 };
 
-static int RunCitra(const std::string& filepath) {
+static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
 
@@ -120,7 +120,7 @@ static int RunCitra(const std::string& filepath) {
 
     if (filepath.empty()) {
         LOG_CRITICAL(Frontend, "Failed to load ROM: No ROM specified");
-        return -1;
+        return Core::System::ResultStatus::ErrorLoader;
     }
 
     Core::System& system{Core::System::GetInstance()};
@@ -143,33 +143,8 @@ static int RunCitra(const std::string& filepath) {
     SCOPE_EXIT({ window.reset(); });
 
     const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
-    switch (load_result) {
-    case Core::System::ResultStatus::ErrorGetLoader:
-        LOG_CRITICAL(Frontend, "Failed to obtain loader for {}!", filepath);
-        return -1;
-    case Core::System::ResultStatus::ErrorLoader:
-        LOG_CRITICAL(Frontend, "Failed to load ROM!");
-        return -1;
-    case Core::System::ResultStatus::ErrorLoader_ErrorEncrypted:
-        LOG_CRITICAL(Frontend, "The game that you are trying to load must be decrypted before "
-                               "being used with Citra. \n\n For more information on dumping and "
-                               "decrypting games, please refer to: "
-                               "https://citra-emu.org/wiki/dumping-game-cartridges/");
-        return -1;
-    case Core::System::ResultStatus::ErrorLoader_ErrorInvalidFormat:
-        LOG_CRITICAL(Frontend, "Error while loading ROM: The ROM format is not supported.");
-        return -1;
-    case Core::System::ResultStatus::ErrorNotInitialized:
-        LOG_CRITICAL(Frontend, "Core not initialized");
-        return -1;
-    case Core::System::ResultStatus::ErrorSystemMode:
-        LOG_CRITICAL(Frontend, "Failed to determine system mode!");
-        return -1;
-    case Core::System::ResultStatus::ErrorVideoCore:
-        LOG_CRITICAL(Frontend, "VideoCore not initialized");
-        return -1;
-    case Core::System::ResultStatus::Success:
-        break; // Expected case
+    if (load_result != Core::System::ResultStatus::Success) {
+        return load_result;
     }
 
     auto& telemetry_session = Core::System::GetInstance().TelemetrySession();
@@ -192,7 +167,7 @@ static int RunCitra(const std::string& filepath) {
         }
     }
 
-    return {};
+    return Core::System::ResultStatus::Success;
 }
 
 void Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env, jobject obj,
@@ -483,5 +458,10 @@ void Java_org_citra_citra_1android_NativeLibrary_Run__Ljava_lang_String_2(JNIEnv
         is_running = false;
         running_cv.notify_all();
     }
-    RunCitra(path);
+
+    const Core::System::ResultStatus result{RunCitra(path)};
+    if (result != Core::System::ResultStatus::Success) {
+        env->CallStaticVoidMethod(IDCache::GetNativeLibraryClass(),
+                                  IDCache::GetExitEmulationActivity(), static_cast<int>(result));
+    }
 }

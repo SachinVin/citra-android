@@ -518,15 +518,17 @@ void System::RegisterImageInterface(std::shared_ptr<Frontend::ImageInterface> im
 
 void System::Shutdown(bool is_deserializing) {
     // Log last frame performance stats
-    const auto perf_results = GetAndResetPerfStats();
-    telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_EmulationSpeed",
-                                perf_results.emulation_speed * 100.0);
-    telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_Framerate",
-                                perf_results.game_fps);
-    telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_Frametime",
-                                perf_results.frametime * 1000.0);
-    telemetry_session->AddField(Telemetry::FieldType::Performance, "Mean_Frametime_MS",
-                                perf_stats->GetMeanFrametime());
+    if (telemetry_session) {
+        const auto perf_results = GetAndResetPerfStats();
+        telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_EmulationSpeed",
+                                    perf_results.emulation_speed * 100.0);
+        telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_Framerate",
+                                    perf_results.game_fps);
+        telemetry_session->AddField(Telemetry::FieldType::Performance, "Shutdown_Frametime",
+                                    perf_results.frametime * 1000.0);
+        telemetry_session->AddField(Telemetry::FieldType::Performance, "Mean_Frametime_MS",
+                                    perf_stats->GetMeanFrametime());
+    }
 
     // Shutdown emulation session
     VideoCore::Shutdown();
@@ -546,7 +548,7 @@ void System::Shutdown(bool is_deserializing) {
     cpu_cores.clear();
     timing.reset();
 
-    if (video_dumper->IsDumping()) {
+    if (video_dumper && video_dumper->IsDumping()) {
         video_dumper->StopDumping();
     }
 
