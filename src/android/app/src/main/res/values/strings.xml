@@ -103,6 +103,10 @@
     <string name="preferences_graphics">Graphics</string>
     <string name="preferences_audio">Audio</string>
 
+    <!-- ROM loading errors -->
+    <string name="loader_error_encrypted">Your ROM is encrypted</string>
+    <string name="loader_error_invalid_format">Invalid ROM format</string>
+
     <!-- Emulation Menu -->
     <string name="emulation_screenshot">Take Screenshot</string>
     <string name="emulation_exit">Exit</string>
