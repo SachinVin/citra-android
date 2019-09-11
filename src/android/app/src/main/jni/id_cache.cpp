@@ -21,6 +21,7 @@ static jmethodID s_display_alert_prompt;
 static jmethodID s_alert_prompt_button;
 static jmethodID s_is_portrait_mode;
 static jmethodID s_landscape_screen_layout;
+static jmethodID s_exit_emulation_activity;
 
 namespace IDCache {
 
@@ -67,6 +68,10 @@ jmethodID GetLandscapeScreenLayout() {
     return s_landscape_screen_layout;
 }
 
+jmethodID GetExitEmulationActivity() {
+    return s_exit_emulation_activity;
+}
+
 } // namespace IDCache
 
 #ifdef __cplusplus
@@ -103,6 +108,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_is_portrait_mode = env->GetStaticMethodID(s_native_library_class, "isPortraitMode", "()Z");
     s_landscape_screen_layout =
         env->GetStaticMethodID(s_native_library_class, "landscapeScreenLayout", "()I");
+    s_exit_emulation_activity =
+        env->GetStaticMethodID(s_native_library_class, "exitEmulationActivity", "(I)V");
 
     return JNI_VERSION;
 }
