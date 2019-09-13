@@ -174,14 +174,20 @@ void Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env, job
                                                                 jobject surf) {
     s_surf = ANativeWindow_fromSurface(env, surf);
 
-    if (is_running) {
+    if (window) {
         window->OnSurfaceChanged(s_surf);
     }
 
     LOG_INFO(Frontend, "Surface changed");
 }
 
-void Java_org_citra_citra_1android_NativeLibrary_SurfaceDestroyed(JNIEnv* env, jobject obj) {}
+void Java_org_citra_citra_1android_NativeLibrary_SurfaceDestroyed(JNIEnv* env, jobject obj) {
+    ANativeWindow_release(s_surf);
+    s_surf = nullptr;
+    if (window) {
+        window->OnSurfaceChanged(s_surf);
+    }
+}
 
 void Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
     JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode) {
