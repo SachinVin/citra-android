@@ -7,6 +7,7 @@
 #include <array>
 #include <list>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <tuple>
 #ifdef __GNUC__
@@ -324,6 +325,8 @@ private:
     u16 resolution_scale_factor;
 
     std::unordered_map<TextureCubeConfig, CachedTextureCube> texture_cube_cache;
+
+    std::recursive_mutex mutex;
 
 public:
     std::unique_ptr<TextureFilterer> texture_filterer;
