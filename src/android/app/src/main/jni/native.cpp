@@ -123,6 +123,9 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
         return Core::System::ResultStatus::ErrorLoader;
     }
 
+    window = std::make_unique<EmuWindow_Android>(s_surf);
+    SCOPE_EXIT({ window.reset(); });
+
     Core::System& system{Core::System::GetInstance()};
     SCOPE_EXIT({ system.Shutdown(); });
 
@@ -138,9 +141,6 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     InputManager::Init();
     SCOPE_EXIT({ InputManager::Shutdown(); });
-
-    window = std::make_unique<EmuWindow_Android>(s_surf);
-    SCOPE_EXIT({ window.reset(); });
 
     const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
     if (load_result != Core::System::ResultStatus::Success) {
