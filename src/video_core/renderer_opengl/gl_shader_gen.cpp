@@ -1232,14 +1232,21 @@ float ProcTexNoiseCoef(vec2 x) {
 ShaderDecompiler::ProgramResult GenerateFragmentShader(const PicaFSConfig& config,
                                                        bool separable_shader) {
     const auto& state = config.state;
+    std::string out;
 
-    std::string out = R"(
+    if (GLES) {
+        out += R"(
+#define ALLOW_SHADOW (defined(CITRA_GLES))
+)";
+    } else {
+        out += R"(
 #extension GL_ARB_shader_image_load_store : enable
 #extension GL_ARB_shader_image_size : enable
 #define ALLOW_SHADOW (defined(GL_ARB_shader_image_load_store) && defined(GL_ARB_shader_image_size))
 )";
+    }
 
-    if (separable_shader) {
+    if (separable_shader && !GLES) {
         out += "#extension GL_ARB_separate_shader_objects : enable\n";
     }
 
@@ -1616,7 +1623,7 @@ do {
 
 ShaderDecompiler::ProgramResult GenerateTrivialVertexShader(bool separable_shader) {
     std::string out;
-    if (separable_shader) {
+    if (separable_shader && !GLES) {
         out += "#extension GL_ARB_separate_shader_objects : enable\n";
     }
 
@@ -1661,8 +1668,8 @@ void main() {
 
 std::optional<ShaderDecompiler::ProgramResult> GenerateVertexShader(
     const Pica::Shader::ShaderSetup& setup, const PicaVSConfig& config, bool separable_shader) {
-    std::string out = "";
-    if (separable_shader) {
+    std::string out;
+    if (separable_shader && !GLES) {
         out += "#extension GL_ARB_separate_shader_objects : enable\n";
     }
 
@@ -1811,8 +1818,8 @@ void EmitPrim(Vertex vtx0, Vertex vtx1, Vertex vtx2) {
 
 ShaderDecompiler::ProgramResult GenerateFixedGeometryShader(const PicaFixedGSConfig& config,
                                                             bool separable_shader) {
-    std::string out = "";
-    if (separable_shader) {
+    std::string out;
+    if (separable_shader && !GLES) {
         out += "#extension GL_ARB_separate_shader_objects : enable\n\n";
     }
 
