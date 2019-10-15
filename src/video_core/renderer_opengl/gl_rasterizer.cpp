@@ -54,14 +54,14 @@ RasterizerOpenGL::RasterizerOpenGL()
       index_buffer(GL_ELEMENT_ARRAY_BUFFER, INDEX_BUFFER_SIZE, false),
       texture_buffer(GL_TEXTURE_BUFFER, TEXTURE_BUFFER_SIZE, false) {
 
-    allow_shadow = GLAD_GL_ARB_shader_image_load_store && GLAD_GL_ARB_shader_image_size &&
-                   GLAD_GL_ARB_framebuffer_no_attachments;
+    allow_shadow = GLES || (GLAD_GL_ARB_shader_image_load_store && GLAD_GL_ARB_shader_image_size &&
+                            GLAD_GL_ARB_framebuffer_no_attachments);
     if (!allow_shadow) {
         LOG_WARNING(Render_OpenGL,
                     "Shadow might not be able to render because of unsupported OpenGL extensions.");
     }
 
-    if (!GLAD_GL_ARB_texture_barrier) {
+    if (!(GLES || GLAD_GL_ARB_texture_barrier)) {
         LOG_WARNING(Render_OpenGL,
                     "ARB_texture_barrier not supported. Some games might produce artifacts.");
     }
@@ -850,7 +850,7 @@ bool RasterizerOpenGL::Draw(bool accelerate, bool is_indexed) {
                         GL_TEXTURE_UPDATE_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT);
     }
 
-    if (need_texture_barrier && GLAD_GL_ARB_texture_barrier) {
+    if (need_texture_barrier && (GLES || GLAD_GL_ARB_texture_barrier)) {
         glTextureBarrier();
     }
 
