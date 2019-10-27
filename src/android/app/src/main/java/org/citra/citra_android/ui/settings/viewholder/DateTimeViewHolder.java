@@ -31,8 +31,12 @@ public final class DateTimeViewHolder extends SettingViewHolder {
     public void bind(SettingsItem item) {
         mItem = (DateTimeSetting) item;
         mTextSettingName.setText(item.getNameId());
+
         if (item.getDescriptionId() > 0) {
             mTextSettingDescription.setText(item.getDescriptionId());
+            mTextSettingDescription.setVisibility(View.VISIBLE);
+        } else {
+            mTextSettingDescription.setVisibility(View.GONE);
         }
     }
 
