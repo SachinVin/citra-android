@@ -30,7 +30,7 @@ public final class SingleChoiceViewHolder extends SettingViewHolder {
         mItem = item;
 
         mTextSettingName.setText(item.getNameId());
-
+        mTextSettingDescription.setVisibility(View.VISIBLE);
         if (item.getDescriptionId() > 0) {
             mTextSettingDescription.setText(item.getDescriptionId());
         } else if (item instanceof SingleChoiceSetting) {
@@ -44,6 +44,8 @@ public final class SingleChoiceViewHolder extends SettingViewHolder {
                     mTextSettingDescription.setText(choices[i]);
                 }
             }
+        } else {
+            mTextSettingDescription.setVisibility(View.GONE);
         }
     }
 
