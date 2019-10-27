@@ -36,7 +36,7 @@ public final class StartupHandler {
                     .setTitle(R.string.app_name)
                     .setIcon(R.mipmap.ic_launcher)
                     .setMessage(parent.getResources().getString(R.string.app_disclaimer))
-                    .setPositiveButton("OK", null)
+                    .setPositiveButton(android.R.string.ok, null)
                     .setOnDismissListener(dialogInterface -> handlePermissionsCheck(parent))
                     .show();
         }
