@@ -38,7 +38,14 @@ public final class InputBindingSettingViewHolder extends SettingViewHolder {
         mItem = (InputBindingSetting) item;
 
         mTextSettingName.setText(item.getNameId());
-        mTextSettingDescription.setText(sharedPreferences.getString(mItem.getKey(), ""));
+
+        String key = sharedPreferences.getString(mItem.getKey(), "");
+        if (key != null && !key.isEmpty()) {
+            mTextSettingDescription.setText(key);
+            mTextSettingDescription.setVisibility(View.VISIBLE);
+        } else {
+            mTextSettingDescription.setVisibility(View.GONE);
+        }
     }
 
     @Override

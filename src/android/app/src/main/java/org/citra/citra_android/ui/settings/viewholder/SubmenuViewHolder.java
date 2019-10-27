@@ -32,6 +32,9 @@ public final class SubmenuViewHolder extends SettingViewHolder {
 
         if (item.getDescriptionId() > 0) {
             mTextSettingDescription.setText(item.getDescriptionId());
+            mTextSettingDescription.setVisibility(View.VISIBLE);
+        } else {
+            mTextSettingDescription.setVisibility(View.GONE);
         }
     }
 
