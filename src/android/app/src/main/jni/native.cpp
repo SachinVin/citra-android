@@ -24,6 +24,7 @@
 #include "core/core.h"
 #include "core/file_sys/cia_container.h"
 #include "core/frontend/applets/default_applets.h"
+#include "core/frontend/scope_acquire_context.h"
 #include "core/gdbstub/gdbstub.h"
 #include "core/hle/service/am/am.h"
 #include "core/loader/loader.h"
@@ -142,6 +143,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     InputManager::Init();
     SCOPE_EXIT({ InputManager::Shutdown(); });
 
+    Frontend::ScopeAcquireContext scope(*window);
     const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
     if (load_result != Core::System::ResultStatus::Success) {
         return load_result;
@@ -153,6 +155,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     is_running = true;
     pause_emulation = false;
 
+    window->StartPresenting();
     while (is_running) {
         if (!pause_emulation) {
             system.RunLoop();
@@ -166,6 +169,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
             running_cv.wait(lock, [] { return !pause_emulation || !is_running; });
         }
     }
+    window->StopPresenting();
 
     return Core::System::ResultStatus::Success;
 }
