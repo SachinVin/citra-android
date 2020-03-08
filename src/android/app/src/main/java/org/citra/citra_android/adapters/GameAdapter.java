@@ -73,7 +73,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 PicassoUtils.loadGameBanner(holder.imageScreenshot,
                         mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
 
-                holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE));
+                holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE).replaceAll("[\\t\\n\\r]+"," "));
                 holder.textCompany.setText(mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY));
 
                 // TODO These shouldn't be necessary once the move to a DB-based model is complete.
@@ -201,10 +201,10 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
-            outRect.left = space;
-            outRect.right = space;
+            outRect.left = 0;
+            outRect.right = 0;
             outRect.bottom = space;
-            outRect.top = space;
+            outRect.top = 0;
         }
     }
 
