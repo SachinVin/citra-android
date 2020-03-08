@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/image_game_screen"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
             android:scaleType="fitCenter"
@@ -51,14 +51,28 @@
             style="@android:style/TextAppearance.Material.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@+id/image_game_screen"
             app:layout_constraintStart_toStartOf="@+id/text_game_title"
             app:layout_constraintTop_toBottomOf="@+id/text_game_title"
+            app:layout_constraintVertical_bias="0.842"
             tools:text="Nintendo" />
+
+        <TextView
+            android:id="@+id/text_filename"
+            style="@android:style/TextAppearance.Material.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/image_game_screen"
+            app:layout_constraintStart_toStartOf="@+id/text_game_title"
+            app:layout_constraintTop_toBottomOf="@+id/text_game_title"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Pilotwings_Resort.cxi" />
 
     </android.support.constraint.ConstraintLayout>
 
