@@ -15,6 +15,7 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageScreenshot;
     public TextView textGameTitle;
     public TextView textCompany;
+    public TextView textFileName;
 
     public String gameId;
 
@@ -34,5 +35,6 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         imageScreenshot = itemView.findViewById(R.id.image_game_screen);
         textGameTitle = itemView.findViewById(R.id.text_game_title);
         textCompany = itemView.findViewById(R.id.text_company);
+        textFileName = itemView.findViewById(R.id.text_filename);
     }
 }
