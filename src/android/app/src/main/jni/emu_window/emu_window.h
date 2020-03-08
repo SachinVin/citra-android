@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <thread>
 #include <vector>
 
 #include <EGL/egl.h>
@@ -13,10 +14,29 @@
 
 struct ANativeWindow;
 
+class SharedContext_Android : public Frontend::GraphicsContext {
+public:
+    SharedContext_Android(EGLDisplay egl_display, EGLConfig egl_config,
+                          EGLContext egl_share_context);
+
+    ~SharedContext_Android() override;
+
+    void MakeCurrent() override;
+
+    void DoneCurrent() override;
+
+private:
+    EGLSurface egl_surface{};
+    EGLContext egl_context{};
+    EGLDisplay egl_display{};
+};
+
 class EmuWindow_Android : public Frontend::EmuWindow {
 public:
     EmuWindow_Android(ANativeWindow* surface);
     ~EmuWindow_Android();
+
+    void Present();
 
     /// Called by the onSurfaceChanges() method to change the surface
     void OnSurfaceChanged(ANativeWindow* surface);
@@ -27,10 +47,15 @@ public:
     /// Handles movement of touch pointer
     void OnTouchMoved(int x, int y);
 
-    void SwapBuffers() override;
     void PollEvents() override;
     void MakeCurrent() override;
     void DoneCurrent() override;
+
+    void StartPresenting();
+    void StopPresenting();
+    bool IsPresenting() const;
+
+    std::unique_ptr<GraphicsContext> CreateSharedContext() const override;
 
 private:
     void OnFramebufferSizeChanged();
@@ -41,13 +66,17 @@ private:
     ANativeWindow* render_window{};
     ANativeWindow* host_window{};
 
-    bool is_shared{};
     int window_width{};
     int window_height{};
-    std::vector<int> shared_attribs;
 
-    EGLConfig config;
+    EGLConfig egl_config;
     EGLSurface egl_surface{};
     EGLContext egl_context{};
     EGLDisplay egl_display{};
+
+    std::unique_ptr<Frontend::GraphicsContext> core_context;
+
+    std::unique_ptr<std::thread> presentation_thread;
+
+    bool is_presenting{};
 };
