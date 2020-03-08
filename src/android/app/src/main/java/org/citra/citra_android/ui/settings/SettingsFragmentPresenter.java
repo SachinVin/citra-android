@@ -248,7 +248,7 @@ public final class SettingsFragmentPresenter {
         Setting hardwareShader = null;
         Setting shadersAccurateMul = null;
         Setting resolutionFactor = null;
-        // Setting vsyncEnable = null;
+        Setting vsyncEnable = null;
         Setting filterMode = null;
 
         if (!mSettings.get(SettingsFile.SETTINGS_DOLPHIN).isEmpty()) {
@@ -256,7 +256,7 @@ public final class SettingsFragmentPresenter {
             hardwareShader = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_HW_SHADER);
             shadersAccurateMul = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
             resolutionFactor = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
-            // vsyncEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_USE_VSYNC);
+            vsyncEnable = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_USE_VSYNC);
             filterMode = mSettings.get(SettingsFile.SETTINGS_DOLPHIN).get(SettingsFile.SECTION_RENDERER).getSetting(SettingsFile.KEY_FILTER_MODE);
         } else {
             mView.passSettingsToActivity(mSettings);
@@ -266,8 +266,7 @@ public final class SettingsFragmentPresenter {
         sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.hw_shaders, R.string.hw_shaders_description, true, hardwareShader, true, mView));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, false, shadersAccurateMul));
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.internal_resolution, R.string.internal_resolution_description, 1, 4, "x", 1, resolutionFactor));
-        // TODO(bunnei): Re-enable once V-Sync is actually supported.
-        // sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.vsync, R.string.vsync_description, false, vsyncEnable));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.vsync, R.string.vsync_description, true, vsyncEnable));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FILTER_MODE, SettingsFile.SECTION_RENDERER, SettingsFile.SETTINGS_DOLPHIN, R.string.linear_filtering, R.string.linear_filtering_description, true, filterMode));
     }
 
