@@ -27,6 +27,7 @@
 #include "core/memory.h"
 #include "core/settings.h"
 #include "core/tracer/recorder.h"
+#include "gl_state.h"
 #include "video_core/debug_utils/debug_utils.h"
 #include "video_core/rasterizer_interface.h"
 #include "video_core/renderer_opengl/gl_vars.h"
@@ -39,7 +40,11 @@ namespace OpenGL {
 // If the size of this is too small, it ends up creating a soft cap on FPS as the renderer will have
 // to wait on available presentation frames. There doesn't seem to be much of a downside to a larger
 // number but 9 swap textures at 60FPS presentation allows for 800% speed so thats probably fine
+#ifdef ANDROID
+constexpr std::size_t SWAP_CHAIN_SIZE = 4;
+#else
 constexpr std::size_t SWAP_CHAIN_SIZE = 9;
+#endif
 
 class OGLTextureMailbox : public Frontend::TextureMailbox {
 public:
@@ -91,7 +96,7 @@ public:
         frame->color.Create();
         state.renderbuffer = frame->color.handle;
         state.Apply();
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
 
         // Recreate the FBO for the render target
         frame->render.Release();
@@ -1153,9 +1158,11 @@ static void APIENTRY DebugHandler(GLenum source, GLenum type, GLuint id, GLenum 
 
 /// Initialize the renderer
 VideoCore::ResultStatus RendererOpenGL::Init() {
+#ifndef ANDROID
     if (!gladLoadGL()) {
         return VideoCore::ResultStatus::ErrorBelowGL33;
     }
+#endif
 
     if (GLAD_GL_KHR_debug) {
         //glEnable(GL_DEBUG_OUTPUT);
