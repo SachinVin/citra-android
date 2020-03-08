@@ -3,12 +3,17 @@ package org.citra.citra_android.adapters;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.citra.citra_android.R;
 import org.citra.citra_android.activities.EmulationActivity;
@@ -66,6 +71,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
      * @param holder   A ViewHolder representing the view we're recycling.
      * @param position The position of the 'new' view in the dataset.
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(GameViewHolder holder, int position) {
         if (mDatasetValid) {
@@ -75,6 +81,9 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
 
                 holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE).replaceAll("[\\t\\n\\r]+"," "));
                 holder.textCompany.setText(mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY));
+
+                final Path gamePath = Paths.get(mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
+                holder.textFileName.setText(gamePath.getFileName().toString());
 
                 // TODO These shouldn't be necessary once the move to a DB-based model is complete.
                 holder.gameId = mCursor.getString(GameDatabase.GAME_COLUMN_GAME_ID);
