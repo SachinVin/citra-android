@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import org.citra.citra_android.R;
+import org.citra.citra_android.utils.PicassoRoundedCornersTransformation;
 
 public class PicassoUtils {
     public static void loadGameBanner(ImageView imageView, String gamePath) {
@@ -22,6 +23,7 @@ public class PicassoUtils {
                 .centerInside()
                 .config(Bitmap.Config.RGB_565)
                 .error(R.drawable.no_banner)
+                .transform(new PicassoRoundedCornersTransformation())
                 .into(imageView);
     }
 }
