@@ -26,9 +26,9 @@ public:
     void DoneCurrent() override;
 
 private:
+    EGLDisplay egl_display{};
     EGLSurface egl_surface{};
     EGLContext egl_context{};
-    EGLDisplay egl_display{};
 };
 
 class EmuWindow_Android : public Frontend::EmuWindow {
