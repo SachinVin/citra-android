@@ -95,7 +95,14 @@ void EmuWindow_Android::OnTouchMoved(int x, int y) {
 
 void EmuWindow_Android::OnFramebufferSizeChanged() {
     UpdateLandscapeScreenLayout();
-    UpdateCurrentFramebufferLayout(window_width, window_height, IsPortraitMode());
+    const bool is_portrait_mode{IsPortraitMode()};
+    const int bigger{window_width > window_height ? window_width : window_height};
+    const int smaller{window_width < window_height ? window_width : window_height};
+    if (is_portrait_mode) {
+        UpdateCurrentFramebufferLayout(smaller, bigger, is_portrait_mode);
+    } else {
+        UpdateCurrentFramebufferLayout(bigger, smaller, is_portrait_mode);
+    }
 }
 
 EmuWindow_Android::EmuWindow_Android(ANativeWindow* surface) {
@@ -125,6 +132,13 @@ EmuWindow_Android::EmuWindow_Android(ANativeWindow* surface) {
     }
 
     CreateWindowSurface();
+
+    if (eglQuerySurface(egl_display, egl_surface, EGL_WIDTH, &window_width) != EGL_TRUE) {
+        return;
+    }
+    if (eglQuerySurface(egl_display, egl_surface, EGL_HEIGHT, &window_height) != EGL_TRUE) {
+        return;
+    }
 
     if (egl_context = eglCreateContext(egl_display, egl_config, 0, egl_context_attribs.data());
         egl_context == EGL_NO_CONTEXT) {
@@ -164,9 +178,6 @@ bool EmuWindow_Android::CreateWindowSurface() {
     EGLint format{};
     eglGetConfigAttrib(egl_display, egl_config, EGL_NATIVE_VISUAL_ID, &format);
     ANativeWindow_setBuffersGeometry(host_window, 0, 0, format);
-    window_width = ANativeWindow_getWidth(host_window);
-    window_height = ANativeWindow_getHeight(host_window);
-    UpdateCurrentFramebufferLayout(window_width, window_height);
 
     if (egl_surface = eglCreateWindowSurface(egl_display, egl_config, host_window, 0);
         egl_surface == EGL_NO_SURFACE) {
