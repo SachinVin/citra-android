@@ -33,7 +33,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     private Toolbar mToolbar;
     private int mFrameLayoutId;
     private PlatformGamesFragment mPlatformGamesFragment;
-    private FloatingActionButton mFab;
 
     private MainPresenter mPresenter = new MainPresenter(this);
 
@@ -47,13 +46,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         setSupportActionBar(mToolbar);
 
         mFrameLayoutId = R.id.games_platform_frame;
-        mFab.setOnClickListener(view -> {
-            if (PermissionsHandler.hasWriteAccess(this)) {
-                mPresenter.onFabClick();
-            } else {
-                PermissionsHandler.checkWritePermission(this);
-            }
-        });
         mPresenter.onCreate();
 
         if (savedInstanceState == null) {
@@ -86,7 +78,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     // TODO: Replace with a ButterKnife injection.
     private void findViews() {
         mToolbar = findViewById(R.id.toolbar_main);
-        mFab = findViewById(R.id.button_add_directory);
     }
 
     @Override
