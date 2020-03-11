@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Environment;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public final class Game {
     private static final String PATH_SCREENSHOT_FOLDER =
             "file://" + Environment.getExternalStorageDirectory().getPath() + "/citra-emu/ScreenShots/";
@@ -31,6 +34,11 @@ public final class Game {
     public static ContentValues asContentValues(String title, String description,
                                                 int country, String path, String gameId, String company) {
         ContentValues values = new ContentValues();
+
+        if (gameId.isEmpty()) {
+            // Homebrew, etc. may not have a game ID, use filename as a unique identifier
+            gameId = Paths.get(path).getFileName().toString();
+        }
 
         String screenPath = PATH_SCREENSHOT_FOLDER + gameId + "/" + gameId + "-1.png";
 
