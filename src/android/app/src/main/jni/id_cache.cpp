@@ -96,7 +96,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     LOG_INFO(Frontend, "Logging backend initialised");
 
     // Initialize Java methods
-    const jclass native_library_class = env->FindClass("org/citra/citra_android/NativeLibrary");
+    const jclass native_library_class = env->FindClass("org/citra/citra_emu/NativeLibrary");
     s_native_library_class = reinterpret_cast<jclass>(env->NewGlobalRef(native_library_class));
     s_display_alert_msg = env->GetStaticMethodID(s_native_library_class, "displayAlertMsg",
                                                  "(Ljava/lang/String;Ljava/lang/String;Z)Z");
