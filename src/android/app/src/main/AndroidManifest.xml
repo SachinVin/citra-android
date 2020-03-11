@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.citra.citra_android">
+    package="org.citra.citra_emu">
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
@@ -19,7 +19,7 @@
 
 
     <application
-        android:name=".CitraApplication"
+        android:name="org.citra.citra_emu.CitraApplication"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="true"
@@ -30,7 +30,7 @@
         <meta-data android:name="android.max_aspect" android:value="2.1" />
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="org.citra.citra_emu.ui.main.MainActivity"
             android:theme="@style/Citra">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
@@ -42,7 +42,7 @@
         </activity>
 
         <activity
-            android:name=".ui.main.TvMainActivity"
+            android:name="org.citra.citra_emu.ui.main.TvMainActivity"
             android:theme="@style/CitraTv">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
@@ -54,17 +54,17 @@
         </activity>
 
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="org.citra.citra_emu.ui.settings.SettingsActivity"
             android:theme="@style/CitraSettings"
             android:label="@string/preferences_settings"/>
 
         <activity
-            android:name=".activities.EmulationActivity"
+            android:name="org.citra.citra_emu.activities.EmulationActivity"
             android:theme="@style/CitraEmulation"
             android:launchMode="singleTop"/>
 
         <activity
-            android:name=".activities.CustomFilePickerActivity"
+            android:name="org.citra.citra_emu.activities.CustomFilePickerActivity"
             android:label="@string/app_name"
             android:theme="@style/FilePickerTheme">
             <intent-filter>
@@ -73,10 +73,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.DirectoryInitializationService"/>
+        <service android:name="org.citra.citra_emu.services.DirectoryInitializationService"/>
 
         <provider
-            android:name=".model.GameProvider"
+            android:name="org.citra.citra_emu.model.GameProvider"
             android:authorities="${applicationId}.provider"
             android:enabled="true"
             android:exported="false">
