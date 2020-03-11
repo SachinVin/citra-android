@@ -1,0 +1,16 @@
+package org.citra.citra_emu.services;
+
+import android.app.IntentService;
+import android.content.Intent;
+
+public final class USBPermService extends IntentService {
+    public USBPermService() {
+        super("USBPermService");
+    }
+
+    // Needed when extending IntentService.
+    // We don't care about the results of the intent handler for this.
+    @Override
+    protected void onHandleIntent(Intent intent) {
+    }
+}
