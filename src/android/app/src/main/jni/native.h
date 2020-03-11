@@ -9,164 +9,164 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_UnPauseEmulation(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_UnPauseEmulation(JNIEnv* env,
                                                                                     jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_PauseEmulation(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_PauseEmulation(JNIEnv* env,
                                                                                   jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_StopEmulation(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_StopEmulation(JNIEnv* env,
                                                                                  jobject obj);
 
-JNIEXPORT jboolean JNICALL Java_org_citra_citra_1android_NativeLibrary_IsRunning(JNIEnv* env,
+JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_IsRunning(JNIEnv* env,
                                                                                  jobject obj);
 
-JNIEXPORT jboolean JNICALL Java_org_citra_citra_1android_NativeLibrary_onGamePadEvent(
+JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadEvent(
     JNIEnv* env, jobject obj, jstring jDevice, jint Button, jint Action);
 
-JNIEXPORT jboolean JNICALL Java_org_citra_citra_1android_NativeLibrary_onGamePadMoveEvent(
+JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadMoveEvent(
     JNIEnv* env, jobject obj, jstring jDevice, jint Axis, jfloat x, jfloat y);
 
-JNIEXPORT jboolean JNICALL Java_org_citra_citra_1android_NativeLibrary_onGamePadAxisEvent(
+JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadAxisEvent(
     JNIEnv* env, jobject obj, jstring jDevice, jint axis_id, jfloat axis_val);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_onTouchEvent(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchEvent(JNIEnv* env,
                                                                                 jobject obj,
                                                                                 jfloat x, jfloat y,
                                                                                 jboolean pressed);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_onTouchMoved(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchMoved(JNIEnv* env,
                                                                                 jobject obj,
                                                                                 jfloat x, jfloat y);
 
-JNIEXPORT jintArray JNICALL Java_org_citra_citra_1android_NativeLibrary_GetBanner(JNIEnv* env,
+JNIEXPORT jintArray JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetBanner(JNIEnv* env,
                                                                                   jobject obj,
                                                                                   jstring jFile);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetTitle(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetTitle(JNIEnv* env,
                                                                                jobject obj,
                                                                                jstring jFilename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetDescription(
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetDescription(
     JNIEnv* env, jobject obj, jstring jFilename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetGameId(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIEnv* env,
                                                                                 jobject obj,
                                                                                 jstring jFilename);
 
-JNIEXPORT jint JNICALL Java_org_citra_citra_1android_NativeLibrary_GetCountry(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCountry(JNIEnv* env,
                                                                               jobject obj,
                                                                               jstring jFilename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetCompany(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                                                  jobject obj,
                                                                                  jstring jFilename);
 
-JNIEXPORT jlong JNICALL Java_org_citra_citra_1android_NativeLibrary_GetFilesize(JNIEnv* env,
+JNIEXPORT jlong JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetFilesize(JNIEnv* env,
                                                                                 jobject obj,
                                                                                 jstring jFilename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetVersionString(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetVersionString(JNIEnv* env,
                                                                                        jobject obj);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetGitRevision(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGitRevision(JNIEnv* env,
                                                                                      jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SaveScreenShot(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveScreenShot(JNIEnv* env,
                                                                                   jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_eglBindAPI(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_eglBindAPI(JNIEnv* env,
                                                                               jobject obj,
                                                                               jint api);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetConfig(
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetConfig(
     JNIEnv* env, jobject obj, jstring jFile, jstring jSection, jstring jKey, jstring jDefault);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetConfig(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetConfig(
     JNIEnv* env, jobject obj, jstring jFile, jstring jSection, jstring jKey, jstring jValue);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetFilename(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetFilename(JNIEnv* env,
                                                                                jobject obj,
                                                                                jstring jFile);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SaveState(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env,
                                                                              jobject obj, jint slot,
                                                                              jboolean wait);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SaveStateAs(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveStateAs(JNIEnv* env,
                                                                                jobject obj,
                                                                                jstring path,
                                                                                jboolean wait);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_LoadState(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env,
                                                                              jobject obj,
                                                                              jint slot);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_LoadStateAs(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadStateAs(JNIEnv* env,
                                                                                jobject obj,
                                                                                jstring path);
 
 JNIEXPORT void JNICALL
-Java_org_citra_citra_1android_services_DirectoryInitializationService_CreateUserDirectories(
+Java_org_citra_citra_1emu_services_DirectoryInitializationService_CreateUserDirectories(
     JNIEnv* env, jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetUserDirectory(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(
     JNIEnv* env, jobject obj, jstring jDirectory);
 
 JNIEXPORT void JNICALL
-Java_org_citra_citra_1android_services_DirectoryInitializationService_SetSysDirectory(
+Java_org_citra_citra_1emu_services_DirectoryInitializationService_SetSysDirectory(
     JNIEnv* env, jclass type, jstring path_);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetUserDirectory(JNIEnv* env,
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetUserDirectory(JNIEnv* env,
                                                                                        jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetSysDirectory(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetSysDirectory(JNIEnv* env,
                                                                                    jobject obj,
                                                                                    jstring path);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_CreateConfigFile();
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_CreateConfigFile();
 
-JNIEXPORT jint JNICALL Java_org_citra_citra_1android_NativeLibrary_DefaultCPUCore(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_citra_citra_1emu_NativeLibrary_DefaultCPUCore(JNIEnv* env,
                                                                                   jobject obj);
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetProfiling(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetProfiling(JNIEnv* env,
                                                                                 jobject obj,
                                                                                 jboolean enable);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_WriteProfileResults(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_WriteProfileResults(JNIEnv* env,
                                                                                        jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_NotifyOrientationChange(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_NotifyOrientationChange(
     JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SwapScreens(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(
     JNIEnv* env, jobject obj, jboolean swap_screens, jboolean is_portrait_mode);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_Run__Ljava_lang_String_2(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2(
     JNIEnv* env, jclass type, jstring path_);
 
 JNIEXPORT void JNICALL
-Java_org_citra_citra_1android_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_String_2Z(
+Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_String_2Z(
     JNIEnv* env, jobject obj, jstring jFile, jstring jSavestate, jboolean jDeleteSavestate);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SurfaceChanged(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SurfaceChanged(JNIEnv* env,
                                                                                   jobject obj,
                                                                                   jobject surf);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SurfaceDestroyed(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(JNIEnv* env,
                                                                                     jobject obj);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_InitGameIni(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InitGameIni(JNIEnv* env,
                                                                                jclass type,
                                                                                jstring gameID_);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1android_NativeLibrary_SetUserSetting(
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserSetting(
     JNIEnv* env, jclass type, jstring gameID_, jstring Section_, jstring Key_, jstring Value_);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1android_NativeLibrary_GetUserSetting(
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetUserSetting(
     JNIEnv* env, jclass type, jstring gameID_, jstring Section_, jstring Key_);
 
 JNIEXPORT jdoubleArray JNICALL
-Java_org_citra_citra_1android_NativeLibrary_GetPerfStats(JNIEnv* env, jclass type);
+Java_org_citra_citra_1emu_NativeLibrary_GetPerfStats(JNIEnv* env, jclass type);
 
 #ifdef __cplusplus
 }
