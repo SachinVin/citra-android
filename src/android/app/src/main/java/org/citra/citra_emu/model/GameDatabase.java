@@ -103,6 +103,14 @@ public final class GameDatabase extends SQLiteOpenHelper {
         scanLibrary(database);
     }
 
+    public void resetDatabase(SQLiteDatabase database) {
+        execSqlAndLog(database, SQL_DELETE_FOLDERS);
+        execSqlAndLog(database, SQL_CREATE_FOLDERS);
+
+        execSqlAndLog(database, SQL_DELETE_GAMES);
+        execSqlAndLog(database, SQL_CREATE_GAMES);
+    }
+
     public void scanLibrary(SQLiteDatabase database) {
         // Before scanning known folders, go through the game table and remove any entries for which the file itself is missing.
         Cursor fileCursor = database.query(TABLE_NAME_GAMES,
