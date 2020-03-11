@@ -148,6 +148,11 @@ public final class MainActivity extends AppCompatActivity implements MainView {
             case MainPresenter.REQUEST_ADD_DIRECTORY:
                 // If the user picked a file, as opposed to just backing out.
                 if (resultCode == MainActivity.RESULT_OK) {
+                    // When a new directory is picked, we currently will reset the existing games
+                    // database. This effectively means that only one game directory is supported.
+                    // TODO(bunnei): Consider fixing this in the future, or removing code for this.
+                    getContentResolver().insert(GameProvider.URI_RESET, null);
+                    // Add the new directory
                     mPresenter.onDirectorySelected(FileBrowserHelper.getSelectedDirectory(result));
                 }
                 break;
