@@ -65,7 +65,9 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "mPlatformGamesFragment", mPlatformGamesFragment);
+        if (PermissionsHandler.hasWriteAccess(this)) {
+            getSupportFragmentManager().putFragment(outState, "mPlatformGamesFragment", mPlatformGamesFragment);
+        }
     }
 
     @Override
@@ -122,8 +124,12 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void launchFileListActivity() {
-        FileBrowserHelper.openDirectoryPicker(this, MainPresenter.REQUEST_ADD_DIRECTORY,
-                R.string.select_game_folder);
+        if (PermissionsHandler.hasWriteAccess(this)) {
+            FileBrowserHelper.openDirectoryPicker(this, MainPresenter.REQUEST_ADD_DIRECTORY,
+                    R.string.select_game_folder);
+        } else {
+            PermissionsHandler.checkWritePermission(this);
+        }
     }
 
     @Override
