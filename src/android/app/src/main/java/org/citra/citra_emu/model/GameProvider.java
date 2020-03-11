@@ -16,6 +16,7 @@ import org.citra.citra_emu.utils.Log;
  */
 public final class GameProvider extends ContentProvider {
     public static final String REFRESH_LIBRARY = "refresh";
+    public static final String RESET_LIBRARY = "reset";
 
     public static final String AUTHORITY = "content://" + BuildConfig.APPLICATION_ID + ".provider";
     public static final Uri URI_FOLDER =
@@ -23,6 +24,7 @@ public final class GameProvider extends ContentProvider {
     public static final Uri URI_GAME =
             Uri.parse(AUTHORITY + "/" + GameDatabase.TABLE_NAME_GAMES + "/");
     public static final Uri URI_REFRESH = Uri.parse(AUTHORITY + "/" + REFRESH_LIBRARY + "/");
+    public static final Uri URI_RESET = Uri.parse(AUTHORITY + "/" + RESET_LIBRARY + "/");
 
     public static final String MIME_TYPE_FOLDER = "vnd.android.cursor.item/vnd.dolphin.folder";
     public static final String MIME_TYPE_GAME = "vnd.android.cursor.item/vnd.dolphin.game";
@@ -89,6 +91,10 @@ public final class GameProvider extends ContentProvider {
         long id = -1;
 
         if (table != null) {
+            if (table.equals(RESET_LIBRARY)) {
+                mDbHelper.resetDatabase(database);
+                return uri;
+            }
             if (table.equals(REFRESH_LIBRARY)) {
                 Log.info(
                         "[GameProvider] URI specified table REFRESH_LIBRARY. No insertion necessary; refreshing library contents...");
