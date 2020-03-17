@@ -38,9 +38,11 @@ import org.citra.citra_emu.fragments.EmulationFragment;
 import org.citra.citra_emu.fragments.MenuFragment;
 import org.citra.citra_emu.model.settings.view.InputBindingSetting;
 import org.citra.citra_emu.ui.main.MainPresenter;
+import org.citra.citra_emu.ui.settings.SettingsActivity;
 import org.citra.citra_emu.utils.Animations;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
+import org.citra.citra_emu.utils.SettingsFile;
 
 import java.lang.annotation.Retention;
 import java.util.List;
@@ -64,6 +66,7 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_SWAP_SCREENS = 9;
     public static final int MENU_ACTION_RESET_OVERLAY = 10;
     public static final int MENU_ACTION_SHOW_OVERLAY = 11;
+    public static final int MENU_ACTION_OPEN_SETTINGS = 12;
 
     private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
     private static final String BACKSTACK_NAME_MENU = "menu";
@@ -481,6 +484,10 @@ public final class EmulationActivity extends AppCompatActivity {
                 toggleMenu();  // Hide the menu (it will be showing since we just clicked it)
                 mEmulationFragment.stopEmulation();
                 exitWithAnimation();
+                break;
+
+            case MENU_ACTION_OPEN_SETTINGS:
+                SettingsActivity.launch(this, SettingsFile.FILE_NAME_CONFIG,"");
                 break;
         }
 
