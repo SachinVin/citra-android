@@ -61,7 +61,7 @@ RasterizerOpenGL::RasterizerOpenGL()
                     "Shadow might not be able to render because of unsupported OpenGL extensions.");
     }
 
-    if (!(GLES || GLAD_GL_ARB_texture_barrier)) {
+    if (!GLAD_GL_ARB_texture_barrier) {
         LOG_WARNING(Render_OpenGL,
                     "ARB_texture_barrier not supported. Some games might produce artifacts.");
     }
@@ -850,7 +850,7 @@ bool RasterizerOpenGL::Draw(bool accelerate, bool is_indexed) {
                         GL_TEXTURE_UPDATE_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT);
     }
 
-    if (need_texture_barrier && (GLES || GLAD_GL_ARB_texture_barrier)) {
+    if (need_texture_barrier && GLAD_GL_ARB_texture_barrier) {
         glTextureBarrier();
     }
 
