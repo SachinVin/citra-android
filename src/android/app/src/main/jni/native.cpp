@@ -395,6 +395,11 @@ void Java_org_citra_citra_1emu_NativeLibrary_WriteProfileResults(JNIEnv* env, jo
 void Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_String_2Z(
     JNIEnv* env, jobject obj, jstring jFile, jstring jSavestate, jboolean jDeleteSavestate) {}
 
+void Java_org_citra_citra_1emu_NativeLibrary_ReloadSettings(JNIEnv* env, jclass type) {
+        Config{};
+        Settings::Apply();
+}
+
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetUserSetting(JNIEnv* env, jclass type,
                                                                    jstring gameID_,
                                                                    jstring Section_, jstring Key_) {

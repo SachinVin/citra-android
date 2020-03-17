@@ -100,6 +100,8 @@ public final class NativeLibrary {
      */
     public static native void onTouchMoved(float x_axis, float y_axis);
 
+    public static native void ReloadSettings();
+
     public static native String GetUserSetting(String gameID, String Section, String Key);
 
     public static native void SetUserSetting(String gameID, String Section, String Key, String Value);

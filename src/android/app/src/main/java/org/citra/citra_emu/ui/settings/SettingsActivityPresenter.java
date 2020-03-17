@@ -4,6 +4,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.model.settings.SettingSection;
 import org.citra.citra_emu.services.DirectoryInitializationService;
 import org.citra.citra_emu.services.DirectoryInitializationService.DirectoryInitializationState;
@@ -119,6 +120,7 @@ public final class SettingsActivityPresenter {
                 SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
                 mView.showToastMessage("Saved settings", false);
             }
+            NativeLibrary.ReloadSettings();
         }
     }
 

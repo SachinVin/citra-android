@@ -159,6 +159,9 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InitGameIni(JNIEn
                                                                                jclass type,
                                                                                jstring gameID_);
 
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_ReloadSettings(JNIEnv* env,
+                                                                              jclass type);
+
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserSetting(
     JNIEnv* env, jclass type, jstring gameID_, jstring Section_, jstring Key_, jstring Value_);
 
