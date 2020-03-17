@@ -68,4 +68,9 @@
         android:title="@string/emulation_show_overlay"
         android:checkable="true"/>
 
+    <item
+        android:id="@+id/menu_emulation_open_settings"
+        app:showAsAction="never"
+        android:title="@string/emulation_open_settings"/>
+
 </menu>
