@@ -886,18 +886,18 @@ void CachedSurface::DownloadGLTexture(const Common::Rectangle<u32>& rect, GLuint
         return;
     }
 
+    MICROPROFILE_SCOPE(OpenGL_TextureDL);
+
+    if (gl_buffer.empty()) {
+        gl_buffer.resize(width * height * GetGLBytesPerPixel(pixel_format));
+    }
+
     if (GLES) {
         if (type == SurfaceType::Depth || type == SurfaceType::DepthStencil) {
             // TODO(bunnei): This is unsupported on GLES right now, fixme
             LOG_WARNING(Render_OpenGL, "Unsupported depth/stencil surface download");
             return;
         }
-    }
-
-    MICROPROFILE_SCOPE(OpenGL_TextureDL);
-
-    if (gl_buffer.empty()) {
-        gl_buffer.resize(width * height * GetGLBytesPerPixel(pixel_format));
     }
 
     OpenGLState state = OpenGLState::GetCurState();
@@ -1925,7 +1925,6 @@ Surface RasterizerCacheOpenGL::CreateSurface(const SurfaceParams& params) {
 
     surface->texture.Create();
 
-    surface->gl_buffer.resize(0);
     surface->invalid_regions.insert(surface->GetInterval());
     AllocateSurfaceTexture(surface->texture.handle, GetFormatTuple(surface->pixel_format),
                            surface->GetScaledWidth(), surface->GetScaledHeight());
