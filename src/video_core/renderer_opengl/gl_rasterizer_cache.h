@@ -138,6 +138,8 @@ private:
     bool valid = false;
 };
 
+class RasterizerCacheOpenGL;
+
 struct CachedSurface : SurfaceParams, std::enable_shared_from_this<CachedSurface> {
     CachedSurface(RasterizerCacheOpenGL& owner) : owner{owner} {}
 
@@ -232,6 +234,25 @@ struct CachedTextureCube {
     std::shared_ptr<SurfaceWatcher> pz;
     std::shared_ptr<SurfaceWatcher> nz;
 };
+
+struct FormatTuple {
+    GLint internal_format;
+    GLenum format;
+    GLenum type;
+};
+
+constexpr FormatTuple tex_tuple = {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE};
+
+const FormatTuple& GetFormatTuple(SurfaceParams::PixelFormat pixel_format);
+
+static constexpr std::array<FormatTuple, 4> depth_format_tuples = {{
+    {GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT}, // D16
+    {},
+    {GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT},   // D24
+    {GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8}, // D24S8
+}};
+
+class TextureDownloaderES;
 
 class RasterizerCacheOpenGL : NonCopyable {
 public:
@@ -331,15 +352,6 @@ private:
 public:
     std::unique_ptr<TextureFilterer> texture_filterer;
     std::unique_ptr<FormatReinterpreterOpenGL> format_reinterpreter;
+    std::unique_ptr<TextureDownloaderES> texture_downloader_es;
 };
-
-struct FormatTuple {
-    GLint internal_format;
-    GLenum format;
-    GLenum type;
-};
-
-constexpr FormatTuple tex_tuple = {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE};
-
-const FormatTuple& GetFormatTuple(SurfaceParams::PixelFormat pixel_format);
 } // namespace OpenGL
