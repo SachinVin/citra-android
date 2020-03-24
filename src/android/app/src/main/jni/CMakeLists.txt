@@ -1,5 +1,3 @@
-add_subdirectory(ndk_helper)
-
 add_library(main SHARED
     button_manager.cpp
     button_manager.h
@@ -16,24 +14,7 @@ add_library(main SHARED
     native.h
 )
 
-target_link_libraries(main
-PRIVATE
-    common
-    core
-    input_common
-    network
-    glad
-    inih
-)
-
-target_link_libraries(main
-PRIVATE
-  android
-  log
-  ndk_helper
-  "-Wl,--no-warn-mismatch"
-  "-Wl,--whole-archive"
-  "-Wl,--no-whole-archive"
-)
+target_link_libraries(main PRIVATE common core input_common network)
+target_link_libraries(main PRIVATE android EGL glad inih log)
 
 set(CPACK_PACKAGE_EXECUTABLES ${CPACK_PACKAGE_EXECUTABLES} main)
