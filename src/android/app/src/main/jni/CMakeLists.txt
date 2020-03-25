@@ -12,6 +12,8 @@ add_library(main SHARED
     id_cache.h
     native.cpp
     native.h
+    ndk_motion.cpp
+    ndk_motion.h
 )
 
 target_link_libraries(main PRIVATE common core input_common network)
