@@ -287,12 +287,12 @@ public final class NativeLibrary {
     /**
      * Notifies the core emulation that the orientation has changed.
      */
-    public static native void NotifyOrientationChange(int layout_option, boolean is_portrait_mode);
+    public static native void NotifyOrientationChange(int layout_option, int rotation);
 
     /**
      * Swaps the top and bottom screens.
      */
-    public static native void SwapScreens(boolean swap_screens, boolean is_portrait_mode);
+    public static native void SwapScreens(boolean swap_screens, int rotation);
 
     public static boolean isPortraitMode() {
         return CitraApplication.getAppContext().getResources().getConfiguration().orientation ==
