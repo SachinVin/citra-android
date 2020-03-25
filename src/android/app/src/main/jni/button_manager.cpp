@@ -15,11 +15,13 @@
 #include "input_common/main.h"
 #include "input_common/sdl/sdl.h"
 #include "jni/button_manager.h"
+#include "jni/ndk_motion.h"
 
 namespace InputManager {
 
 static std::shared_ptr<ButtonFactory> button;
 static std::shared_ptr<AnalogFactory> analog;
+static std::shared_ptr<NDKMotionFactory> motion;
 
 // Button Handler
 class KeyButton final : public Input::ButtonDevice {
@@ -305,15 +307,19 @@ std::string GenerateAnalogParamPackage(int axis_id) {
 void Init() {
     button = std::make_shared<ButtonFactory>();
     analog = std::make_shared<AnalogFactory>();
+    motion = std::make_shared<NDKMotionFactory>();
     Input::RegisterFactory<Input::ButtonDevice>("gamepad", button);
     Input::RegisterFactory<Input::AnalogDevice>("gamepad", analog);
+    Input::RegisterFactory<Input::MotionDevice>("motion_emu", motion);
 }
 
 void Shutdown() {
     Input::UnregisterFactory<Input::ButtonDevice>("gamepad");
     Input::UnregisterFactory<Input::AnalogDevice>("gamepad");
+    Input::UnregisterFactory<Input::MotionDevice>("motion_emu");
     button.reset();
     analog.reset();
+    motion.reset();
 }
 
 } // namespace InputManager

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <jni.h>
+
 // Function calls from the Java side
 #ifdef __cplusplus
 extern "C" {
@@ -136,10 +138,10 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_WriteProfileResul
                                                                                        jobject obj);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_NotifyOrientationChange(
-    JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode);
+    JNIEnv* env, jclass clazz, jint layout_option, jint rotation);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(
-    JNIEnv* env, jobject obj, jboolean swap_screens, jboolean is_portrait_mode);
+    JNIEnv* env, jclass clazz, jboolean swap_screens, jint rotation);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2(
     JNIEnv* env, jclass type, jstring path_);
