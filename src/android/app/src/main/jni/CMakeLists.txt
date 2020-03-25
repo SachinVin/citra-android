@@ -1,4 +1,6 @@
 add_library(main SHARED
+    applets/swkbd.cpp
+    applets/swkbd.h
     button_manager.cpp
     button_manager.h
     config.cpp
