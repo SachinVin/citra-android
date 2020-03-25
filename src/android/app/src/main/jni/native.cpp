@@ -19,6 +19,7 @@
 #include "core/frontend/scope_acquire_context.h"
 #include "core/hle/service/am/am.h"
 #include "core/settings.h"
+#include "jni/applets/swkbd.h"
 #include "jni/button_manager.h"
 #include "jni/config.h"
 #include "jni/emu_window/emu_window.h"
@@ -83,18 +84,6 @@ static int AlertPromptButton() {
                                                      IDCache::GetAlertPromptButton()));
 }
 
-class AndroidKeyboard final : public Frontend::SoftwareKeyboard {
-public:
-    void Execute(const Frontend::KeyboardConfig& config) override {
-        SoftwareKeyboard::Execute(config);
-        Finalize(DisplayAlertPrompt("Enter text", config.hint_text.c_str(),
-                                    static_cast<int>(this->config.button_config)),
-                 AlertPromptButton());
-    }
-
-    void ShowError(const std::string& error) override {}
-};
-
 static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
@@ -118,7 +107,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
-    system.RegisterSoftwareKeyboard(std::make_shared<AndroidKeyboard>());
+    system.RegisterSoftwareKeyboard(std::make_shared<SoftwareKeyboard::AndroidKeyboard>());
 
     InputManager::Init();
 

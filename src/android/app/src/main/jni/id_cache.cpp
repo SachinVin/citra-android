@@ -7,6 +7,7 @@
 #include "common/logging/filter.h"
 #include "common/logging/log.h"
 #include "core/settings.h"
+#include "jni/applets/swkbd.h"
 #include "jni/id_cache.h"
 
 #include <jni.h>
@@ -111,6 +112,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_exit_emulation_activity =
         env->GetStaticMethodID(s_native_library_class, "exitEmulationActivity", "(I)V");
 
+    SoftwareKeyboard::InitJNI(env);
+
     return JNI_VERSION;
 }
 
@@ -121,6 +124,7 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
     }
 
     env->DeleteGlobalRef(s_native_library_class);
+    SoftwareKeyboard::CleanupJNI(env);
 }
 
 #ifdef __cplusplus
