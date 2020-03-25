@@ -36,6 +36,7 @@
 #include "jni/game_info.h"
 #include "jni/id_cache.h"
 #include "jni/native.h"
+#include "jni/ndk_motion.h"
 #include "network/network.h"
 #include "video_core/renderer_base.h"
 #include "video_core/video_core.h"
@@ -194,18 +195,20 @@ void Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(JNIEnv* env, jobje
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_NotifyOrientationChange(
-    JNIEnv* env, jobject obj, jint layout_option, jboolean is_portrait_mode) {
+    JNIEnv* env, jclass clazz, jint layout_option, jint rotation) {
     Settings::values.layout_option = static_cast<Settings::LayoutOption>(layout_option);
-    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
+    VideoCore::g_renderer->UpdateCurrentFramebufferLayout(!(rotation % 2));
+    InputManager::screen_rotation = rotation;
 }
 
-void Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(JNIEnv* env, jobject obj,
+void Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(JNIEnv* env, jclass clazz,
                                                              jboolean swap_screens,
-                                                             jboolean is_portrait_mode) {
+                                                             jint rotation) {
     Settings::values.swap_screen = swap_screens;
     if (VideoCore::g_renderer) {
-        VideoCore::g_renderer->UpdateCurrentFramebufferLayout(is_portrait_mode);
+        VideoCore::g_renderer->UpdateCurrentFramebufferLayout(!(rotation % 2));
     }
+    InputManager::screen_rotation = rotation;
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(JNIEnv* env, jobject obj,

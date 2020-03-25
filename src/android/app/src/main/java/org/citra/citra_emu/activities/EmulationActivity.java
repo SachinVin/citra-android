@@ -261,7 +261,7 @@ public final class EmulationActivity extends AppCompatActivity {
 
         // Override Citra core INI with the one set by our in game menu
         NativeLibrary.SwapScreens(EmulationMenuSettings.getSwapScreens(),
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+                                  getWindowManager().getDefaultDisplay().getRotation());
     }
 
     @Override
@@ -461,7 +461,8 @@ public final class EmulationActivity extends AppCompatActivity {
                 EmulationMenuSettings.setSwapScreens(isEnabled);
                 item.setChecked(isEnabled);
 
-                NativeLibrary.SwapScreens(isEnabled, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+                NativeLibrary.SwapScreens(isEnabled, getWindowManager().getDefaultDisplay()
+                                                                       .getRotation());
                 break;
             }
 
@@ -496,8 +497,8 @@ public final class EmulationActivity extends AppCompatActivity {
 
     private void changeScreenOrientation(int layoutOption, MenuItem item) {
         item.setChecked(true);
-        NativeLibrary.NotifyOrientationChange(layoutOption,
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+        NativeLibrary.NotifyOrientationChange(layoutOption, getWindowManager().getDefaultDisplay()
+                                                                              .getRotation());
         EmulationMenuSettings.setLandscapeScreenLayout(layoutOption);
     }
 
