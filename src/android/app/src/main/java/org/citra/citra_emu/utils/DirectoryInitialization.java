@@ -83,7 +83,6 @@ public final class DirectoryInitialization {
                     "DirectoryInitialization has to finish running first!");
         }
         return userPath;
-
     }
 
     private static native void SetSysDirectory(String path);
