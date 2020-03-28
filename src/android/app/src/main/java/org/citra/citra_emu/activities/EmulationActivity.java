@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,12 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
@@ -39,7 +34,6 @@ import org.citra.citra_emu.fragments.MenuFragment;
 import org.citra.citra_emu.model.settings.view.InputBindingSetting;
 import org.citra.citra_emu.ui.main.MainPresenter;
 import org.citra.citra_emu.ui.settings.SettingsActivity;
-import org.citra.citra_emu.utils.Animations;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
 import org.citra.citra_emu.utils.SettingsFile;
@@ -52,8 +46,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public final class EmulationActivity extends AppCompatActivity {
     public static final String EXTRA_SELECTED_GAME = "SelectedGame";
     public static final String EXTRA_SELECTED_TITLE = "SelectedTitle";
-    public static final String EXTRA_SCREEN_PATH = "ScreenPath";
-    public static final String EXTRA_GRID_POSITION = "GridPosition";
     public static final int MENU_ACTION_EDIT_CONTROLS_PLACEMENT = 0;
     public static final int MENU_ACTION_TOGGLE_CONTROLS = 1;
     public static final int MENU_ACTION_ADJUST_SCALE = 2;
@@ -100,44 +92,31 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     private View mDecorView;
-    private ImageView mImageView;
     private EmulationFragment mEmulationFragment;
     private SharedPreferences mPreferences;
     private ControllerMappingHelper mControllerMappingHelper;
-    // So that MainActivity knows which view to invalidate before the return animation.
-    private int mPosition;
     private boolean mDeviceHasTouchScreen;
     private boolean mMenuVisible;
     private boolean activityRecreated;
-    private String mScreenPath;
     private String mSelectedTitle;
     private String mPath;
     private Runnable afterShowingScreenshot = new Runnable() {
         @Override
         public void run() {
-            setResult(mPosition);
             supportFinishAfterTransition();
         }
     };
 
-    public static void launch(FragmentActivity activity, String path, String title,
-                              String screenshotPath, int position, View sharedView) {
+    public static void launch(FragmentActivity activity, String path, String title) {
         Intent launcher = new Intent(activity, EmulationActivity.class);
 
         launcher.putExtra(EXTRA_SELECTED_GAME, path);
         launcher.putExtra(EXTRA_SELECTED_TITLE, title);
-        launcher.putExtra(EXTRA_SCREEN_PATH, screenshotPath);
-        launcher.putExtra(EXTRA_GRID_POSITION, position);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity,
-                sharedView,
-                "image_game_screenshot");
+        Bundle options = new Bundle();
 
         // I believe this warning is a bug. Activities are FragmentActivity from the support lib
         //noinspection RestrictedApi
-        activity.startActivityForResult(launcher, MainPresenter.REQUEST_EMULATE_GAME,
-                options.toBundle());
+        activity.startActivityForResult(launcher, MainPresenter.REQUEST_EMULATE_GAME, options);
     }
 
     private void showRunningNotification() {
@@ -176,8 +155,6 @@ public final class EmulationActivity extends AppCompatActivity {
             Intent gameToEmulate = getIntent();
             mPath = gameToEmulate.getStringExtra(EXTRA_SELECTED_GAME);
             mSelectedTitle = gameToEmulate.getStringExtra(EXTRA_SELECTED_TITLE);
-            mScreenPath = gameToEmulate.getStringExtra(EXTRA_SCREEN_PATH);
-            mPosition = gameToEmulate.getIntExtra(EXTRA_GRID_POSITION, -1);
             activityRecreated = false;
         } else {
             activityRecreated = true;
@@ -211,8 +188,6 @@ public final class EmulationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_emulation);
 
-        mImageView = findViewById(R.id.image_screenshot);
-
         // Find or create the EmulationFragment
         mEmulationFragment = (EmulationFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_emulation_fragment);
@@ -221,34 +196,6 @@ public final class EmulationActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.frame_emulation_fragment, mEmulationFragment)
                     .commit();
-        }
-
-        if (savedInstanceState == null) {
-            // Picasso will take a while to load these big-ass screenshots. So don't run
-            // the animation until we say so.
-            postponeEnterTransition();
-
-            Picasso.get()
-                    .load(mScreenPath)
-                    .noFade()
-                    .noPlaceholder()
-                    .into(mImageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            supportStartPostponedEnterTransition();
-                        }
-                        @Override
-                        public void onError(Exception ex) {
-                            // Still have to do this, or else the app will crash.
-                            supportStartPostponedEnterTransition();
-                        }
-                    });
-
-            Animations.fadeViewOut(mImageView)
-                    .setStartDelay(2000)
-                    .withEndAction(() -> mImageView.setVisibility(View.GONE));
-        } else {
-            mImageView.setVisibility(View.GONE);
         }
 
         if (mDeviceHasTouchScreen) {
@@ -261,23 +208,19 @@ public final class EmulationActivity extends AppCompatActivity {
 
         // Override Citra core INI with the one set by our in game menu
         NativeLibrary.SwapScreens(EmulationMenuSettings.getSwapScreens(),
-                                  getWindowManager().getDefaultDisplay().getRotation());
+                getWindowManager().getDefaultDisplay().getRotation());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(EXTRA_SELECTED_GAME, mPath);
         outState.putString(EXTRA_SELECTED_TITLE, mSelectedTitle);
-        outState.putString(EXTRA_SCREEN_PATH, mScreenPath);
-        outState.putInt(EXTRA_GRID_POSITION, mPosition);
         super.onSaveInstanceState(outState);
     }
 
     protected void restoreState(Bundle savedInstanceState) {
         mPath = savedInstanceState.getString(EXTRA_SELECTED_GAME);
         mSelectedTitle = savedInstanceState.getString(EXTRA_SELECTED_TITLE);
-        mScreenPath = savedInstanceState.getString(EXTRA_SCREEN_PATH);
-        mPosition = savedInstanceState.getInt(EXTRA_GRID_POSITION);
 
         // If an alert prompt was in progress when state was restored, retry displaying it
         NativeLibrary.retryDisplayAlertPrompt();
@@ -299,14 +242,14 @@ public final class EmulationActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, (dialogInterface, i) ->
                     {
                         mEmulationFragment.stopEmulation();
-                        exitWithAnimation();
+                        finish();
                     })
                     .setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
                     {
                     }).setOnDismissListener(dialogInterface ->
-                    {
-                        NativeLibrary.UnPauseEmulation();
-                    })
+            {
+                NativeLibrary.UnPauseEmulation();
+            })
                     .create()
                     .show();
         }
@@ -346,37 +289,6 @@ public final class EmulationActivity extends AppCompatActivity {
                     .commit();
             mMenuVisible = true;
         }
-    }
-
-    public void exitWithAnimation() {
-        tryDismissRunningNotification(this);
-
-        runOnUiThread(() ->
-        {
-            Picasso.get()
-                    .invalidate(mScreenPath);
-
-            Picasso.get()
-                    .load(mScreenPath)
-                    .noFade()
-                    .noPlaceholder()
-                    .into(mImageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            showScreenshot();
-                        }
-
-                        @Override
-                        public void onError(Exception ex) {
-                            finish();
-                        }
-                    });
-        });
-    }
-
-    private void showScreenshot() {
-        Animations.fadeViewIn(mImageView)
-                .withEndAction(afterShowingScreenshot);
     }
 
     @Override
@@ -462,7 +374,7 @@ public final class EmulationActivity extends AppCompatActivity {
                 item.setChecked(isEnabled);
 
                 NativeLibrary.SwapScreens(isEnabled, getWindowManager().getDefaultDisplay()
-                                                                       .getRotation());
+                        .getRotation());
                 break;
             }
 
@@ -484,11 +396,11 @@ public final class EmulationActivity extends AppCompatActivity {
             case MENU_ACTION_EXIT:
                 toggleMenu();  // Hide the menu (it will be showing since we just clicked it)
                 mEmulationFragment.stopEmulation();
-                exitWithAnimation();
+                finish();
                 break;
 
             case MENU_ACTION_OPEN_SETTINGS:
-                SettingsActivity.launch(this, SettingsFile.FILE_NAME_CONFIG,"");
+                SettingsActivity.launch(this, SettingsFile.FILE_NAME_CONFIG, "");
                 break;
         }
 
@@ -498,7 +410,7 @@ public final class EmulationActivity extends AppCompatActivity {
     private void changeScreenOrientation(int layoutOption, MenuItem item) {
         item.setChecked(true);
         NativeLibrary.NotifyOrientationChange(layoutOption, getWindowManager().getDefaultDisplay()
-                                                                              .getRotation());
+                .getRotation());
         EmulationMenuSettings.setLandscapeScreenLayout(layoutOption);
     }
 
@@ -585,13 +497,15 @@ public final class EmulationActivity extends AppCompatActivity {
         seekbar.setMax(150);
         seekbar.setProgress(mPreferences.getInt("controlScale", 50));
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 value.setText(String.valueOf(progress + 50));
             }
 
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         value.setText(String.valueOf(seekbar.getProgress() + 50));
@@ -600,7 +514,8 @@ public final class EmulationActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.emulation_control_scale);
         builder.setView(view);
-        builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> { });
+        builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+        });
         builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
         {
             SharedPreferences.Editor editor = mPreferences.edit();
@@ -623,7 +538,8 @@ public final class EmulationActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.emulation_touch_overlay_reset))
                 .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> mEmulationFragment.resetInputOverlay())
-                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> { })
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+                })
                 .create()
                 .show();
     }
@@ -702,20 +618,24 @@ public final class EmulationActivity extends AppCompatActivity {
         if (axisValuesDPad[0] == 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_LEFT, NativeLibrary.ButtonState.RELEASED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_RIGHT, NativeLibrary.ButtonState.RELEASED);
-        } if (axisValuesDPad[0] < 0.f) {
+        }
+        if (axisValuesDPad[0] < 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_LEFT, NativeLibrary.ButtonState.PRESSED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_RIGHT, NativeLibrary.ButtonState.RELEASED);
-        } if (axisValuesDPad[0] > 0.f) {
+        }
+        if (axisValuesDPad[0] > 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_LEFT, NativeLibrary.ButtonState.RELEASED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_RIGHT, NativeLibrary.ButtonState.PRESSED);
         }
         if (axisValuesDPad[1] == 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_UP, NativeLibrary.ButtonState.RELEASED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_DOWN, NativeLibrary.ButtonState.RELEASED);
-        } if (axisValuesDPad[1] < 0.f) {
+        }
+        if (axisValuesDPad[1] < 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_UP, NativeLibrary.ButtonState.PRESSED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_DOWN, NativeLibrary.ButtonState.RELEASED);
-        } if (axisValuesDPad[1] > 0.f) {
+        }
+        if (axisValuesDPad[1] > 0.f) {
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_UP, NativeLibrary.ButtonState.RELEASED);
             NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.DPAD_DOWN, NativeLibrary.ButtonState.PRESSED);
         }
