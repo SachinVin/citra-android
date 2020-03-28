@@ -112,7 +112,7 @@ public final class EmulationActivity extends AppCompatActivity {
 
         launcher.putExtra(EXTRA_SELECTED_GAME, path);
         launcher.putExtra(EXTRA_SELECTED_TITLE, title);
-        activity.startActivityForResult(launcher, MainPresenter.REQUEST_EMULATE_GAME);
+        activity.startActivity(launcher);
     }
 
     private void showRunningNotification() {
