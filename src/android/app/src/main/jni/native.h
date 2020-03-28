@@ -109,14 +109,14 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadStateAs(JNIEn
                                                                                jstring path);
 
 JNIEXPORT void JNICALL
-Java_org_citra_citra_1emu_services_DirectoryInitializationService_CreateUserDirectories(
+Java_org_citra_citra_1emu_utils_DirectoryInitialization_CreateUserDirectories(
     JNIEnv* env, jobject obj);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(
     JNIEnv* env, jobject obj, jstring jDirectory);
 
 JNIEXPORT void JNICALL
-Java_org_citra_citra_1emu_services_DirectoryInitializationService_SetSysDirectory(
+Java_org_citra_citra_1emu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jclass type, jstring path_);
 
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetUserDirectory(JNIEnv* env,
