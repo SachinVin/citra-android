@@ -73,7 +73,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="org.citra.citra_emu.services.DirectoryInitializationService"/>
+        <service android:name="org.citra.citra_emu.utils.DirectoryInitialization"/>
 
         <provider
             android:name="org.citra.citra_emu.model.GameProvider"

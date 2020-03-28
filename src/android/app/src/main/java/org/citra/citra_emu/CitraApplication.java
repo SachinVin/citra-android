@@ -11,7 +11,7 @@ import android.content.Context;
 import android.os.Build;
 
 import org.citra.citra_emu.model.GameDatabase;
-import org.citra.citra_emu.services.DirectoryInitializationService;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.PermissionsHandler;
 
 public class CitraApplication extends Application {
@@ -41,7 +41,7 @@ public class CitraApplication extends Application {
         application = this;
 
         if (PermissionsHandler.hasWriteAccess(getApplicationContext())) {
-            DirectoryInitializationService.startService(getApplicationContext());
+            DirectoryInitialization.start(getApplicationContext());
         }
 
         createNotificationChannel();

@@ -22,8 +22,8 @@ import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.overlay.InputOverlay;
-import org.citra.citra_emu.services.DirectoryInitializationService;
-import org.citra.citra_emu.services.DirectoryInitializationService.DirectoryInitializationState;
+import org.citra.citra_emu.utils.DirectoryInitialization;
+import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
 import org.citra.citra_emu.utils.Log;
@@ -113,7 +113,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     @Override
     public void onResume() {
         super.onResume();
-        if (DirectoryInitializationService.areDolphinDirectoriesReady()) {
+        if (DirectoryInitialization.areDolphinDirectoriesReady()) {
             mEmulationState.run(activity.isActivityRecreated());
         } else {
             setupDolphinDirectoriesThenStartEmulation();
@@ -139,7 +139,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
 
     private void setupDolphinDirectoriesThenStartEmulation() {
         IntentFilter statusIntentFilter = new IntentFilter(
-                DirectoryInitializationService.BROADCAST_ACTION);
+                DirectoryInitialization.BROADCAST_ACTION);
 
         directoryStateReceiver =
                 new DirectoryStateReceiver(directoryInitializationState ->
@@ -163,7 +163,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 directoryStateReceiver,
                 statusIntentFilter);
-        DirectoryInitializationService.startService(getActivity());
+        DirectoryInitialization.start(getActivity());
     }
 
     public void refreshInputOverlay() {
@@ -190,8 +190,8 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
             {
                 final double[] perfStats = NativeLibrary.GetPerfStats();
                 if (perfStats[FPS] > 0) {
-                    mPerfStats.setText(String.format("FPS: %d Speed: %d%%", (int)(perfStats[FPS] + 0.5),
-                            (int)(perfStats[SPEED] * 100.0 + 0.5)));
+                    mPerfStats.setText(String.format("FPS: %d Speed: %d%%", (int) (perfStats[FPS] + 0.5),
+                            (int) (perfStats[SPEED] * 100.0 + 0.5)));
                 }
 
                 perfStatsUpdateHandler.postDelayed(perfStatsUpdater, 3000);
