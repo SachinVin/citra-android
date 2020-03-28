@@ -135,4 +135,6 @@
     <string name="load_settings">Loading Settings...</string>
 
     <string name="external_storage_not_mounted">The external storage needs to be available in order to use Citra</string>
+
+    <string name="select_dir">Select This Directory</string>
 </resources>
