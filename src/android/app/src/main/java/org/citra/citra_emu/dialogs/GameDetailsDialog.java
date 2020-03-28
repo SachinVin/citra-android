@@ -69,12 +69,7 @@ public final class GameDetailsDialog extends DialogFragment {
         buttonLaunch.setOnClickListener(view ->
         {
             // Start the emulation activity and send the path of the clicked ROM to it.
-            EmulationActivity.launch(getActivity(),
-                    getArguments().getString(ARG_GAME_PATH),
-                    getArguments().getString(ARG_GAME_TITLE),
-                    getArguments().getString(ARG_GAME_SCREENSHOT_PATH),
-                    -1,
-                    imageGameScreen);
+            EmulationActivity.launch(getActivity(), getArguments().getString(ARG_GAME_PATH), getArguments().getString(ARG_GAME_TITLE));
         });
 
         // Fill in the view contents.

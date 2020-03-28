@@ -82,12 +82,7 @@ public final class TvMainActivity extends FragmentActivity implements MainView {
                         TvGameViewHolder holder = (TvGameViewHolder) itemViewHolder;
 
                         // Start the emulation activity and send the path of the clicked ISO to it.
-                        EmulationActivity.launch(TvMainActivity.this,
-                                holder.path,
-                                holder.title,
-                                holder.screenshotPath,
-                                -1,
-                                holder.imageScreenshot);
+                        EmulationActivity.launch(TvMainActivity.this, holder.path, holder.title);
                     }
                 });
     }
