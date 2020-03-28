@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import org.citra.citra_emu.services.DirectoryInitializationService;
-import org.citra.citra_emu.services.DirectoryInitializationService.DirectoryInitializationState;
+import org.citra.citra_emu.utils.DirectoryInitialization;
+import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 
 import rx.functions.Action1;
 
@@ -19,7 +19,7 @@ public class DirectoryStateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         DirectoryInitializationState state = (DirectoryInitializationState) intent
-                .getSerializableExtra(DirectoryInitializationService.EXTRA_STATE);
+                .getSerializableExtra(DirectoryInitialization.EXTRA_STATE);
         callback.call(state);
     }
 }
