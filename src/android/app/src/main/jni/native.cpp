@@ -374,11 +374,10 @@ void Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, jobject obj,
 void Java_org_citra_citra_1emu_NativeLibrary_LoadStateAs(JNIEnv* env, jobject obj,
                                                              jstring path) {}
 
-void Java_org_citra_citra_1emu_services_DirectoryInitializationService_CreateUserDirectories(
+void Java_org_citra_citra_1emu_utils_DirectoryInitialization_CreateUserDirectories(
     JNIEnv* env, jobject obj) {}
 
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetUserDirectory(JNIEnv* env, jobject obj) {
-
     return nullptr;
 }
 
@@ -461,7 +460,7 @@ jdoubleArray Java_org_citra_citra_1emu_NativeLibrary_GetPerfStats(JNIEnv* env, j
     return jstats;
 }
 
-void Java_org_citra_citra_1emu_services_DirectoryInitializationService_SetSysDirectory(
+void Java_org_citra_citra_1emu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jclass type, jstring path_) {
     const char* path = env->GetStringUTFChars(path_, 0);
 

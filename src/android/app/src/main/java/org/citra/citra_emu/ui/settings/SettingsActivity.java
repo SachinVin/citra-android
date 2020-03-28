@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.model.settings.SettingSection;
-import org.citra.citra_emu.services.DirectoryInitializationService;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 receiver,
                 filter);
-        DirectoryInitializationService.startService(this);
+        DirectoryInitialization.start(this);
     }
 
     @Override

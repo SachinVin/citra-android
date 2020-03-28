@@ -7,7 +7,7 @@ import org.citra.citra_emu.model.settings.IntSetting;
 import org.citra.citra_emu.model.settings.Setting;
 import org.citra.citra_emu.model.settings.SettingSection;
 import org.citra.citra_emu.model.settings.StringSetting;
-import org.citra.citra_emu.services.DirectoryInitializationService;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.ui.settings.SettingsActivityView;
 import org.ini4j.Wini;
 
@@ -212,7 +212,7 @@ public final class SettingsFile {
     @NonNull
     private static File getSettingsFile(String fileName) {
         return new File(
-                DirectoryInitializationService.getUserDirectory() + "/config/" + fileName + ".ini");
+                DirectoryInitialization.getUserDirectory() + "/config/" + fileName + ".ini");
     }
 
     private static SettingSection sectionFromLine(String line) {
