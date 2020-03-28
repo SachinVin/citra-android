@@ -7,8 +7,6 @@ import android.content.Intent;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 
-import rx.functions.Action1;
-
 public class DirectoryStateReceiver extends BroadcastReceiver {
     Action1<DirectoryInitializationState> callback;
 
