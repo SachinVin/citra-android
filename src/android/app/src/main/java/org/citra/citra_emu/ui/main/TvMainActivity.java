@@ -23,7 +23,7 @@ import org.citra.citra_emu.adapters.GameRowPresenter;
 import org.citra.citra_emu.adapters.SettingsRowPresenter;
 import org.citra.citra_emu.model.Game;
 import org.citra.citra_emu.model.TvSettingsItem;
-import org.citra.citra_emu.services.DirectoryInitializationService;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.ui.settings.SettingsActivity;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
 import org.citra.citra_emu.utils.FileBrowserHelper;
@@ -160,7 +160,7 @@ public final class TvMainActivity extends FragmentActivity implements MainView {
         switch (requestCode) {
             case PermissionsHandler.REQUEST_CODE_WRITE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    DirectoryInitializationService.startService(this);
+                    DirectoryInitialization.start(this);
                     loadGames();
                 } else {
                     Toast.makeText(this, R.string.write_permission_needed, Toast.LENGTH_SHORT)
