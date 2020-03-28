@@ -10,10 +10,10 @@ import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.utils.Log;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import rx.Observable;
 
@@ -132,7 +132,6 @@ public final class GameDatabase extends SQLiteOpenHelper {
             }
         }
 
-
         // Get a cursor listing all the folders the user has added to the library.
         Cursor folderCursor = database.query(TABLE_NAME_FOLDERS,
                 null,    // Get all columns.
@@ -142,99 +141,111 @@ public final class GameDatabase extends SQLiteOpenHelper {
                 null,
                 null);    // Order of folders is irrelevant.
 
-        Set<String> allowedExtensions = new HashSet<>(Arrays.asList(
-                ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".cia", ".app", ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz"));
-
         // Possibly overly defensive, but ensures that moveToNext() does not skip a row.
         folderCursor.moveToPosition(-1);
-
-        Consumer<String> AttemptToAddGame = filePath -> {
-            String name = NativeLibrary.GetTitle(filePath);
-
-            // If the game's title field is empty, use the filename.
-            if (name.isEmpty()) {
-                name = filePath.substring(filePath.lastIndexOf("/") + 1);
-            }
-
-            String gameId = NativeLibrary.GetGameId(filePath);
-
-            // If the game's ID field is empty, use the filename without extension.
-            if (gameId.isEmpty()) {
-                gameId = filePath.substring(filePath.lastIndexOf("/") + 1,
-                                            filePath.lastIndexOf("."));
-            }
-
-            ContentValues game = Game.asContentValues(name,
-                                                      NativeLibrary.GetDescription(filePath).replace("\n", " "),
-                                                      NativeLibrary.GetRegions(filePath),
-                                                      filePath,
-                                                      gameId,
-                                                      NativeLibrary.GetCompany(filePath));
-
-            // Try to update an existing game first.
-            int rowsMatched = database.update(TABLE_NAME_GAMES,    // Which table to update.
-                                              game,
-                                              // The values to fill the row with.
-                                              KEY_GAME_ID + " = ?",
-                                              // The WHERE clause used to find the right row.
-                                              new String[]{game.getAsString(
-                                                      KEY_GAME_ID)});    // The ? in WHERE clause is replaced with this,
-            // which is provided as an array because there
-            // could potentially be more than one argument.
-
-            // If update fails, insert a new game instead.
-            if (rowsMatched == 0) {
-                Log.verbose("[GameDatabase] Adding game: " + game.getAsString(KEY_GAME_TITLE));
-                database.insert(TABLE_NAME_GAMES, null, game);
-            } else {
-                Log.verbose("[GameDatabase] Updated game: " + game.getAsString(KEY_GAME_TITLE));
-            }
-        };
 
         // Iterate through all results of the DB query (i.e. all folders in the library.)
         while (folderCursor.moveToNext()) {
             String folderPath = folderCursor.getString(FOLDER_COLUMN_PATH);
+
             File folder = new File(folderPath);
-
-            Log.info("[GameDatabase] Reading files from library folder: " + folderPath);
-
-            // Iterate through every file in the folder.
-            File[] children = folder.listFiles();
-
-            if (children != null) {
-                for (File file : children) {
-                    if (!file.isHidden() && !file.isDirectory()) {
-                        String filePath = file.getPath();
-
-                        int extensionStart = filePath.lastIndexOf('.');
-                        if (extensionStart > 0) {
-                            String fileExtension = filePath.substring(extensionStart);
-
-                            // Check that the file has an extension we care about before trying to read out of it.
-                            if (allowedExtensions.contains(fileExtension.toLowerCase())) {
-                                AttemptToAddGame.accept(filePath);
-                            }
-                        }
-                    }
-                }
-            }
             // If the folder is empty because it no longer exists, remove it from the library.
-            else if (!folder.exists()) {
+            if (!folder.exists()) {
                 Log.error(
                         "[GameDatabase] Folder no longer exists. Removing from the library: " + folderPath);
                 database.delete(TABLE_NAME_FOLDERS,
                         KEY_DB_ID + " = ?",
                         new String[]{Long.toString(folderCursor.getLong(COLUMN_DB_ID))});
-            } else {
-                Log.error("[GameDatabase] Folder contains no games: " + folderPath);
             }
+
+            addGamesRecursive(database, folder, 1);
         }
 
         fileCursor.close();
         folderCursor.close();
 
-        Arrays.stream(NativeLibrary.GetInstalledGamePaths()).forEach(AttemptToAddGame);
+        Arrays.stream(NativeLibrary.GetInstalledGamePaths())
+              .forEach(filePath -> attemptToAddGame(database, filePath));
+
         database.close();
+    }
+
+    private static void addGamesRecursive(SQLiteDatabase database, File parent, int depth) {
+        Set<String> allowedExtensions = new HashSet<String>(Arrays.asList(
+                ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".app", ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz"));
+
+        if(depth <= 0) {
+            return;
+        }
+
+        File[] children = parent.listFiles();
+        if (children != null) {
+            for (File file : children) {
+                if (file.isHidden()) {
+                    continue;
+                }
+
+                if (file.isDirectory()) {
+                    addGamesRecursive(database, file, depth - 1);
+                }
+                else {
+                    String filePath = file.getPath();
+
+                    int extensionStart = filePath.lastIndexOf('.');
+                    if (extensionStart > 0) {
+                        String fileExtension = filePath.substring(extensionStart);
+
+                        // Check that the file has an extension we care about before trying to read out of it.
+                        if (allowedExtensions.contains(fileExtension.toLowerCase())) {
+                            attemptToAddGame(database, filePath);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void attemptToAddGame(SQLiteDatabase database, String filePath) {
+        String name = NativeLibrary.GetTitle(filePath);
+
+        // If the game's title field is empty, use the filename.
+        if (name.isEmpty()) {
+            name = filePath.substring(filePath.lastIndexOf("/") + 1);
+        }
+
+        String gameId = NativeLibrary.GetGameId(filePath);
+
+        // If the game's ID field is empty, use the filename without extension.
+        if (gameId.isEmpty()) {
+            gameId = filePath.substring(filePath.lastIndexOf("/") + 1,
+                    filePath.lastIndexOf("."));
+        }
+
+        ContentValues game = Game.asContentValues(name,
+                                                  NativeLibrary.GetDescription(filePath).replace("\n", " "),
+                                                  NativeLibrary.GetRegions(filePath),
+                                                  filePath,
+                                                  gameId,
+                                                  NativeLibrary.GetCompany(filePath));
+
+        // Try to update an existing game first.
+        int rowsMatched = database.update(TABLE_NAME_GAMES,    // Which table to update.
+                game,
+                // The values to fill the row with.
+                KEY_GAME_ID + " = ?",
+                // The WHERE clause used to find the right row.
+                new String[]{game.getAsString(
+                        KEY_GAME_ID)});    // The ? in WHERE clause is replaced with this,
+        // which is provided as an array because there
+        // could potentially be more than one argument.
+
+        // If update fails, insert a new game instead.
+        if (rowsMatched == 0) {
+            Log.verbose("[GameDatabase] Adding game: " + game.getAsString(KEY_GAME_TITLE));
+            database.insert(TABLE_NAME_GAMES, null, game);
+        } else {
+            Log.verbose("[GameDatabase] Updated game: " + game.getAsString(KEY_GAME_TITLE));
+        }
     }
 
     public Observable<Cursor> getGames() {
