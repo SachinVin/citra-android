@@ -13,7 +13,6 @@ import rx.schedulers.Schedulers;
 
 public final class MainPresenter {
     public static final int REQUEST_ADD_DIRECTORY = 1;
-    public static final int REQUEST_EMULATE_GAME = 2;
 
     private final MainView mView;
     private String mDirToAdd;
@@ -56,10 +55,6 @@ public final class MainPresenter {
 
     public void onDirectorySelected(String dir) {
         mDirToAdd = dir;
-    }
-
-    public void refreshFragmentScreenshot(int resultCode) {
-        mView.refreshFragmentScreenshot(resultCode);
     }
 
     public void loadGames() {
