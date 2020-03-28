@@ -21,14 +21,6 @@ public interface MainView {
      */
     void refresh();
 
-    /**
-     * Tell the view to tell the currently displayed {@link android.support.v4.app.Fragment}
-     * to refresh the screenshot at the given position in its list of games.
-     *
-     * @param fragmentPosition An index corresponding to the list or grid of games.
-     */
-    void refreshFragmentScreenshot(int fragmentPosition);
-
     void launchSettingsActivity(String menuTag);
 
     void launchFileListActivity();
