@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.model.settings.SettingSection;
-import org.citra.citra_emu.services.DirectoryInitializationService;
-import org.citra.citra_emu.services.DirectoryInitializationService.DirectoryInitializationState;
+import org.citra.citra_emu.utils.DirectoryInitialization;
+import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.utils.SettingsFile;
@@ -63,16 +63,16 @@ public final class SettingsActivityPresenter {
     }
 
     private void prepareDolphinDirectoriesIfNeeded() {
-        File configFile = new File(DirectoryInitializationService.getUserDirectory() + "/config/" + SettingsFile.FILE_NAME_CONFIG + ".ini");
+        File configFile = new File(DirectoryInitialization.getUserDirectory() + "/config/" + SettingsFile.FILE_NAME_CONFIG + ".ini");
         if (!configFile.exists()) {
 
         }
-        if (DirectoryInitializationService.areDolphinDirectoriesReady()) {
+        if (DirectoryInitialization.areDolphinDirectoriesReady()) {
             loadSettingsUI();
         } else {
             mView.showLoading();
             IntentFilter statusIntentFilter = new IntentFilter(
-                    DirectoryInitializationService.BROADCAST_ACTION);
+                    DirectoryInitialization.BROADCAST_ACTION);
 
             directoryStateReceiver =
                     new DirectoryStateReceiver(directoryInitializationState ->
