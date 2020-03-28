@@ -477,8 +477,8 @@ public final class NativeLibrary {
         AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
                 .setTitle(captionId)
                 .setMessage(Html.fromHtml("Please follow the guides to redump your <a href=\"https://citra-emu.org/wiki/dumping-game-cartridges/\">game cartidges</a> or <a href=\"https://citra-emu.org/wiki/dumping-installed-titles/\">installed titles</a>."))
-                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> emulationActivity.exitWithAnimation())
-                .setOnDismissListener(dialogInterface -> emulationActivity.exitWithAnimation());
+                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> emulationActivity.finish())
+                .setOnDismissListener(dialogInterface -> emulationActivity.finish());
         emulationActivity.runOnUiThread(() -> {
             AlertDialog alert = builder.create();
             alert.show();
