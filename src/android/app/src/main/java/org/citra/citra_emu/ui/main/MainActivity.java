@@ -15,7 +15,7 @@ import android.widget.Toast;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.model.GameProvider;
-import org.citra.citra_emu.services.DirectoryInitializationService;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.ui.platform.PlatformGamesFragment;
 import org.citra.citra_emu.ui.platform.PlatformGamesView;
 import org.citra.citra_emu.ui.settings.SettingsActivity;
@@ -168,7 +168,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         switch (requestCode) {
             case PermissionsHandler.REQUEST_CODE_WRITE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    DirectoryInitializationService.startService(this);
+                    DirectoryInitialization.start(this);
 
                     mPlatformGamesFragment = new PlatformGamesFragment();
                     getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
