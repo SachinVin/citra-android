@@ -55,6 +55,7 @@
 
         <activity
             android:name="org.citra.citra_emu.ui.settings.SettingsActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/CitraSettings"
             android:label="@string/preferences_settings"/>
 
