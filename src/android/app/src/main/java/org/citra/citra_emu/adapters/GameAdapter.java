@@ -79,7 +79,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 PicassoUtils.loadGameBanner(holder.imageScreenshot,
                         mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
 
-                holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE).replaceAll("[\\t\\n\\r]+"," "));
+                holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE).replaceAll("[\\t\\n\\r]+", " "));
                 holder.textCompany.setText(mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY));
 
                 final Path gamePath = Paths.get(mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
@@ -185,19 +185,14 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
     @Override
     public void onClick(View view) {
         // Double-click prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
         GameViewHolder holder = (GameViewHolder) view.getTag();
 
-        EmulationActivity.launch((FragmentActivity) view.getContext(),
-                holder.path,
-                holder.title,
-                holder.screenshotPath,
-                holder.getAdapterPosition(),
-                holder.imageScreenshot);
+        EmulationActivity.launch((FragmentActivity) view.getContext(), holder.path, holder.title);
     }
 
     public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
