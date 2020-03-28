@@ -104,16 +104,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void refreshFragmentScreenshot(int fragmentPosition) {
-        // Invalidate Picasso image so that the new screenshot is animated in.
-        PlatformGamesView fragment = getPlatformGamesView();
-
-        if (fragment != null) {
-            fragment.refreshScreenshotAtPosition(fragmentPosition);
-        }
-    }
-
-    @Override
     public void launchSettingsActivity(String menuTag) {
         if (PermissionsHandler.hasWriteAccess(this)) {
             SettingsActivity.launch(this, menuTag, "");
@@ -155,10 +145,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
                     // Add the new directory
                     mPresenter.onDirectorySelected(FileBrowserHelper.getSelectedDirectory(result));
                 }
-                break;
-
-            case MainPresenter.REQUEST_EMULATE_GAME:
-                mPresenter.refreshFragmentScreenshot(resultCode);
                 break;
         }
     }
