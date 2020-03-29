@@ -36,8 +36,4 @@ public final class Log {
     public static void error(String message) {
         android.util.Log.e(TAG, message);
     }
-
-    public static void wtf(String message) {
-        android.util.Log.wtf(TAG, message);
-    }
 }

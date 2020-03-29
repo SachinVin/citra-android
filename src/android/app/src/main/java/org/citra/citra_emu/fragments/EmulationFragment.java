@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -112,10 +114,10 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     @Override
     public void onResume() {
         super.onResume();
-        if (DirectoryInitialization.areDolphinDirectoriesReady()) {
+        if (DirectoryInitialization.areCitraDirectoriesReady()) {
             mEmulationState.run(activity.isActivityRecreated());
         } else {
-            setupDolphinDirectoriesThenStartEmulation();
+            setupCitraDirectoriesThenStartEmulation();
         }
     }
 
@@ -137,7 +139,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         super.onDetach();
     }
 
-    private void setupDolphinDirectoriesThenStartEmulation() {
+    private void setupCitraDirectoriesThenStartEmulation() {
         IntentFilter statusIntentFilter = new IntentFilter(
                 DirectoryInitialization.BROADCAST_ACTION);
 
@@ -145,7 +147,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
                 new DirectoryStateReceiver(directoryInitializationState ->
                 {
                     if (directoryInitializationState ==
-                            DirectoryInitializationState.DOLPHIN_DIRECTORIES_INITIALIZED) {
+                            DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED) {
                         mEmulationState.run(activity.isActivityRecreated());
                     } else if (directoryInitializationState ==
                             DirectoryInitializationState.EXTERNAL_STORAGE_PERMISSION_NEEDED) {
@@ -245,7 +247,6 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
 
     private static class EmulationState {
         private final String mGamePath;
-        private Thread mEmulationThread;
         private State state;
         private Surface mSurface;
         private boolean mRunWhenSurfaceIsValid;
@@ -341,7 +342,7 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         private void runWithValidSurface() {
             mRunWhenSurfaceIsValid = false;
             if (state == State.STOPPED) {
-                mEmulationThread = new Thread(() ->
+                Thread mEmulationThread = new Thread(() ->
                 {
                     NativeLibrary.SurfaceChanged(mSurface);
                     Log.debug("[EmulationFragment] Starting emulation thread.");
