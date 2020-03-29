@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,13 @@ import com.nononsenseapps.filepicker.FilePickerFragment;
 import org.citra.citra_emu.R;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomFilePickerFragment extends FilePickerFragment {
     private int mTitle;
+    private static final Set<String> extensions = new HashSet<>(Arrays.asList("elf", "axf", "cci", "3ds", "cxi", "app", "3dsx", "cia"));
 
     @NonNull
     @Override
@@ -60,5 +63,30 @@ public class CustomFilePickerFragment extends FilePickerFragment {
 
     public void setTitle(int title) {
         mTitle = title;
+    }
+
+
+    @Override
+    protected boolean isItemVisible(@NonNull final File file) {
+        // Some users jump to the conclusion that Dolphin isn't able to detect their
+        // files if the files don't show up in the file picker when mode == MODE_DIR.
+        // To avoid this, show files even when the user needs to select a directory.
+        return (showHiddenItems || !file.isHidden()) &&
+                (file.isDirectory() ||
+                        extensions.contains(fileExtension(file.getName()).toLowerCase()));
+    }
+
+    @Override
+    public boolean isCheckable(@NonNull final File file) {
+        // We need to make a small correction to the isCheckable logic due to
+        // overriding isItemVisible to show files when mode == MODE_DIR.
+        // AbstractFilePickerFragment always treats files as checkable when
+        // allowExistingFile == true, but we don't want files to be checkable when mode == MODE_DIR.
+        return super.isCheckable(file) && !(mode == MODE_DIR && file.isFile());
+    }
+
+    private static String fileExtension(@NonNull String filename) {
+        int i = filename.lastIndexOf('.');
+        return i < 0 ? "" : filename.substring(i + 1);
     }
 }
