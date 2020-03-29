@@ -2,7 +2,7 @@ package org.citra.citra_emu.ui.main;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v17.leanback.widget.TitleViewAdapter;
+import androidx.leanback.widget.TitleViewAdapter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,13 +1,12 @@
 package org.citra.citra_emu.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.citra.citra_emu.model.settings.FloatSetting;
 import org.citra.citra_emu.model.settings.IntSetting;
 import org.citra.citra_emu.model.settings.Setting;
 import org.citra.citra_emu.model.settings.SettingSection;
 import org.citra.citra_emu.model.settings.StringSetting;
-import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.ui.settings.SettingsActivityView;
 import org.ini4j.Wini;
 
