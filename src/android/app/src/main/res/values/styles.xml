@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Inherit from the material theme -->
-    <style name="CitraBase" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CitraBase" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Main theme colors -->
         <!-- Branding color for the app bar -->
         <item name="colorPrimary">@color/citra_orange</item>
@@ -18,7 +18,7 @@
     </style>
 
     <!-- Same as above, but use default action bar, and mandate margins. -->
-    <style name="CitraSettingsBase" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CitraSettingsBase" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
     </style>
@@ -34,7 +34,7 @@
     <!-- Themes for Dialogs -->
 
     <!-- Inherit from the Base Citra Dialog Theme -->
-    <style name="CitraEmulationBase" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CitraEmulationBase" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -52,7 +52,7 @@
         <item name="colorAccent">@color/citra_accent</item>
     </style>
 
-    <style name="CitraEmulationTvBase" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CitraEmulationTvBase" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -125,7 +125,7 @@
          <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="FilePickerAlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
