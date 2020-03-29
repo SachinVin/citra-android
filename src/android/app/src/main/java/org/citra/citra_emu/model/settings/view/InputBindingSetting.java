@@ -212,7 +212,7 @@ public final class InputBindingSetting extends SettingsItem {
 
         // Try remove all possible keys we wrote for this setting
         String oldKey = preferences.getString(getReverseKey(), "");
-        if (oldKey != "") {
+        if (!oldKey.equals("")) {
             editor.remove(getKey()); // Used for ui text
             editor.remove(oldKey); // Used for button mapping
             editor.remove(oldKey + "_GuestOrientation"); // Used for axis orientation

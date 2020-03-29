@@ -1,7 +1,7 @@
 package org.citra.citra_emu.model.settings;
 
 /**
- * Abstraction for a setting item as read from / written to Dolphin's configuration ini files.
+ * Abstraction for a setting item as read from / written to Citra's configuration ini files.
  * These files generally consist of a key/value pair, though the type of value is ambiguous and
  * must be inferred at read-time. The type of value determines which child of this class is used
  * to represent the Setting.
