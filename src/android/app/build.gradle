@@ -9,7 +9,7 @@ def autoVersion = (int) (((new Date().getTime() / 1000) - 1451606400) / 10)
 def buildType
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -100,16 +100,12 @@ android {
     }
 }
 
-ext {
-    androidSupportVersion = '28.0.0'
-}
-
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
 
     // Android TV UI libraries.
     implementation 'androidx.leanback:leanback:1.0.0'
@@ -119,7 +115,7 @@ dependencies {
 
     // Allows FRP-style asynchronous operations in Android.
     implementation 'io.reactivex:rxandroid:1.2.1'
-    implementation 'com.nononsenseapps:filepicker:4.1.0'
+    implementation 'com.nononsenseapps:filepicker:4.2.1'
     implementation 'org.ini4j:ini4j:0.5.4'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

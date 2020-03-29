@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.citra.citra_emu.NativeLibrary;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
  * A service that spawns its own thread in order to copy several binary and shader files
