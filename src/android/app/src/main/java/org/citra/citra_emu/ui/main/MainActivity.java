@@ -190,11 +190,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
-    @Nullable
-    private PlatformGamesView getPlatformGamesView() {
-        return (PlatformGamesView) getSupportFragmentManager().findFragmentById(mFrameLayoutId);
-    }
-
     @Override
     protected void onDestroy() {
         EmulationActivity.tryDismissRunningNotification(this);
