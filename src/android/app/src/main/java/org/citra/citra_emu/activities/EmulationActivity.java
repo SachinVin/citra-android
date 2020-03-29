@@ -103,12 +103,6 @@ public final class EmulationActivity extends AppCompatActivity {
     private boolean activityRecreated;
     private String mSelectedTitle;
     private String mPath;
-    private Runnable afterShowingScreenshot = new Runnable() {
-        @Override
-        public void run() {
-            supportFinishAfterTransition();
-        }
-    };
 
     public static void launch(FragmentActivity activity, String path, String title) {
         Intent launcher = new Intent(activity, EmulationActivity.class);
