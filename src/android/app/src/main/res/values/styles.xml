@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Inherit from the material theme -->
-    <style name="CitraBase" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="CitraBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Main theme colors -->
         <!-- Branding color for the app bar -->
         <item name="colorPrimary">@color/citra_orange</item>
@@ -18,7 +18,7 @@
     </style>
 
     <!-- Same as above, but use default action bar, and mandate margins. -->
-    <style name="CitraSettingsBase" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="CitraSettingsBase" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
     </style>
@@ -34,7 +34,7 @@
     <!-- Themes for Dialogs -->
 
     <!-- Inherit from the Base Citra Dialog Theme -->
-    <style name="CitraEmulationBase" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="CitraEmulationBase" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -52,7 +52,7 @@
         <item name="colorAccent">@color/citra_accent</item>
     </style>
 
-    <style name="CitraEmulationTvBase" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="CitraEmulationTvBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -108,8 +108,8 @@
         <item name="android:textColor">@color/button_text_color</item>
     </style>
 
-    <!-- You can also inherit from NNF_BaseTheme.Light -->
-    <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">
+    <!-- Inherit from a base file picker theme that handles day/night -->
+    <style name="FilePickerTheme" parent="FilePickerBaseTheme">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
@@ -122,10 +122,10 @@
 
         <!-- If you want to set a specific toolbar theme, do it here -->
 
-         <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="FilePickerAlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+    <style name="FilePickerAlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
