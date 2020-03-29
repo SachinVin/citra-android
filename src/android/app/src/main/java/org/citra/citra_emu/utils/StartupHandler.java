@@ -1,9 +1,12 @@
 package org.citra.citra_emu.utils;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.FragmentActivity;
+
 import android.text.TextUtils;
 
 import org.citra.citra_emu.R;
