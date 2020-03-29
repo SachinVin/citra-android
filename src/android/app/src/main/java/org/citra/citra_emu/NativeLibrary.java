@@ -6,7 +6,8 @@
 
 package org.citra.citra_emu;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+
 import android.content.res.Configuration;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -413,9 +414,9 @@ public final class NativeLibrary {
         container.addView(alertPromptEditText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
-            .setTitle(caption)
-            .setView(container)
-            .setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
+                .setTitle(caption)
+                .setView(container)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
                 {
                     alertPromptButton = buttonConfig;
                     alertPromptResult = alertPromptEditText.getText().toString();
@@ -423,13 +424,13 @@ public final class NativeLibrary {
                         alertPromptLock.notifyAll();
                     }
                 })
-            .setOnDismissListener(dialogInterface ->
-            {
-                alertPromptResult = "";
-                synchronized (alertPromptLock) {
-                    alertPromptLock.notifyAll();
-                }
-            });
+                .setOnDismissListener(dialogInterface ->
+                {
+                    alertPromptResult = "";
+                    synchronized (alertPromptLock) {
+                        alertPromptLock.notifyAll();
+                    }
+                });
 
         if (buttonConfig > 0) {
             builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
