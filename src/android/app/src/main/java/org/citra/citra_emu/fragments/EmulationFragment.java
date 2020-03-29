@@ -48,7 +48,6 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     private Runnable perfStatsUpdater;
 
     public static EmulationFragment newInstance(String gamePath) {
-
         Bundle args = new Bundle();
         args.putString(KEY_GAMEPATH, gamePath);
 
