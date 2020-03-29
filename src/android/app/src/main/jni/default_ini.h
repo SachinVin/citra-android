@@ -187,7 +187,6 @@ enable_dsp_lle =
 # 0 (default): No, 1: Yes
 enable_dsp_lle_thread =
 
-
 # Which audio output engine to use.
 # auto (default): Auto-select, null: No audio output, sdl2: SDL2 (if available)
 output_engine =

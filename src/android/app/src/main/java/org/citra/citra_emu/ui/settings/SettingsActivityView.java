@@ -76,34 +76,6 @@ public interface SettingsActivityView {
     void onSettingChanged();
 
     /**
-     * Called by a containing Fragment to tell the containing Activity that a GCPad's setting
-     * was modified.
-     *
-     * @param key   Identifier for the GCPad that was modified.
-     * @param value New setting for the GCPad.
-     */
-    void onGcPadSettingChanged(String key, int value);
-
-    /**
-     * Called by a containing Fragment to tell the containing Activity that a Wiimote's setting
-     * was modified.
-     *
-     * @param section Identifier for Wiimote that was modified; Wiimotes are identified by their section,
-     *                not their key.
-     * @param value   New setting for the Wiimote.
-     */
-    void onWiimoteSettingChanged(String section, int value);
-
-    /**
-     * Called by a containing Fragment to tell the containing Activity that an extension setting
-     * was modified.
-     *
-     * @param key   Identifier for the extension that was modified.
-     * @param value New setting for the extension.
-     */
-    void onExtensionSettingChanged(String key, int value);
-
-    /**
      * Show loading dialog while loading the settings
      */
     void showLoading();

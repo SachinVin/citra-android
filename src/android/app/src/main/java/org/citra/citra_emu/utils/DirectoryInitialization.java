@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A service that spawns its own thread in order to copy several binary and shader files
- * from the Dolphin APK to the external file system.
+ * from the Citra APK to the external file system.
  */
 public final class DirectoryInitialization {
     public static final String BROADCAST_ACTION = "org.citra.citra_emu.BROADCAST";
@@ -33,7 +33,7 @@ public final class DirectoryInitialization {
     public static final String EXTRA_STATE = "directoryState";
     private static volatile DirectoryInitializationState directoryState = null;
     private static String userPath;
-    private static AtomicBoolean isDolphinDirectoryInitializationRunning = new AtomicBoolean(false);
+    private static AtomicBoolean isCitraDirectoryInitializationRunning = new AtomicBoolean(false);
 
     public static void start(Context context) {
         // Can take a few seconds to run, so don't block UI thread.
@@ -42,16 +42,16 @@ public final class DirectoryInitialization {
     }
 
     private static void init(Context context) {
-        if (!isDolphinDirectoryInitializationRunning.compareAndSet(false, true))
+        if (!isCitraDirectoryInitializationRunning.compareAndSet(false, true))
             return;
 
-        if (directoryState != DirectoryInitializationState.DOLPHIN_DIRECTORIES_INITIALIZED) {
+        if (directoryState != DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED) {
             if (PermissionsHandler.hasWriteAccess(context)) {
-                if (setDolphinUserDirectory()) {
+                if (setCitraUserDirectory()) {
                     initializeInternalStorage(context);
                     CreateUserDirectories();
                     NativeLibrary.CreateConfigFile();
-                    directoryState = DirectoryInitializationState.DOLPHIN_DIRECTORIES_INITIALIZED;
+                    directoryState = DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED;
                 } else {
                     directoryState = DirectoryInitializationState.CANT_FIND_EXTERNAL_STORAGE;
                 }
@@ -60,7 +60,7 @@ public final class DirectoryInitialization {
             }
         }
 
-        isDolphinDirectoryInitializationRunning.set(false);
+        isCitraDirectoryInitializationRunning.set(false);
         sendBroadcastState(directoryState, context);
     }
 
@@ -72,14 +72,14 @@ public final class DirectoryInitialization {
         file.delete();
     }
 
-    public static boolean areDolphinDirectoriesReady() {
-        return directoryState == DirectoryInitializationState.DOLPHIN_DIRECTORIES_INITIALIZED;
+    public static boolean areCitraDirectoriesReady() {
+        return directoryState == DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED;
     }
 
     public static String getUserDirectory() {
         if (directoryState == null) {
             throw new IllegalStateException("DirectoryInitialization has to run at least once!");
-        } else if (isDolphinDirectoryInitializationRunning.get()) {
+        } else if (isCitraDirectoryInitializationRunning.get()) {
             throw new IllegalStateException(
                     "DirectoryInitialization has to finish running first!");
         }
@@ -91,7 +91,7 @@ public final class DirectoryInitialization {
 
     private static native void SetSysDirectory(String path);
 
-    private static boolean setDolphinUserDirectory() {
+    private static boolean setCitraUserDirectory() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File externalPath = Environment.getExternalStorageDirectory();
             if (externalPath != null) {
@@ -113,7 +113,7 @@ public final class DirectoryInitialization {
         String revision = NativeLibrary.GetGitRevision();
         if (!preferences.getString("sysDirectoryVersion", "").equals(revision)) {
             // There is no extracted Sys directory, or there is a Sys directory from another
-            // version of Dolphin that might contain outdated files. Let's (re-)extract Sys.
+            // version of Citra that might contain outdated files. Let's (re-)extract Sys.
             deleteDirectoryRecursively(sysDirectory);
             copyAssetFolder("Sys", sysDirectory, true, context);
 
@@ -183,7 +183,7 @@ public final class DirectoryInitialization {
     }
 
     public enum DirectoryInitializationState {
-        DOLPHIN_DIRECTORIES_INITIALIZED,
+        CITRA_DIRECTORIES_INITIALIZED,
         EXTERNAL_STORAGE_PERMISSION_NEEDED,
         CANT_FIND_EXTERNAL_STORAGE
     }
