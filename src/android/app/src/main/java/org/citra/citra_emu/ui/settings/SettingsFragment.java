@@ -49,19 +49,6 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
         mPresenter.onAttach();
     }
 
-    /**
-     * This version of onAttach is needed for versions below Marshmallow.
-     *
-     * @param activity
-     */
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        mActivity = (SettingsActivityView) activity;
-        mPresenter.onAttach();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
