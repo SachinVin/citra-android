@@ -21,8 +21,6 @@ public final class GameProvider extends ContentProvider {
     public static final String AUTHORITY = "content://" + BuildConfig.APPLICATION_ID + ".provider";
     public static final Uri URI_FOLDER =
             Uri.parse(AUTHORITY + "/" + GameDatabase.TABLE_NAME_FOLDERS + "/");
-    public static final Uri URI_GAME =
-            Uri.parse(AUTHORITY + "/" + GameDatabase.TABLE_NAME_GAMES + "/");
     public static final Uri URI_REFRESH = Uri.parse(AUTHORITY + "/" + REFRESH_LIBRARY + "/");
     public static final Uri URI_RESET = Uri.parse(AUTHORITY + "/" + RESET_LIBRARY + "/");
 

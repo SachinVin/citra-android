@@ -20,14 +20,6 @@ public interface PlatformGamesView {
     void refreshScreenshotAtPosition(int position);
 
     /**
-     * Pass a click event to the view's Presenter. Typically called from the
-     * view's list adapter.
-     *
-     * @param gameId The ID of the game that was clicked.
-     */
-    void onItemClick(String gameId);
-
-    /**
      * To be called when an asynchronous database read completes. Passes the
      * result, in this case a {@link Cursor}, to the view.
      *

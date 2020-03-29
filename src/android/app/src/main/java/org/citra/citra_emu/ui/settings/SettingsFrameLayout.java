@@ -24,23 +24,4 @@ public final class SettingsFrameLayout extends FrameLayout {
     public SettingsFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-
-    public float getYFraction() {
-        return getY() / getHeight();
-    }
-
-    public void setYFraction(float yFraction) {
-        final int height = getHeight();
-        setY((height > 0) ? (yFraction * height) : -9999);
-    }
-
-    public float getVisibleness() {
-        return 1.0f;
-    }
-
-    public void setVisibleness(float visibleness) {
-        setScaleX(visibleness);
-        setScaleY(visibleness);
-        setAlpha(visibleness);
-    }
 }
