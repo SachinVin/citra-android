@@ -38,6 +38,7 @@ public final class CheckBoxSettingViewHolder extends SettingViewHolder {
             mTextSettingDescription.setText(item.getDescriptionId());
             mTextSettingDescription.setVisibility(View.VISIBLE);
         } else {
+            mTextSettingDescription.setText("");
             mTextSettingDescription.setVisibility(View.GONE);
         }
 
