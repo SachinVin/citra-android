@@ -1,6 +1,6 @@
 package org.citra.citra_emu.ui.settings;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import org.citra.citra_emu.model.settings.Setting;
 import org.citra.citra_emu.model.settings.SettingSection;
