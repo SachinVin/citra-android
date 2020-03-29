@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,7 +59,7 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
 
         return true;
@@ -76,7 +79,7 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         // Critical: If super method is not called, rotations will be busted.
         super.onSaveInstanceState(outState);
         mPresenter.saveState(outState);

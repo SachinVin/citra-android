@@ -1,13 +1,17 @@
 package org.citra.citra_emu.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.IntDef;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -15,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.SparseIntArray;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -206,7 +211,7 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(EXTRA_SELECTED_GAME, mPath);
         outState.putString(EXTRA_SELECTED_TITLE, mSelectedTitle);
         super.onSaveInstanceState(outState);
@@ -247,10 +252,6 @@ public final class EmulationActivity extends AppCompatActivity {
                     .create()
                     .show();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent result) {
     }
 
     private void enableFullscreenImmersive() {
