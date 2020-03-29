@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.database.CursorMapper;
@@ -15,6 +17,7 @@ import androidx.leanback.widget.ListRowPresenter;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
+
 import android.widget.Toast;
 
 import org.citra.citra_emu.R;
@@ -67,7 +70,7 @@ public final class TvMainActivity extends FragmentActivity implements MainView {
                 .commit();
 
         // Set display parameters for the BrowseFragment
-        mBrowseFragment.setHeadersState(BrowseFragment.HEADERS_ENABLED);
+        mBrowseFragment.setHeadersState(BrowseSupportFragment.HEADERS_ENABLED);
         mBrowseFragment.setBrandColor(ContextCompat.getColor(this, R.color.citra_orange_dark));
         buildRowsAdapter();
 
@@ -142,7 +145,7 @@ public final class TvMainActivity extends FragmentActivity implements MainView {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PermissionsHandler.REQUEST_CODE_WRITE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
