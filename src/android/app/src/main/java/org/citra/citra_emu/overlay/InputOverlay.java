@@ -111,7 +111,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
      * within a SharedPreferences instance so that those values can be retrieved here.
      * <p>
      * This has a few benefits over the conventional way of storing the values
-     * (ie. within the Dolphin ini file).
+     * (ie. within the Citra ini file).
      * <ul>
      * <li>No native calls</li>
      * <li>Keeps Android-only values inside the Android environment</li>
@@ -641,9 +641,9 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
 
     public void refreshControls() {
         // Remove all the overlay buttons from the HashSet.
-        overlayButtons.removeAll(overlayButtons);
-        overlayDpads.removeAll(overlayDpads);
-        overlayJoysticks.removeAll(overlayJoysticks);
+        overlayButtons.clear();
+        overlayDpads.clear();
+        overlayJoysticks.clear();
 
         String orientation =
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?

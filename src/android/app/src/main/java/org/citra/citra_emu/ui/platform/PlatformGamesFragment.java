@@ -52,14 +52,11 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
 
         // Add swipe down to refresh gesture
         final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.refresh_grid_games);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                GameDatabase databaseHelper = CitraApplication.databaseHelper;
-                databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
-                refresh();
-                pullToRefresh.setRefreshing(false);
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            GameDatabase databaseHelper = CitraApplication.databaseHelper;
+            databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
+            refresh();
+            pullToRefresh.setRefreshing(false);
         });
     }
 

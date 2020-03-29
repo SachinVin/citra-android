@@ -44,7 +44,7 @@ final class SettingsSectionMap extends HashMap<String, SettingSection> {
  * Contains static methods for interacting with .ini files in which settings are stored.
  */
 public final class SettingsFile {
-    public static final int SETTINGS_DOLPHIN = 0;
+    public static final int SETTINGS_CITRA = 0;
 
     public static final String FILE_NAME_CONFIG = "config";
 
@@ -186,15 +186,13 @@ public final class SettingsFile {
      * @param fileName The target filename without a path or extension.
      * @param sections The HashMap containing the Settings we want to serialize.
      * @param view     The current view.
-     * @return An Observable representing the operation.
      */
     public static void saveFile(final String fileName, final HashMap<String, SettingSection> sections,
                                 SettingsActivityView view) {
         File ini = getSettingsFile(fileName);
 
-        Wini writer = null;
         try {
-            writer = new Wini(ini);
+            Wini writer = new Wini(ini);
 
             Set<String> keySet = sections.keySet();
             for (String key : keySet) {
@@ -244,17 +242,17 @@ public final class SettingsFile {
             return null;
         }
 
-        int file = SETTINGS_DOLPHIN;
+        int file = SETTINGS_CITRA;
 
         try {
-            int valueAsInt = Integer.valueOf(value);
+            int valueAsInt = Integer.parseInt(value);
 
             return new IntSetting(key, current.getName(), file, valueAsInt);
         } catch (NumberFormatException ex) {
         }
 
         try {
-            float valueAsFloat = Float.valueOf(value);
+            float valueAsFloat = Float.parseFloat(value);
 
             return new FloatSetting(key, current.getName(), file, valueAsFloat);
         } catch (NumberFormatException ex) {
