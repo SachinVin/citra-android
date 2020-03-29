@@ -16,8 +16,8 @@ import android.view.View;
  * Without this View, the emulation SurfaceView acts like it has the
  * highest Z-value, blocking any other View, such as the menu fragments.
  */
-public final class NVidiaShieldWorkaroundView extends View {
-    public NVidiaShieldWorkaroundView(Context context, AttributeSet attrs) {
+public final class NvidiaShieldWorkaroundView extends View {
+    public NvidiaShieldWorkaroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // Setting this seems to workaround the bug

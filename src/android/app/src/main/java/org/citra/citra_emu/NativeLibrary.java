@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Class which contains methods that interact
- * with the native side of the Dolphin code.
+ * with the native side of the Citra code.
  */
 public final class NativeLibrary {
     /**
@@ -157,15 +157,6 @@ public final class NativeLibrary {
 
     public static native long GetFilesize(String filename);
 
-    public static native int GetPlatform(String filename);
-
-    /**
-     * Gets the Dolphin version string.
-     *
-     * @return the Dolphin version string.
-     */
-    public static native String GetVersionString();
-
     public static native String GetGitRevision();
 
     /**
@@ -231,8 +222,6 @@ public final class NativeLibrary {
      */
     public static native void Run(String path, String savestatePath, boolean deleteSavestate);
 
-    public static native void ChangeDisc(String path);
-
     // Surface Handling
     public static native void SurfaceChanged(Surface surf);
 
@@ -274,11 +263,6 @@ public final class NativeLibrary {
      * Native EGL functions not exposed by Java bindings
      **/
     public static native void eglBindAPI(int api);
-
-    /**
-     * Provides a way to refresh the connections on Wiimotes
-     */
-    public static native void RefreshWiimotes();
 
     /**
      * Returns the performance stats for the current game
@@ -353,7 +337,7 @@ public final class NativeLibrary {
             }
 
             // Show the AlertDialog on the main thread.
-            emulationActivity.runOnUiThread(() -> builder.show());
+            emulationActivity.runOnUiThread(builder::show);
 
             // Wait for the lock to notify that it is complete.
             synchronized (lock) {
@@ -485,8 +469,6 @@ public final class NativeLibrary {
             alert.show();
             ((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
         });
-
-        return;
     }
 
     public static void setEmulationActivity(EmulationActivity emulationActivity) {

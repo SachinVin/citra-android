@@ -46,7 +46,6 @@ public final class MenuFragment extends Fragment implements View.OnClickListener
         return fragment;
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingame_menu, container, false);

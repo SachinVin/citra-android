@@ -62,7 +62,7 @@ public final class MainPresenter {
         databaseHelper.getGames()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(games -> mView.showGames(games));
+                .subscribe(mView::showGames);
     }
 
     private void refeshGameList() {
