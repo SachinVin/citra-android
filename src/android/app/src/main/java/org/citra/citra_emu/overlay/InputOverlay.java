@@ -673,7 +673,6 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         if (!mPreferences.getBoolean("OverlayInit", false)) {
             // It's possible that a user has created their overlay before this was added
             // Only change the overlay if the 'A' button is not in the upper corner.
-            // GameCube
             if (mPreferences.getFloat(ButtonType.BUTTON_A + "-X", 0f) == 0f) {
                 defaultOverlayLandscape();
             }

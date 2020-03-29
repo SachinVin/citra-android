@@ -71,11 +71,6 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
     }
 
     @Override
-    public void onItemClick(String gameId) {
-        // No-op for now
-    }
-
-    @Override
     public void showGames(Cursor games) {
         if (mAdapter != null) {
             mAdapter.swapCursor(games);
