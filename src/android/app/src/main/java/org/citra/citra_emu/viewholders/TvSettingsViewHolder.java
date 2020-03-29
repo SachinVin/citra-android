@@ -1,7 +1,7 @@
 package org.citra.citra_emu.viewholders;
 
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.Presenter;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.Presenter;
 import android.view.View;
 
 public final class TvSettingsViewHolder extends Presenter.ViewHolder {
