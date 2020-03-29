@@ -147,7 +147,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
                 null,
                 null);    // Order of folders is irrelevant.
 
-        Set<String> allowedExtensions = new HashSet<String>(Arrays.asList(
+        Set<String> allowedExtensions = new HashSet<>(Arrays.asList(
                 ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".cia", ".app", ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz"));
 
         // Possibly overly defensive, but ensures that moveToNext() does not skip a row.

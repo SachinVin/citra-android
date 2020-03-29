@@ -46,15 +46,15 @@ public final class SettingsActivityPresenter {
     }
 
     public void onStart() {
-        prepareDolphinDirectoriesIfNeeded();
+        prepareCitraDirectoriesIfNeeded();
     }
 
     void loadSettingsUI() {
         if (mSettings.isEmpty()) {
             if (!TextUtils.isEmpty(gameId)) {
-                mSettings.add(SettingsFile.SETTINGS_DOLPHIN, SettingsFile.readFile("../GameSettings/" + gameId, mView));
+                mSettings.add(SettingsFile.SETTINGS_CITRA, SettingsFile.readFile("../GameSettings/" + gameId, mView));
             } else {
-                mSettings.add(SettingsFile.SETTINGS_DOLPHIN, SettingsFile.readFile(SettingsFile.FILE_NAME_CONFIG, mView));
+                mSettings.add(SettingsFile.SETTINGS_CITRA, SettingsFile.readFile(SettingsFile.FILE_NAME_CONFIG, mView));
             }
         }
 
@@ -62,12 +62,12 @@ public final class SettingsActivityPresenter {
         mView.onSettingsFileLoaded(mSettings);
     }
 
-    private void prepareDolphinDirectoriesIfNeeded() {
+    private void prepareCitraDirectoriesIfNeeded() {
         File configFile = new File(DirectoryInitialization.getUserDirectory() + "/config/" + SettingsFile.FILE_NAME_CONFIG + ".ini");
         if (!configFile.exists()) {
 
         }
-        if (DirectoryInitialization.areDolphinDirectoriesReady()) {
+        if (DirectoryInitialization.areCitraDirectoriesReady()) {
             loadSettingsUI();
         } else {
             mView.showLoading();
@@ -77,7 +77,7 @@ public final class SettingsActivityPresenter {
             directoryStateReceiver =
                     new DirectoryStateReceiver(directoryInitializationState ->
                     {
-                        if (directoryInitializationState == DirectoryInitializationState.DOLPHIN_DIRECTORIES_INITIALIZED) {
+                        if (directoryInitializationState == DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED) {
                             mView.hideLoading();
                             loadSettingsUI();
                         } else if (directoryInitializationState == DirectoryInitializationState.EXTERNAL_STORAGE_PERMISSION_NEEDED) {
@@ -112,12 +112,12 @@ public final class SettingsActivityPresenter {
                 Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
                 // Needed workaround for now due to an odd bug in how it handles saving two different settings sections to the same file. It won't save GFX settings if it follows the normal saving pattern
                 if (menuTag.equals("Dolphin")) {
-                    SettingsFile.saveFile("../GameSettings/" + gameId, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
+                    SettingsFile.saveFile("../GameSettings/" + gameId, mSettings.get(SettingsFile.SETTINGS_CITRA), mView);
                 }
                 mView.showToastMessage("Saved settings for " + gameId, false);
             } else {
                 Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
-                SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_DOLPHIN), mView);
+                SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_CITRA), mView);
                 mView.showToastMessage("Saved settings", false);
             }
             NativeLibrary.ReloadSettings();
@@ -147,31 +147,5 @@ public final class SettingsActivityPresenter {
 
     public void saveState(Bundle outState) {
         outState.putBoolean(KEY_SHOULD_SAVE, mShouldSave);
-    }
-
-    public void onGcPadSettingChanged(String key, int value) {
-        if (value != 0) // Not disabled
-        {
-            mView.showSettingsFragment(key + (value / 6), true, gameId);
-        }
-    }
-
-    public void onWiimoteSettingChanged(String section, int value) {
-        switch (value) {
-            case 1:
-                mView.showSettingsFragment(section, true, gameId);
-                break;
-
-            case 2:
-                mView.showToastMessage("Please make sure Continuous Scanning is enabled in Core Settings.", false);
-                break;
-        }
-    }
-
-    public void onExtensionSettingChanged(String key, int value) {
-        if (value != 0) // None
-        {
-            mView.showSettingsFragment(key + value, true, gameId);
-        }
     }
 }

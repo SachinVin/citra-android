@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Environment;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class Game {

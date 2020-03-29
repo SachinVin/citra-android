@@ -149,12 +149,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mDialog = builder.show();
     }
 
-    DialogInterface.OnClickListener defaultCancelListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            closeDialog();
-        }
-    };
+    DialogInterface.OnClickListener defaultCancelListener = (dialog, which) -> closeDialog();
 
     public void onDateTimeClick(DateTimeSetting item, int position) {
         mClickedItem = item;
@@ -173,33 +168,30 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         dp.updateDate(Integer.parseInt(settingValue.substring(0, 4)), Integer.parseInt(settingValue.substring(5, 7)) - 1, Integer.parseInt(settingValue.substring(8, 10)));
 
         tp.setIs24HourView(true);
-        tp.setCurrentHour(Integer.parseInt(settingValue.substring(11, 13)));
-        tp.setCurrentMinute(Integer.parseInt(settingValue.substring(14, 16)));
+        tp.setHour(Integer.parseInt(settingValue.substring(11, 13)));
+        tp.setMinute(Integer.parseInt(settingValue.substring(14, 16)));
 
-        DialogInterface.OnClickListener ok = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //set it
-                int year = dp.getYear();
-                if (year < 2000) {
-                    year = 2000;
-                }
-                String month = ("00" + (dp.getMonth() + 1)).substring(String.valueOf(dp.getMonth() + 1).length());
-                String day = ("00" + dp.getDayOfMonth()).substring(String.valueOf(dp.getDayOfMonth()).length());
-                String hr = ("00" + tp.getCurrentHour()).substring(String.valueOf(tp.getCurrentHour()).length());
-                String min = ("00" + tp.getCurrentMinute()).substring(String.valueOf(tp.getCurrentMinute()).length());
-                String datetime = year + "-" + month + "-" + day + " " + hr + ":" + min + ":01";
-
-                StringSetting setting = item.setSelectedValue(datetime);
-                if (setting != null) {
-                    mView.putSetting(setting);
-                }
-
-                mView.onSettingChanged();
-
-                mClickedItem = null;
-                closeDialog();
+        DialogInterface.OnClickListener ok = (dialog, which) -> {
+            //set it
+            int year = dp.getYear();
+            if (year < 2000) {
+                year = 2000;
             }
+            String month = ("00" + (dp.getMonth() + 1)).substring(String.valueOf(dp.getMonth() + 1).length());
+            String day = ("00" + dp.getDayOfMonth()).substring(String.valueOf(dp.getDayOfMonth()).length());
+            String hr = ("00" + tp.getHour()).substring(String.valueOf(tp.getHour()).length());
+            String min = ("00" + tp.getMinute()).substring(String.valueOf(tp.getMinute()).length());
+            String datetime = year + "-" + month + "-" + day + " " + hr + ":" + min + ":01";
+
+            StringSetting setting = item.setSelectedValue(datetime);
+            if (setting != null) {
+                mView.putSetting(setting);
+            }
+
+            mView.onSettingChanged();
+
+            mClickedItem = null;
+            closeDialog();
         };
 
         builder.setView(view);
@@ -263,17 +255,13 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         dialog.setMessage(String.format(mContext.getString(messageResId), mContext.getString(item.getNameId())));
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, mContext.getString(android.R.string.cancel), this);
         dialog.setButton(AlertDialog.BUTTON_NEUTRAL, mContext.getString(R.string.clear), (dialogInterface, i) ->
-        {
-            item.removeOldMapping();
-        });
+                item.removeOldMapping());
         dialog.setOnDismissListener(dialog1 ->
         {
             StringSetting setting = new StringSetting(item.getKey(), item.getSection(), item.getFile(), item.getValue());
             notifyItemChanged(position);
 
-            if (setting != null) {
-                mView.putSetting(setting);
-            }
+            mView.putSetting(setting);
 
             mView.onSettingChanged();
         });
