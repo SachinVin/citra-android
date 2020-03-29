@@ -81,7 +81,7 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
         SettingsActivityView activity = (SettingsActivityView) getActivity();
 
         ArrayList<HashMap<String, SettingSection>> settings = new ArrayList<>();
-        settings.add(SettingsFile.SETTINGS_DOLPHIN, activity.getSettings(SettingsFile.SETTINGS_DOLPHIN));
+        settings.add(SettingsFile.SETTINGS_CITRA, activity.getSettings(SettingsFile.SETTINGS_CITRA));
         mPresenter.onViewCreated(settings);
     }
 

@@ -88,8 +88,6 @@ public final class GameProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         String table = uri.getLastPathSegment();
 
-        long id = -1;
-
         if (table != null) {
             if (table.equals(RESET_LIBRARY)) {
                 mDbHelper.resetDatabase(database);
@@ -102,7 +100,7 @@ public final class GameProvider extends ContentProvider {
                 return uri;
             }
 
-            id = database.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+            long id = database.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
             // If insertion was successful...
             if (id > 0) {
