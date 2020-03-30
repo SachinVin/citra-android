@@ -102,6 +102,7 @@ void LogSettings() {
     LogSetting("Audio_EnableDspLleMultithread", Settings::values.enable_dsp_lle_multithread);
     LogSetting("Audio_OutputEngine", Settings::values.sink_id);
     LogSetting("Audio_EnableAudioStretching", Settings::values.enable_audio_stretching);
+    LogSetting("Audio_EnableRealTime", Settings::values.enable_realtime_audio);
     LogSetting("Audio_OutputDevice", Settings::values.audio_device_id);
     LogSetting("Audio_InputDeviceType", static_cast<int>(Settings::values.mic_input_type));
     LogSetting("Audio_InputDevice", Settings::values.mic_input_device);
