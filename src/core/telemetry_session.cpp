@@ -162,6 +162,8 @@ void TelemetrySession::AddInitialInfo(Loader::AppLoader& app_loader) {
     AddField(Telemetry::FieldType::UserConfig, "Audio_SinkId", Settings::values.sink_id);
     AddField(Telemetry::FieldType::UserConfig, "Audio_EnableAudioStretching",
              Settings::values.enable_audio_stretching);
+    AddField(Telemetry::FieldType::UserConfig, "Audio_EnableRealTime",
+             Settings::values.enable_realtime_audio);
     AddField(Telemetry::FieldType::UserConfig, "Core_UseCpuJit", Settings::values.use_cpu_jit);
     AddField(Telemetry::FieldType::UserConfig, "Renderer_ResolutionFactor",
              Settings::values.resolution_factor);
