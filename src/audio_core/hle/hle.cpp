@@ -17,6 +17,7 @@
 #elif HAVE_FDK
 #include "audio_core/hle/fdk_decoder.h"
 #endif
+#include <algorithm>
 #include "audio_core/hle/common.h"
 #include "audio_core/hle/decoder.h"
 #include "audio_core/hle/hle.h"
@@ -30,6 +31,7 @@
 #include "common/logging/log.h"
 #include "core/core.h"
 #include "core/core_timing.h"
+#include "core/settings.h"
 
 SERIALIZE_EXPORT_IMPL(AudioCore::DspHle)
 
@@ -453,7 +455,11 @@ void DspHle::Impl::AudioTickCallback(s64 cycles_late) {
 
     // Reschedule recurrent event
     Core::Timing& timing = Core::System::GetInstance().CoreTiming();
-    timing.ScheduleEvent(audio_frame_ticks - cycles_late, tick_event);
+    const double time_scale =
+        Settings::values.enable_realtime_audio
+            ? std::clamp(Core::System::GetInstance().GetLastFrameTimeScale(), 1.0, 3.0)
+            : 1.0;
+    timing.ScheduleEvent(audio_frame_ticks / time_scale - cycles_late, tick_event);
 }
 
 DspHle::DspHle(Memory::MemorySystem& memory) : impl(std::make_unique<Impl>(*this, memory)) {}
