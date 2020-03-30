@@ -92,7 +92,6 @@ class NDKMotion final : public Input::MotionDevice {
 
     void Destruct() {
         ASensorManager_destroyEventQueue(sensor_manager, event_queue);
-        ALooper_release(looper);
     }
 
     void Update() const {
