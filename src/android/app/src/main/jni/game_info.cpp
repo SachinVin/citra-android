@@ -68,7 +68,7 @@ char16_t* GetTitle(std::string physical_name) {
     char16_t* title;
     title = reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].long_title.data());
 
-    LOG_INFO(Frontend, "Title: %s", Common::UTF16ToUTF8(title).data());
+    LOG_INFO(Frontend, "Title: {}", Common::UTF16ToUTF8(title));
 
     return title;
 }
@@ -91,7 +91,7 @@ char16_t* GetPublisher(std::string physical_name) {
     publisher =
         reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
 
-    LOG_INFO(Frontend, "Publisher: %s", Common::UTF16ToUTF8(publisher).data());
+    LOG_INFO(Frontend, "Publisher: {}", Common::UTF16ToUTF8(publisher));
 
     return publisher;
 }
