@@ -53,6 +53,7 @@ public final class SettingsFile {
 
     public static final String KEY_AUDIO_OUTPUT_ENGINE = "output_engine";
     public static final String KEY_ENABLE_AUDIO_STRETCHING = "enable_audio_stretching";
+    public static final String KEY_ENABLE_REALTIME_AUDIO = "enable_realtime_audio";
     public static final String KEY_VOLUME = "volume";
 
     public static final String KEY_USE_VIRTUAL_SD = "use_virtual_sd";
