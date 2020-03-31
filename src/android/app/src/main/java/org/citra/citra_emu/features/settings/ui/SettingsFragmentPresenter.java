@@ -221,7 +221,7 @@ public final class SettingsFragmentPresenter {
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, Settings.SECTION_RENDERER, R.string.internal_resolution, R.string.internal_resolution_description, 1, 4, "x", 1, resolutionFactor));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, Settings.SECTION_RENDERER, R.string.vsync, R.string.vsync_description, true, vsyncEnable));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FILTER_MODE, Settings.SECTION_RENDERER, R.string.linear_filtering, R.string.linear_filtering_description, true, filterMode));
-        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME, Settings.SECTION_RENDERER, R.string.texture_filter_name, R.string.texture_filter_description, textureFilterNames, textureFilterNames,"none", textureFilterName));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME, Settings.SECTION_RENDERER, R.string.texture_filter_name, R.string.texture_filter_description, textureFilterNames, textureFilterNames, "none", textureFilterName));
     }
 
     private void addAudioSettings(ArrayList<SettingsItem> sl) {
@@ -229,8 +229,10 @@ public final class SettingsFragmentPresenter {
 
         SettingSection audioSection = mSettings.getSection(Settings.SECTION_AUDIO);
         Setting audioStretch = audioSection.getSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING);
+        Setting realtimeAudio = audioSection.getSetting(SettingsFile.KEY_ENABLE_REALTIME_AUDIO);
 
         sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_REALTIME_AUDIO, Settings.SECTION_AUDIO, R.string.realtime_audio, R.string.realtime_audio_description, true, realtimeAudio));
     }
 
     private void addDebugSettings(ArrayList<SettingsItem> sl) {
