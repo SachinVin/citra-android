@@ -6,7 +6,6 @@ package org.citra.citra_emu.applets;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.utils.Log;
+
+import androidx.annotation.Nullable;
 
 public final class SoftwareKeyboard {
     /// Corresponds to Frontend::ButtonConfig
