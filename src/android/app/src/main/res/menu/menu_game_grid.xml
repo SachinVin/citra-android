@@ -4,9 +4,10 @@
 
     <item
         android:id="@+id/button_add_directory"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_folder"
         android:title="@string/add_directory_title"
         app:showAsAction="ifRoom" />
+		
     <item
         android:id="@+id/menu_settings_core"
         android:icon="@drawable/ic_settings_core"
