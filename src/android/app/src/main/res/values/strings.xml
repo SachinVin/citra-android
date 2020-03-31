@@ -73,6 +73,8 @@
     <!-- Audio settings strings -->
     <string name="audio_stretch">Enable audio stretching</string>
     <string name="audio_stretch_description">Stretches audio to reduce stuttering. When enabled, increases audio latency and slightly reduces performance.</string>
+    <string name="realtime_audio">Enable real-time audio</string>
+    <string name="realtime_audio_description">Desynchronizes the audio from the current framerate. When enabled, the audio should always be running at fullspeed, even if the game is not.</string>
 
     <!-- Miscellaneous -->
     <string name="clear">Clear</string>
