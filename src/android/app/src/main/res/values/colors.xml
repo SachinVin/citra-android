@@ -7,4 +7,9 @@
 
     <color name="lb_tv_white">#FFCCCCCC</color>
 
+    <color name="card_view_background">#ffffff</color>
+    <color name="card_view_disabled">#dddddd</color>
+
+    <color name="gamelist_divider">#ffffff</color>
+
 </resources>
