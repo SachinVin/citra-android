@@ -111,7 +111,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     InputManager::Init();
 
-    Frontend::ScopeAcquireContext scope(*window);
+    window->MakeCurrent();
     const Core::System::ResultStatus load_result{system.Load(*window, filepath)};
     if (load_result != Core::System::ResultStatus::Success) {
         return load_result;
