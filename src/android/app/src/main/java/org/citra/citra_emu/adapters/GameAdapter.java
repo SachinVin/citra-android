@@ -3,6 +3,7 @@ package org.citra.citra_emu.adapters;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
@@ -11,18 +12,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.model.GameDatabase;
+import org.citra.citra_emu.ui.DividerItemDecoration;
 import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.utils.PicassoUtils;
 import org.citra.citra_emu.viewholders.GameViewHolder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * This adapter gets its information from a database Cursor. This fact, paired with the usage of
@@ -95,6 +100,9 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 holder.country = mCursor.getInt(GameDatabase.GAME_COLUMN_COUNTRY);
                 holder.company = mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY);
                 holder.screenshotPath = mCursor.getString(GameDatabase.GAME_COLUMN_SCREENSHOT_PATH);
+
+                final int backgroundColorId = isValidGame(holder.path) ? R.color.card_view_background : R.color.card_view_disabled;
+                holder.setBackgroundColor(ContextCompat.getColor(CitraApplication.getAppContext(), backgroundColorId));
             } else {
                 Log.error("[GameAdapter] Can't bind view; Cursor is not valid.");
             }
@@ -197,10 +205,11 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
         EmulationActivity.launch((FragmentActivity) view.getContext(), holder.path, holder.title);
     }
 
-    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+    public static class SpacesItemDecoration extends DividerItemDecoration {
         private int space;
 
-        public SpacesItemDecoration(int space) {
+        public SpacesItemDecoration(Drawable divider, int space) {
+            super(divider);
             this.space = space;
         }
 
@@ -212,6 +221,11 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
             outRect.bottom = space;
             outRect.top = 0;
         }
+    }
+
+    private boolean isValidGame(String path) {
+        return Stream.of(
+                ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz").noneMatch(suffix -> path.toLowerCase().endsWith(suffix));
     }
 
     private final class GameDataSetObserver extends DataSetObserver {

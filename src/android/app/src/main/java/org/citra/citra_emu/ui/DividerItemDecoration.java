@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Implementation from:
  * https://gist.github.com/lapastillaroja/858caf1a82791b6c1a36
  */
-public final class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
     private boolean mShowFirstDivider = false;
