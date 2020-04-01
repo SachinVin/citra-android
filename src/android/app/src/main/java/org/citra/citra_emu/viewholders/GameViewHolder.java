@@ -13,6 +13,7 @@ import org.citra.citra_emu.R;
  * keep calling findViewById(), which is expensive.
  */
 public class GameViewHolder extends RecyclerView.ViewHolder {
+    private View itemView;
     public ImageView imageScreenshot;
     public TextView textGameTitle;
     public TextView textCompany;
@@ -31,11 +32,16 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public GameViewHolder(View itemView) {
         super(itemView);
 
+        this.itemView = itemView;
         itemView.setTag(this);
 
         imageScreenshot = itemView.findViewById(R.id.image_game_screen);
         textGameTitle = itemView.findViewById(R.id.text_game_title);
         textCompany = itemView.findViewById(R.id.text_company);
         textFileName = itemView.findViewById(R.id.text_filename);
+    }
+
+    public void setBackgroundColor(int color){
+        itemView.setBackgroundColor(color);
     }
 }
