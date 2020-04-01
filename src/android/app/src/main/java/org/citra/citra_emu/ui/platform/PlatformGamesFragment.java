@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
 
     private GameAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private TextView mTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
     @Override
     public void refresh() {
         mPresenter.refresh();
+        updateTextView();
     }
 
     @Override
@@ -69,9 +72,15 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
         if (mAdapter != null) {
             mAdapter.swapCursor(games);
         }
+        updateTextView();
+    }
+
+    private void updateTextView() {
+        mTextView.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     private void findViews(View root) {
         mRecyclerView = root.findViewById(R.id.grid_games);
+        mTextView = root.findViewById(R.id.gamelist_empty_text);
     }
 }
