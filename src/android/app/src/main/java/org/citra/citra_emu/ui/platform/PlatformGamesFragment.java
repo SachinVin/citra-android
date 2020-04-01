@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,7 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(1));
+        mRecyclerView.addItemDecoration(new GameAdapter.SpacesItemDecoration(ContextCompat.getDrawable(getActivity(), R.drawable.gamelist_divider), 1));
 
         // Add swipe down to refresh gesture
         final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.refresh_grid_games);

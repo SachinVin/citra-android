@@ -3,4 +3,9 @@
 
     <color name="citra_orange">#fec303</color>
 
+    <color name="card_view_background">#121212</color>
+    <color name="card_view_disabled">#303030</color>
+
+    <color name="gamelist_divider">#404040</color>
+
 </resources>
