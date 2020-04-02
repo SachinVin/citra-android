@@ -71,9 +71,6 @@
     </style>
 
     <!-- Hax to make Tablayout render icons -->
-    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
 
     <!-- Android TV Themes -->
     <style name="CitraTvBase" parent="Theme.Leanback.Browse">
@@ -102,10 +99,6 @@
         <item name="android:paddingLeft">32dp</item>
         <item name="android:paddingRight">32dp</item>
         <item name="android:layout_margin">0dp</item>
-    </style>
-
-    <style name="OverlayInGameMenuOption" parent="InGameMenuOption">
-        <item name="android:textColor">@color/button_text_color</item>
     </style>
 
     <!-- Inherit from a base file picker theme that handles day/night -->
