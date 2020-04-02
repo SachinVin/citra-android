@@ -7,6 +7,7 @@ apply plugin: 'com.android.application'
  */
 def autoVersion = (int) (((new Date().getTime() / 1000) - 1451606400) / 10)
 def buildType
+def abiFilter = "arm64-v8a" //, "x86"
 
 android {
     compileSdkVersion 29
@@ -32,6 +33,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 28
         versionCode autoVersion
+        ndk.abiFilters abiFilter
     }
 
     signingConfigs {
@@ -94,7 +96,7 @@ android {
                         "-DENABLE_WEB_SERVICE=0", // Don't use telemetry
                         "-DANDROID_ARM_NEON=true" // cryptopp requires Neon to work
 
-                abiFilters "arm64-v8a" //, "x86"
+                abiFilters abiFilter
             }
         }
     }
