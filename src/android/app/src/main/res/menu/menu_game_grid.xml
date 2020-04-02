@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/button_add_directory"
-        android:title="@string/add_directory_title"
         android:icon="@drawable/ic_add"
-        app:showAsAction="always"/>
+        android:title="@string/add_directory_title"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_settings_core"
-        android:title="@string/grid_menu_core_settings"
         android:icon="@drawable/ic_settings_core"
-        app:showAsAction="always"/>
+        android:title="@string/grid_menu_core_settings"
+        app:showAsAction="ifRoom" />
 
 </menu>

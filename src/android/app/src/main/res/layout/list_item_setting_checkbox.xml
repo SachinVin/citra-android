@@ -20,7 +20,7 @@
         android:layout_marginTop="@dimen/spacing_large"
         android:layout_toStartOf="@+id/checkbox"
         android:textSize="16sp"
-        tools:text="@string/overclock_enable"/>
+        tools:text="@string/frame_limit_enable"/>
 
     <TextView
         android:id="@+id/text_setting_description"
@@ -35,7 +35,7 @@
         android:layout_marginTop="@dimen/spacing_small"
         android:layout_toStartOf="@+id/checkbox"
         android:textAlignment="textStart"
-        tools:text="@string/overclock_enable_description" />
+        tools:text="@string/frame_limit_enable_description" />
 
     <CheckBox
         android:id="@+id/checkbox"
