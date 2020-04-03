@@ -2,6 +2,7 @@ package org.citra.citra_emu.features.settings.utils;
 
 import androidx.annotation.NonNull;
 
+import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.features.settings.model.FloatSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
@@ -9,6 +10,7 @@ import org.citra.citra_emu.features.settings.model.SettingSection;
 import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.features.settings.model.StringSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsActivityView;
+import org.citra.citra_emu.utils.BiMap;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.Log;
 import org.ini4j.Wini;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Contains static methods for interacting with .ini files in which settings are stored.
@@ -99,6 +102,13 @@ public final class SettingsFile {
 
     public static final String KEY_LOG_FILTER = "log_filter";
 
+    private static BiMap<String, String> sectionsMap = new BiMap<>();
+
+    static {
+        //TODO: Add members to sectionsMap when game-specific settings are added
+    }
+
+
     private SettingsFile() {
     }
 
@@ -107,12 +117,12 @@ public final class SettingsFile {
      * effectively a HashMap of key/value settings. If unsuccessful, outputs an error telling why it
      * failed.
      *
-     * @param fileName The name of the settings file without a path or extension.
-     * @param view     The current view.
+     * @param fileName     The name of the settings file without a path or extension.
+     * @param isCustomGame
+     * @param view         The current view.
      * @return An Observable that emits a HashMap of the file's contents, then completes.
      */
-    public static HashMap<String, SettingSection> readFile(final String fileName,
-                                                           SettingsActivityView view) {
+    static HashMap<String, SettingSection> readFile(final String fileName, boolean isCustomGame, SettingsActivityView view) {
         HashMap<String, SettingSection> sections = new Settings.SettingsSectionMap();
 
         File ini = getSettingsFile(fileName);
@@ -125,7 +135,7 @@ public final class SettingsFile {
             SettingSection current = null;
             for (String line; (line = reader.readLine()) != null; ) {
                 if (line.startsWith("[") && line.endsWith("]")) {
-                    current = sectionFromLine(line);
+                    current = sectionFromLine(line, isCustomGame);
                     sections.put(current.getName(), current);
                 } else if ((current != null)) {
                     Setting setting = settingFromLine(current, line);
@@ -151,6 +161,23 @@ public final class SettingsFile {
         }
 
         return sections;
+    }
+
+    public static HashMap<String, SettingSection> readFile(final String fileName, SettingsActivityView view) {
+        return readFile(fileName, false, view);
+    }
+
+    /**
+     * Reads a given .ini file from disk and returns it as a HashMap of SettingSections, themselves
+     * effectively a HashMap of key/value settings. If unsuccessful, outputs an error telling why it
+     * failed.
+     *
+     * @param gameId the id of the game to load it's settings.
+     * @param view   The current view.
+     */
+    public static HashMap<String, SettingSection> readCustomGameSettings(final String gameId, SettingsActivityView view) {
+        String fileName = "../GameSettings/" + gameId;
+        return readFile(fileName, true, view);
     }
 
     /**
@@ -180,14 +207,50 @@ public final class SettingsFile {
         }
     }
 
+
+    public static void saveCustomGameSettings(final String gameId, final HashMap<String, SettingSection> sections) {
+        Set<String> sortedSections = new TreeSet<>(sections.keySet());
+
+        for (String sectionKey : sortedSections) {
+            SettingSection section = sections.get(sectionKey);
+
+            HashMap<String, Setting> settings = section.getSettings();
+            Set<String> sortedKeySet = new TreeSet<>(settings.keySet());
+
+            for (String settingKey : sortedKeySet) {
+                Setting setting = settings.get(settingKey);
+                NativeLibrary.SetUserSetting(gameId, mapSectionNameFromIni(section.getName()), setting.getKey(), setting.getValueAsString());
+            }
+        }
+    }
+
+    private static String mapSectionNameFromIni(String generalSectionName) {
+        if (sectionsMap.getForward(generalSectionName) != null) {
+            return sectionsMap.getForward(generalSectionName);
+        }
+
+        return generalSectionName;
+    }
+
+    private static String mapSectionNameToIni(String generalSectionName) {
+        if (sectionsMap.getBackward(generalSectionName) != null) {
+            return sectionsMap.getBackward(generalSectionName);
+        }
+
+        return generalSectionName;
+    }
+
     @NonNull
     private static File getSettingsFile(String fileName) {
         return new File(
                 DirectoryInitialization.getUserDirectory() + "/config/" + fileName + ".ini");
     }
 
-    private static SettingSection sectionFromLine(String line) {
+    private static SettingSection sectionFromLine(String line, boolean isCustomGame) {
         String sectionName = line.substring(1, line.length() - 1);
+        if (isCustomGame) {
+            sectionName = mapSectionNameToIni(sectionName);
+        }
         return new SettingSection(sectionName);
     }
 
