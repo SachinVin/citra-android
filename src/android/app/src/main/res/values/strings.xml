@@ -58,13 +58,14 @@
     <string name="hw_shaders">Enable hardware shader</string>
     <string name="hw_shaders_description">Uses hardware to emulate 3DS shaders. When enabled, game performance will be significantly improved.</string>
     <string name="shaders_accurate_mul">Enable accurate shader multiplication</string>
-    <string name="shaders_accurate_mul_description">Uses more accurate multiplication in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>>
+    <string name="shaders_accurate_mul_description">Uses more accurate multiplication in hardware shaders, which may fix some graphical bugs. When enabled, performance will be reduced.</string>
     <string name="frame_limit_enable">Enable limit speed</string>
     <string name="frame_limit_enable_description">When enabled, emulation speed will be limited to a specified percentage of normal speed.</string>
     <string name="frame_limit_slider">Limit speed percent</string>
     <string name="frame_limit_slider_description">Specifies the percentage to limit emulation speed. With the default of 100% emulation will be limited to normal speed. Values higher or lower will increase or decrease the speed limit.</string>
     <string name="internal_resolution">Internal resolution</string>
     <string name="internal_resolution_description">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games.</string>
+    <string name="performance_warning">Turning off this setting will significantly reduce emulation performance! For the best experience, it is recommended that you leave this setting enabled.</string>
 
     <!-- Audio settings strings -->
     <string name="audio_stretch">Enable audio stretching</string>
