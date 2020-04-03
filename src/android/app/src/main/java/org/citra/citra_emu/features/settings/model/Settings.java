@@ -17,13 +17,14 @@ public class Settings {
     public static final String SECTION_CONTROLS = "Controls";
     public static final String SECTION_RENDERER = "Renderer";
     public static final String SECTION_AUDIO = "Audio";
+    public static final String SECTION_DEBUG = "Debug";
 
     private String gameId;
 
     private static final Map<String, List<String>> configFileSectionsMap = new HashMap<>();
 
     static {
-        configFileSectionsMap.put(SettingsFile.FILE_NAME_CONFIG, Arrays.asList(SECTION_CORE, SECTION_SYSTEM, SECTION_CONTROLS, SECTION_RENDERER, SECTION_AUDIO));
+        configFileSectionsMap.put(SettingsFile.FILE_NAME_CONFIG, Arrays.asList(SECTION_CORE, SECTION_SYSTEM, SECTION_CONTROLS, SECTION_RENDERER, SECTION_AUDIO, SECTION_DEBUG));
     }
 
     /**
