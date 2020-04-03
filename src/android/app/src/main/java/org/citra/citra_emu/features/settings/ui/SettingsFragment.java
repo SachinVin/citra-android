@@ -3,6 +3,7 @@ package org.citra.citra_emu.features.settings.ui;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         mActivity = (SettingsActivityView) context;
