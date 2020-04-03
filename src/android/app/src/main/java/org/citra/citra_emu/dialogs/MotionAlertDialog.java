@@ -8,7 +8,7 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import org.citra.citra_emu.model.settings.view.InputBindingSetting;
+import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.utils.Log;
 
 import java.util.ArrayList;
