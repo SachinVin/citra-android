@@ -1,5 +1,7 @@
 package org.citra.citra_emu.features.settings.model.view;
 
+import org.citra.citra_emu.CitraApplication;
+import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
 import org.citra.citra_emu.features.settings.ui.SettingsFragmentView;
@@ -43,7 +45,7 @@ public final class CheckBoxSetting extends SettingsItem {
     public IntSetting setChecked(boolean checked) {
         // Show a performance warning if the setting has been disabled
         if (mShowPerformanceWarning && !checked) {
-            mView.showToastMessage("Turning off this setting will significantly reduce emulation performance! For the best experience, it is recommended that you leave this setting enabled.", true);
+            mView.showToastMessage(CitraApplication.getAppContext().getString(R.string.performance_warning), true);
         }
 
         if (getSetting() == null) {
