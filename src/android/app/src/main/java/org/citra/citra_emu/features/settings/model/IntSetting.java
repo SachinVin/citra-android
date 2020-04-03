@@ -3,8 +3,8 @@ package org.citra.citra_emu.features.settings.model;
 public final class IntSetting extends Setting {
     private int mValue;
 
-    public IntSetting(String key, String section, int file, int value) {
-        super(key, section, file);
+    public IntSetting(String key, String section, int value) {
+        super(key, section);
         mValue = value;
     }
 

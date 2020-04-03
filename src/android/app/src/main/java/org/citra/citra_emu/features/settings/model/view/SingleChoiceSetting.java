@@ -9,9 +9,9 @@ public final class SingleChoiceSetting extends SettingsItem {
     private int mChoicesId;
     private int mValuesId;
 
-    public SingleChoiceSetting(String key, String section, int file, int titleId, int descriptionId,
+    public SingleChoiceSetting(String key, String section, int titleId, int descriptionId,
                                int choicesId, int valuesId, int defaultValue, Setting setting) {
-        super(key, section, file, setting, titleId, descriptionId);
+        super(key, section, setting, titleId, descriptionId);
         mValuesId = valuesId;
         mChoicesId = choicesId;
         mDefaultValue = defaultValue;
@@ -43,7 +43,7 @@ public final class SingleChoiceSetting extends SettingsItem {
      */
     public IntSetting setSelectedValue(int selection) {
         if (getSetting() == null) {
-            IntSetting setting = new IntSetting(getKey(), getSection(), getFile(), selection);
+            IntSetting setting = new IntSetting(getKey(), getSection(), selection);
             setSetting(setting);
             return setting;
         } else {
