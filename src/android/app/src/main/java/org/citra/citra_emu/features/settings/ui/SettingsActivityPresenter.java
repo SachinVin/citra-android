@@ -126,10 +126,6 @@ public final class SettingsActivityPresenter {
         }
     }
 
-    public boolean handleOptionsItem(int itemId) {
-        return false;
-    }
-
     public void onSettingChanged() {
         mShouldSave = true;
     }
