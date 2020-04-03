@@ -1,7 +1,5 @@
 package org.citra.citra_emu.ui.main;
 
-import android.database.Cursor;
-
 /**
  * Abstraction for the screen that shows on application launch.
  * Implementations will differ primarily to target touch-screen
@@ -24,12 +22,4 @@ public interface MainView {
     void launchSettingsActivity(String menuTag);
 
     void launchFileListActivity();
-
-    /**
-     * To be called when an asynchronous database read completes. Passes the
-     * result, in this case a {@link Cursor} to the view.
-     *
-     * @param games A Cursor containing the games read from the database.
-     */
-    void showGames(Cursor games);
 }
