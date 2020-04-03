@@ -258,7 +258,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 item.removeOldMapping());
         dialog.setOnDismissListener(dialog1 ->
         {
-            StringSetting setting = new StringSetting(item.getKey(), item.getSection(), item.getFile(), item.getValue());
+            StringSetting setting = new StringSetting(item.getKey(), item.getSection(), item.getValue());
             notifyItemChanged(position);
 
             mView.putSetting(setting);

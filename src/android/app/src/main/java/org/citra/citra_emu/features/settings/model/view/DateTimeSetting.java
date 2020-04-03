@@ -6,9 +6,9 @@ import org.citra.citra_emu.features.settings.model.StringSetting;
 public final class DateTimeSetting extends SettingsItem {
     private String mDefaultValue;
 
-    public DateTimeSetting(String key, String section, int file, int titleId, int descriptionId,
+    public DateTimeSetting(String key, String section, int titleId, int descriptionId,
                            String defaultValue, Setting setting) {
-        super(key, section, file, setting, titleId, descriptionId);
+        super(key, section, setting, titleId, descriptionId);
         mDefaultValue = defaultValue;
     }
 
@@ -23,7 +23,7 @@ public final class DateTimeSetting extends SettingsItem {
 
     public StringSetting setSelectedValue(String datetime) {
         if (getSetting() == null) {
-            StringSetting setting = new StringSetting(getKey(), getSection(), getFile(), datetime);
+            StringSetting setting = new StringSetting(getKey(), getSection(), datetime);
             setSetting(setting);
             return setting;
         } else {
