@@ -46,4 +46,10 @@ public final class SettingSection {
     public HashMap<String, Setting> getSettings() {
         return mSettings;
     }
+
+    public void mergeSection(SettingSection settingSection) {
+        for (Setting setting : settingSection.mSettings.values()) {
+            putSetting(setting);
+        }
+    }
 }
