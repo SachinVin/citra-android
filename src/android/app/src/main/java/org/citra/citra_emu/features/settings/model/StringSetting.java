@@ -3,8 +3,8 @@ package org.citra.citra_emu.features.settings.model;
 public final class StringSetting extends Setting {
     private String mValue;
 
-    public StringSetting(String key, String section, int file, String value) {
-        super(key, section, file);
+    public StringSetting(String key, String section, String value) {
+        super(key, section);
         mValue = value;
     }
 

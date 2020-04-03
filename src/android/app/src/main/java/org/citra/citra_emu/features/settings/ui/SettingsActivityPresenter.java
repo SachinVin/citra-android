@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.citra.citra_emu.NativeLibrary;
-import org.citra.citra_emu.features.settings.model.SettingSection;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
@@ -13,15 +13,13 @@ import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class SettingsActivityPresenter {
     private static final String KEY_SHOULD_SAVE = "should_save";
 
     private SettingsActivityView mView;
 
-    private ArrayList<HashMap<String, SettingSection>> mSettings = new ArrayList<>();
+    private Settings mSettings = new Settings();
 
     private int mStackCount;
 
@@ -52,9 +50,9 @@ public final class SettingsActivityPresenter {
     void loadSettingsUI() {
         if (mSettings.isEmpty()) {
             if (!TextUtils.isEmpty(gameId)) {
-                mSettings.add(SettingsFile.SETTINGS_CITRA, SettingsFile.readFile("../GameSettings/" + gameId, mView));
+                mSettings.loadSettings(gameId, mView);
             } else {
-                mSettings.add(SettingsFile.SETTINGS_CITRA, SettingsFile.readFile(SettingsFile.FILE_NAME_CONFIG, mView));
+                mSettings.loadSettings(mView);
             }
         }
 
@@ -93,12 +91,12 @@ public final class SettingsActivityPresenter {
         }
     }
 
-    public void setSettings(ArrayList<HashMap<String, SettingSection>> settings) {
+    public void setSettings(Settings settings) {
         mSettings = settings;
     }
 
-    public HashMap<String, SettingSection> getSettings(int file) {
-        return mSettings.get(file);
+    public Settings getSettings() {
+        return mSettings;
     }
 
     public void onStop(boolean finishing) {
@@ -108,20 +106,11 @@ public final class SettingsActivityPresenter {
         }
 
         if (mSettings != null && finishing && mShouldSave) {
-            if (!TextUtils.isEmpty(gameId)) {
-                Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
-                // Needed workaround for now due to an odd bug in how it handles saving two different settings sections to the same file. It won't save GFX settings if it follows the normal saving pattern
-                if (menuTag.equals("Dolphin")) {
-                    SettingsFile.saveFile("../GameSettings/" + gameId, mSettings.get(SettingsFile.SETTINGS_CITRA), mView);
-                }
-                mView.showToastMessage("Saved settings for " + gameId, false);
-            } else {
-                Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
-                SettingsFile.saveFile(SettingsFile.FILE_NAME_CONFIG, mSettings.get(SettingsFile.SETTINGS_CITRA), mView);
-                mView.showToastMessage("Saved settings", false);
-            }
-            NativeLibrary.ReloadSettings();
+            Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
+            mSettings.saveSettings(mView);
         }
+
+        NativeLibrary.ReloadSettings();
     }
 
     public void addToStack() {
