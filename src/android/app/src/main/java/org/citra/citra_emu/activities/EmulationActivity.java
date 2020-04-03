@@ -13,9 +13,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.IntDef;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +32,6 @@ import android.widget.TextView;
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.fragments.EmulationFragment;
-import org.citra.citra_emu.fragments.MenuFragment;
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
@@ -64,8 +61,6 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_OPEN_SETTINGS = 12;
 
     private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
-    private static final String BACKSTACK_NAME_MENU = "menu";
-    private static final String BACKSTACK_NAME_SUBMENU = "submenu";
     private static SparseIntArray buttonsActionsMap = new SparseIntArray();
 
     static {
@@ -77,7 +72,6 @@ public final class EmulationActivity extends AppCompatActivity {
                 .append(R.id.menu_emulation_adjust_scale, EmulationActivity.MENU_ACTION_ADJUST_SCALE);
         buttonsActionsMap.append(R.id.menu_emulation_show_fps,
                 EmulationActivity.MENU_ACTION_SHOW_FPS);
-        buttonsActionsMap.append(R.id.menu_exit, EmulationActivity.MENU_ACTION_EXIT);
         buttonsActionsMap.append(R.id.menu_screen_layout_landscape,
                 EmulationActivity.MENU_ACTION_SCREEN_LAYOUT_LANDSCAPE);
         buttonsActionsMap.append(R.id.menu_screen_layout_portrait,
@@ -98,8 +92,6 @@ public final class EmulationActivity extends AppCompatActivity {
     private EmulationFragment mEmulationFragment;
     private SharedPreferences mPreferences;
     private ControllerMappingHelper mControllerMappingHelper;
-    private boolean mDeviceHasTouchScreen;
-    private boolean mMenuVisible;
     private boolean activityRecreated;
     private String mSelectedTitle;
     private String mPath;
@@ -154,30 +146,22 @@ public final class EmulationActivity extends AppCompatActivity {
             restoreState(savedInstanceState);
         }
 
-        mDeviceHasTouchScreen = getPackageManager().hasSystemFeature("android.hardware.touchscreen");
         mControllerMappingHelper = new ControllerMappingHelper();
 
-        int themeId;
-        if (mDeviceHasTouchScreen) {
-            themeId = R.style.CitraEmulation;
+        // Get a handle to the Window containing the UI.
+        mDecorView = getWindow().getDecorView();
+        mDecorView.setOnSystemUiVisibilityChangeListener(visibility ->
+        {
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                // Go back to immersive fullscreen mode in 3s
+                Handler handler = new Handler(getMainLooper());
+                handler.postDelayed(this::enableFullscreenImmersive, 3000 /* 3s */);
+            }
+        });
+        // Set these options now so that the SurfaceView the game renders into is the right size.
+        enableFullscreenImmersive();
 
-            // Get a handle to the Window containing the UI.
-            mDecorView = getWindow().getDecorView();
-            mDecorView.setOnSystemUiVisibilityChangeListener(visibility ->
-            {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    // Go back to immersive fullscreen mode in 3s
-                    Handler handler = new Handler(getMainLooper());
-                    handler.postDelayed(this::enableFullscreenImmersive, 3000 /* 3s */);
-                }
-            });
-            // Set these options now so that the SurfaceView the game renders into is the right size.
-            enableFullscreenImmersive();
-        } else {
-            themeId = R.style.CitraEmulationTv;
-        }
-
-        setTheme(themeId);
+        setTheme(R.style.CitraEmulation);
 
         setContentView(R.layout.activity_emulation);
 
@@ -191,9 +175,7 @@ public final class EmulationActivity extends AppCompatActivity {
                     .commit();
         }
 
-        if (mDeviceHasTouchScreen) {
-            setTitle(mSelectedTitle);
-        }
+        setTitle(mSelectedTitle);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -221,29 +203,21 @@ public final class EmulationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!mDeviceHasTouchScreen) {
-            boolean popResult = getSupportFragmentManager().popBackStackImmediate(
-                    BACKSTACK_NAME_SUBMENU, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            if (!popResult) {
-                toggleMenu();
-            }
-        } else {
-            NativeLibrary.PauseEmulation();
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.emulation_close_game)
-                    .setMessage(R.string.emulation_close_game_message)
-                    .setPositiveButton(android.R.string.yes, (dialogInterface, i) ->
-                    {
-                        mEmulationFragment.stopEmulation();
-                        finish();
-                    })
-                    .setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
-                    {
-                    }).setOnDismissListener(dialogInterface ->
-                    NativeLibrary.UnPauseEmulation())
-                    .create()
-                    .show();
-        }
+        NativeLibrary.PauseEmulation();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.emulation_close_game)
+                .setMessage(R.string.emulation_close_game_message)
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) ->
+                {
+                    mEmulationFragment.stopEmulation();
+                    finish();
+                })
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
+                {
+                }).setOnDismissListener(dialogInterface ->
+                NativeLibrary.UnPauseEmulation())
+                .create()
+                .show();
     }
 
     private void enableFullscreenImmersive() {
@@ -255,27 +229,6 @@ public final class EmulationActivity extends AppCompatActivity {
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_IMMERSIVE);
-    }
-
-    private void toggleMenu() {
-        boolean result = getSupportFragmentManager().popBackStackImmediate(
-                BACKSTACK_NAME_MENU, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        mMenuVisible = false;
-
-        if (!result) {
-            // Removing the menu failed, so that means it wasn't visible. Add it.
-            Fragment fragment = MenuFragment.newInstance(mSelectedTitle);
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(
-                            R.animator.menu_slide_in_from_left,
-                            R.animator.menu_slide_out_to_left,
-                            R.animator.menu_slide_in_from_left,
-                            R.animator.menu_slide_out_to_left)
-                    .add(R.id.frame_menu, fragment)
-                    .addToBackStack(BACKSTACK_NAME_MENU)
-                    .commit();
-            mMenuVisible = true;
-        }
     }
 
     @Override
@@ -381,7 +334,6 @@ public final class EmulationActivity extends AppCompatActivity {
             }
 
             case MENU_ACTION_EXIT:
-                toggleMenu();  // Hide the menu (it will be showing since we just clicked it)
                 mEmulationFragment.stopEmulation();
                 finish();
                 break;
@@ -412,10 +364,6 @@ public final class EmulationActivity extends AppCompatActivity {
     // Gets button presses
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (mMenuVisible) {
-            return super.dispatchKeyEvent(event);
-        }
-
         int action;
         int button = mPreferences.getInt(InputBindingSetting.getInputButtonKey(event.getKeyCode()), event.getKeyCode());
 
@@ -533,10 +481,6 @@ public final class EmulationActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
-        if (mMenuVisible) {
-            return false;
-        }
-
         if (((event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) == 0)) {
             return super.dispatchGenericMotionEvent(event);
         }

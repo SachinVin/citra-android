@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onBindViewHolder(GameViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         if (mDatasetValid) {
             if (mCursor.moveToPosition(position)) {
                 PicassoUtils.loadGameBanner(holder.imageScreenshot,

@@ -20,10 +20,6 @@ public class PermissionsHandler {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean checkWritePermission(final FragmentActivity activity) {
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-
         if (isFirstBoot(activity)) {
             activity.requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE},
                     REQUEST_CODE_WRITE_PERMISSION);
@@ -34,11 +30,6 @@ public class PermissionsHandler {
     }
 
     public static boolean hasWriteAccess(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasWritePermission = ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE);
-            return hasWritePermission == PackageManager.PERMISSION_GRANTED;
-        }
-
-        return true;
+        return ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }
