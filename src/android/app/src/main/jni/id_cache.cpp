@@ -8,6 +8,7 @@
 #include "common/logging/log.h"
 #include "core/settings.h"
 #include "jni/applets/swkbd.h"
+#include "jni/camera/still_image_camera.h"
 #include "jni/id_cache.h"
 
 #include <jni.h>
@@ -113,6 +114,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         env->GetStaticMethodID(s_native_library_class, "exitEmulationActivity", "(I)V");
 
     SoftwareKeyboard::InitJNI(env);
+    Camera::StillImage::InitJNI(env);
 
     return JNI_VERSION;
 }
@@ -125,6 +127,7 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
 
     env->DeleteGlobalRef(s_native_library_class);
     SoftwareKeyboard::CleanupJNI(env);
+    Camera::StillImage::CleanupJNI(env);
 }
 
 #ifdef __cplusplus
