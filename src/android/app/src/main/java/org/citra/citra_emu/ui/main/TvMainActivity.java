@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.database.CursorMapper;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -27,7 +26,7 @@ import org.citra.citra_emu.adapters.SettingsRowPresenter;
 import org.citra.citra_emu.model.Game;
 import org.citra.citra_emu.model.TvSettingsItem;
 import org.citra.citra_emu.utils.DirectoryInitialization;
-import org.citra.citra_emu.ui.settings.SettingsActivity;
+import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.PermissionsHandler;
