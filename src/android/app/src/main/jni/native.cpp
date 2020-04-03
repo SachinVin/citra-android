@@ -16,11 +16,13 @@
 #include "common/string_util.h"
 #include "core/core.h"
 #include "core/frontend/applets/default_applets.h"
+#include "core/frontend/camera/factory.h"
 #include "core/frontend/scope_acquire_context.h"
 #include "core/hle/service/am/am.h"
 #include "core/settings.h"
 #include "jni/applets/swkbd.h"
 #include "jni/button_manager.h"
+#include "jni/camera/still_image_camera.h"
 #include "jni/config.h"
 #include "jni/emu_window/emu_window.h"
 #include "jni/game_info.h"
@@ -106,6 +108,8 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     Config{};
     Settings::Apply();
 
+    Camera::RegisterFactory("image", std::make_unique<Camera::StillImage::Factory>());
+
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
     system.RegisterSoftwareKeyboard(std::make_shared<SoftwareKeyboard::AndroidKeyboard>());
@@ -162,9 +166,8 @@ void Java_org_citra_citra_1emu_NativeLibrary_SurfaceChanged(JNIEnv* env,
     LOG_INFO(Frontend, "Surface changed");
 }
 
-void Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(JNIEnv* env,
-                                                              [[maybe_unused]] [
-                                                                  [maybe_unused]] jclass clazz) {
+void Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(
+    JNIEnv* env, [[maybe_unused]][[maybe_unused]] jclass clazz) {
     ANativeWindow_release(s_surf);
     s_surf = nullptr;
     if (window) {
