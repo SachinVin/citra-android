@@ -52,55 +52,6 @@
         <item name="colorAccent">@color/citra_accent</item>
     </style>
 
-    <style name="CitraEmulationTvBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/citra_orange</item>
-        <item name="colorPrimaryDark">@color/citra_orange_dark</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-
-        <item name="android:windowBackground">@android:color/black</item>
-
-        <!-- Enable window content transitions -->
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">true</item>
-    </style>
-
-    <!-- Inherit from the Base Citra Emulation Theme -->
-    <style name="CitraEmulationTv" parent="CitraEmulationTvBase">
-        <item name="colorAccent">@color/citra_accent</item>
-    </style>
-
-    <!-- Hax to make Tablayout render icons -->
-
-    <!-- Android TV Themes -->
-    <style name="CitraTvBase" parent="Theme.Leanback.Browse">
-        <item name="colorPrimary">@color/citra_orange</item>
-        <item name="colorPrimaryDark">@color/citra_orange_dark</item>
-
-        <!-- Enable window content transitions -->
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">true</item>
-    </style>
-
-    <style name="CitraTv" parent="CitraTvBase">
-        <item name="colorAccent">@color/citra_accent</item>
-        <item name="browseTitleViewLayout">@layout/titleview</item>
-    </style>
-
-    <style name="InGameMenuOption" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:gravity">center_vertical|left</item>
-        <item name="android:paddingLeft">32dp</item>
-        <item name="android:paddingRight">32dp</item>
-        <item name="android:layout_margin">0dp</item>
-    </style>
-
     <!-- Inherit from a base file picker theme that handles day/night -->
     <style name="FilePickerTheme" parent="FilePickerBaseTheme">
         <item name="colorPrimary">@color/citra_orange</item>
