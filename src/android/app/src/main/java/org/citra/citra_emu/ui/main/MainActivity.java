@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
@@ -17,8 +17,7 @@ import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.model.GameProvider;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.ui.platform.PlatformGamesFragment;
-import org.citra.citra_emu.ui.platform.PlatformGamesView;
-import org.citra.citra_emu.ui.settings.SettingsActivity;
+import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.PermissionsHandler;
