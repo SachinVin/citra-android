@@ -2,12 +2,8 @@ package org.citra.citra_emu.features.settings.ui;
 
 import android.content.IntentFilter;
 
-import org.citra.citra_emu.features.settings.model.SettingSection;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * Abstraction for the Activity that manages SettingsFragments.
  */
@@ -25,10 +21,9 @@ public interface SettingsActivityView {
      * loaded from disk, so that each Fragment doesn't need to perform its own
      * read operation.
      *
-     * @param file The settings file to load.
      * @return A possibly null HashMap of Settings.
      */
-    HashMap<String, SettingSection> getSettings(int file);
+    Settings getSettings();
 
     /**
      * Used to provide the Activity with Settings HashMaps if a Fragment already
@@ -37,14 +32,14 @@ public interface SettingsActivityView {
      *
      * @param settings The ArrayList of all the Settings HashMaps.
      */
-    void setSettings(ArrayList<HashMap<String, SettingSection>> settings);
+    void setSettings(Settings settings);
 
     /**
      * Called when an asynchronous load operation completes.
      *
      * @param settings The (possibly null) result of the ini load operation.
      */
-    void onSettingsFileLoaded(ArrayList<HashMap<String, SettingSection>> settings);
+    void onSettingsFileLoaded(Settings settings);
 
     /**
      * Called when an asynchronous load operation fails.
