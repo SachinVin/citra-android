@@ -8,9 +8,6 @@ import org.citra.citra_emu.model.GameDatabase;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 public final class MainPresenter {
     public static final int REQUEST_ADD_DIRECTORY = 1;
 
@@ -25,10 +22,6 @@ public final class MainPresenter {
         String versionName = BuildConfig.VERSION_NAME;
         mView.setVersionString(versionName);
         refeshGameList();
-    }
-
-    public void onFabClick() {
-        mView.launchFileListActivity();
     }
 
     public boolean handleOptionSelection(int itemId) {
@@ -55,14 +48,6 @@ public final class MainPresenter {
 
     public void onDirectorySelected(String dir) {
         mDirToAdd = dir;
-    }
-
-    public void loadGames() {
-        GameDatabase databaseHelper = CitraApplication.databaseHelper;
-        databaseHelper.getGames()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::showGames);
     }
 
     private void refeshGameList() {
