@@ -129,3 +129,7 @@ endif()
 
 # lodepng
 add_subdirectory(lodepng)
+
+# libyuv
+add_subdirectory(libyuv)
+target_include_directories(yuv INTERFACE ./libyuv/include)
