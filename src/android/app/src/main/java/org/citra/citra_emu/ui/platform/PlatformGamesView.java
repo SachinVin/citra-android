@@ -12,14 +12,6 @@ public interface PlatformGamesView {
     void refresh();
 
     /**
-     * Tell the view that a certain game's screenshot has been updated,
-     * and should be redrawn on-screen.
-     *
-     * @param position The index of the game that should be redrawn.
-     */
-    void refreshScreenshotAtPosition(int position);
-
-    /**
      * To be called when an asynchronous database read completes. Passes the
      * result, in this case a {@link Cursor}, to the view.
      *

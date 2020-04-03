@@ -3,7 +3,6 @@ package org.citra.citra_emu.ui.platform;
 import android.database.Cursor;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -58,11 +57,6 @@ public final class PlatformGamesFragment extends Fragment implements PlatformGam
             refresh();
             pullToRefresh.setRefreshing(false);
         });
-    }
-
-    @Override
-    public void refreshScreenshotAtPosition(int position) {
-        mAdapter.notifyItemChanged(position);
     }
 
     @Override
