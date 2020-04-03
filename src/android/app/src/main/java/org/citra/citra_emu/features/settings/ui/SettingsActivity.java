@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.citra.citra_emu.R;

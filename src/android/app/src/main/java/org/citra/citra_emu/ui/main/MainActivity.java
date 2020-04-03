@@ -2,11 +2,12 @@ package org.citra.citra_emu.ui.main;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -62,7 +63,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (PermissionsHandler.hasWriteAccess(this)) {
             getSupportFragmentManager().putFragment(outState, "mPlatformGamesFragment", mPlatformGamesFragment);
@@ -121,11 +122,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
-    @Override
-    public void showGames(Cursor games) {
-        // no-op. Handled by PlatformGamesFragment.
-    }
-
     /**
      * @param requestCode An int describing whether the Activity that is returning did so successfully.
      * @param resultCode  An int describing what Activity is giving us this callback.
@@ -133,6 +129,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
         switch (requestCode) {
             case MainPresenter.REQUEST_ADD_DIRECTORY:
                 // If the user picked a file, as opposed to just backing out.
@@ -149,7 +146,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PermissionsHandler.REQUEST_CODE_WRITE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
