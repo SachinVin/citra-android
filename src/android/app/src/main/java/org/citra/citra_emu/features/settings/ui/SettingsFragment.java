@@ -2,23 +2,23 @@ package org.citra.citra_emu.features.settings.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.Setting;
-import org.citra.citra_emu.features.settings.model.SettingSection;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.ui.DividerItemDecoration;
-import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class SettingsFragment extends Fragment implements SettingsFragmentView {
     private static final String ARGUMENT_MENU_TAG = "menu_tag";
@@ -79,9 +79,7 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
 
         SettingsActivityView activity = (SettingsActivityView) getActivity();
 
-        ArrayList<HashMap<String, SettingSection>> settings = new ArrayList<>();
-        settings.add(SettingsFile.SETTINGS_CITRA, activity.getSettings(SettingsFile.SETTINGS_CITRA));
-        mPresenter.onViewCreated(settings);
+        mPresenter.onViewCreated(activity.getSettings());
     }
 
     @Override
@@ -95,12 +93,12 @@ public final class SettingsFragment extends Fragment implements SettingsFragment
     }
 
     @Override
-    public void onSettingsFileLoaded(ArrayList<HashMap<String, SettingSection>> settings) {
+    public void onSettingsFileLoaded(Settings settings) {
         mPresenter.setSettings(settings);
     }
 
     @Override
-    public void passSettingsToActivity(ArrayList<HashMap<String, SettingSection>> settings) {
+    public void passSettingsToActivity(Settings settings) {
         if (mActivity != null) {
             mActivity.setSettings(settings);
         }

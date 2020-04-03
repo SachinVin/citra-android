@@ -3,8 +3,8 @@ package org.citra.citra_emu.features.settings.model;
 public final class BooleanSetting extends Setting {
     private boolean mValue;
 
-    public BooleanSetting(String key, String section, int file, boolean value) {
-        super(key, section, file);
+    public BooleanSetting(String key, String section, boolean value) {
+        super(key, section);
         mValue = value;
     }
 

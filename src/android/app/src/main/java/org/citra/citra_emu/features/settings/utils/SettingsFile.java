@@ -6,6 +6,7 @@ import org.citra.citra_emu.features.settings.model.FloatSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
 import org.citra.citra_emu.features.settings.model.SettingSection;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.features.settings.model.StringSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsActivityView;
 import org.citra.citra_emu.utils.DirectoryInitialization;
@@ -19,42 +20,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
-
-/**
- * A HashMap<String, SettingSection> that constructs a new SettingSection instead of returning null
- * when getting a key not already in the map
- */
-final class SettingsSectionMap extends HashMap<String, SettingSection> {
-    @Override
-    public SettingSection get(Object key) {
-        if (!(key instanceof String)) {
-            return null;
-        }
-
-        String stringKey = (String) key;
-
-        if (!super.containsKey(stringKey)) {
-            SettingSection section = new SettingSection(stringKey);
-            super.put(stringKey, section);
-            return section;
-        }
-        return super.get(key);
-    }
-}
+import java.util.TreeMap;
 
 /**
  * Contains static methods for interacting with .ini files in which settings are stored.
  */
 public final class SettingsFile {
-    public static final int SETTINGS_CITRA = 0;
-
     public static final String FILE_NAME_CONFIG = "config";
-
-    public static final String SECTION_CORE = "Core";
-    public static final String SECTION_SYSTEM = "System";
-    public static final String SECTION_CONTROLS = "Controls";
-    public static final String SECTION_RENDERER = "Renderer";
-    public static final String SECTION_AUDIO = "Audio";
 
     public static final String KEY_CPU_JIT = "use_cpu_jit";
 
@@ -131,7 +103,7 @@ public final class SettingsFile {
     }
 
     /**
-     * Reads a given .ini file from disk and returns it as a HashMap of SettingSections, themselves
+     * Reads a given .ini file from disk and returns it as a HashMap of Settings, themselves
      * effectively a HashMap of key/value settings. If unsuccessful, outputs an error telling why it
      * failed.
      *
@@ -141,7 +113,7 @@ public final class SettingsFile {
      */
     public static HashMap<String, SettingSection> readFile(final String fileName,
                                                            SettingsActivityView view) {
-        HashMap<String, SettingSection> sections = new SettingsSectionMap();
+        HashMap<String, SettingSection> sections = new Settings.SettingsSectionMap();
 
         File ini = getSettingsFile(fileName);
 
@@ -156,7 +128,7 @@ public final class SettingsFile {
                     current = sectionFromLine(line);
                     sections.put(current.getName(), current);
                 } else if ((current != null)) {
-                    Setting setting = settingFromLine(current, line, fileName);
+                    Setting setting = settingFromLine(current, line);
                     if (setting != null) {
                         current.putSetting(setting);
                     }
@@ -189,7 +161,7 @@ public final class SettingsFile {
      * @param sections The HashMap containing the Settings we want to serialize.
      * @param view     The current view.
      */
-    public static void saveFile(final String fileName, final HashMap<String, SettingSection> sections,
+    public static void saveFile(final String fileName, TreeMap<String, SettingSection> sections,
                                 SettingsActivityView view) {
         File ini = getSettingsFile(fileName);
 
@@ -223,12 +195,11 @@ public final class SettingsFile {
      * For a line of text, determines what type of data is being represented, and returns
      * a Setting object containing this data.
      *
-     * @param current  The section currently being parsed by the consuming method.
-     * @param line     The line of text being parsed.
-     * @param fileName The name of the ini file the setting is in.
+     * @param current The section currently being parsed by the consuming method.
+     * @param line    The line of text being parsed.
      * @return A typed Setting containing the key/value contained in the line.
      */
-    private static Setting settingFromLine(SettingSection current, String line, String fileName) {
+    private static Setting settingFromLine(SettingSection current, String line) {
         String[] splitLine = line.split("=");
 
         if (splitLine.length != 2) {
@@ -244,23 +215,21 @@ public final class SettingsFile {
             return null;
         }
 
-        int file = SETTINGS_CITRA;
-
         try {
             int valueAsInt = Integer.parseInt(value);
 
-            return new IntSetting(key, current.getName(), file, valueAsInt);
+            return new IntSetting(key, current.getName(), valueAsInt);
         } catch (NumberFormatException ex) {
         }
 
         try {
             float valueAsFloat = Float.parseFloat(value);
 
-            return new FloatSetting(key, current.getName(), file, valueAsFloat);
+            return new FloatSetting(key, current.getName(), valueAsFloat);
         } catch (NumberFormatException ex) {
         }
 
-        return new StringSetting(key, current.getName(), file, value);
+        return new StringSetting(key, current.getName(), value);
     }
 
     /**
