@@ -146,4 +146,7 @@
     <string name="max_length_exceeded">Text is too long (should be no more than %d characters)</string>
     <string name="blank_input_not_allowed">Blank input is not allowed</string>
     <string name="empty_input_not_allowed">Empty input is not allowed</string>
+
+    <!-- Camera -->
+    <string name="camera_select_image">Select Image</string>
 </resources>

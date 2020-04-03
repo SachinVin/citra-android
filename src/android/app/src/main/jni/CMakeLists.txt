@@ -3,6 +3,8 @@ add_library(main SHARED
     applets/swkbd.h
     button_manager.cpp
     button_manager.h
+    camera/still_image_camera.cpp
+    camera/still_image_camera.h
     config.cpp
     config.h
     default_ini.h
