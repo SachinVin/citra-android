@@ -19,6 +19,6 @@ add_library(main SHARED
 )
 
 target_link_libraries(main PRIVATE common core input_common network)
-target_link_libraries(main PRIVATE android EGL glad inih log)
+target_link_libraries(main PRIVATE android jnigraphics EGL glad inih log yuv)
 
 set(CPACK_PACKAGE_EXECUTABLES ${CPACK_PACKAGE_EXECUTABLES} main)
