@@ -16,8 +16,8 @@ import org.citra.citra_emu.features.settings.utils.SettingsFile;
 public final class InputBindingSetting extends SettingsItem {
     private static final String INPUT_MAPPING_PREFIX = "InputMapping";
 
-    public InputBindingSetting(String key, String section, int file, int titleId, Setting setting) {
-        super(key, section, file, setting, titleId, 0);
+    public InputBindingSetting(String key, String section, int titleId, Setting setting) {
+        super(key, section, setting, titleId, 0);
     }
 
     public String getValue() {
@@ -32,8 +32,7 @@ public final class InputBindingSetting extends SettingsItem {
     /**
      * Returns true if this key is for the 3DS Circle Pad
      */
-    private boolean IsCirclePad()
-    {
+    private boolean IsCirclePad() {
         switch (getKey()) {
             case SettingsFile.KEY_CIRCLEPAD_AXIS_HORIZONTAL:
             case SettingsFile.KEY_CIRCLEPAD_AXIS_VERTICAL:
@@ -45,8 +44,7 @@ public final class InputBindingSetting extends SettingsItem {
     /**
      * Returns true if this key is for a horizontal axis for a 3DS analog stick or D-pad
      */
-    public boolean IsHorizontalOrientation()
-    {
+    public boolean IsHorizontalOrientation() {
         switch (getKey()) {
             case SettingsFile.KEY_CIRCLEPAD_AXIS_HORIZONTAL:
             case SettingsFile.KEY_CSTICK_AXIS_HORIZONTAL:
@@ -59,8 +57,7 @@ public final class InputBindingSetting extends SettingsItem {
     /**
      * Returns true if this key is for the 3DS C-Stick
      */
-    private boolean IsCStick()
-    {
+    private boolean IsCStick() {
         switch (getKey()) {
             case SettingsFile.KEY_CSTICK_AXIS_HORIZONTAL:
             case SettingsFile.KEY_CSTICK_AXIS_VERTICAL:
@@ -72,8 +69,7 @@ public final class InputBindingSetting extends SettingsItem {
     /**
      * Returns true if this key is for the 3DS D-Pad
      */
-    private boolean IsDPad()
-    {
+    private boolean IsDPad() {
         switch (getKey()) {
             case SettingsFile.KEY_DPAD_AXIS_HORIZONTAL:
             case SettingsFile.KEY_DPAD_AXIS_VERTICAL:
@@ -100,16 +96,14 @@ public final class InputBindingSetting extends SettingsItem {
     /**
      * Returns true if a gamepad axis can be used to map this key.
      */
-    public boolean IsAxisMappingSupported()
-    {
+    public boolean IsAxisMappingSupported() {
         return IsCirclePad() || IsCStick() || IsDPad() || IsTrigger();
     }
 
     /**
      * Returns true if a gamepad button can be used to map this key.
      */
-    private boolean IsButtonMappingSupported()
-    {
+    private boolean IsButtonMappingSupported() {
         return !IsAxisMappingSupported() || IsTrigger();
     }
 
@@ -306,8 +300,7 @@ public final class InputBindingSetting extends SettingsItem {
      *
      * @param keyEvent KeyEvent of this key press.
      */
-    public void onKeyInput(KeyEvent keyEvent)
-    {
+    public void onKeyInput(KeyEvent keyEvent) {
         if (!IsButtonMappingSupported()) {
             Toast.makeText(CitraApplication.getAppContext(), R.string.input_message_analog_only, Toast.LENGTH_LONG).show();
             return;
@@ -329,12 +322,11 @@ public final class InputBindingSetting extends SettingsItem {
      * @param axisDir     Either '-' or '+' (currently unused)
      */
     public void onMotionInput(InputDevice device, InputDevice.MotionRange motionRange,
-                              char axisDir)
-    {
+                              char axisDir) {
         if (!IsAxisMappingSupported()) {
-             Toast.makeText(CitraApplication.getAppContext(), R.string.input_message_button_only, Toast.LENGTH_LONG).show();
-             return;
-         }
+            Toast.makeText(CitraApplication.getAppContext(), R.string.input_message_button_only, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
         SharedPreferences.Editor editor = preferences.edit();
@@ -344,7 +336,7 @@ public final class InputBindingSetting extends SettingsItem {
             button = NativeLibrary.ButtonType.STICK_LEFT;
         } else if (IsCStick()) {
             button = NativeLibrary.ButtonType.STICK_C;
-        } else if (IsDPad()){
+        } else if (IsDPad()) {
             button = NativeLibrary.ButtonType.DPAD;
         } else {
             button = getButtonCode();
@@ -366,7 +358,7 @@ public final class InputBindingSetting extends SettingsItem {
         SharedPreferences.Editor editor = preferences.edit();
 
         if (getSetting() == null) {
-            StringSetting setting = new StringSetting(getKey(), getSection(), getFile(), "");
+            StringSetting setting = new StringSetting(getKey(), getSection(), "");
             setSetting(setting);
 
             editor.putString(setting.getKey(), ui);

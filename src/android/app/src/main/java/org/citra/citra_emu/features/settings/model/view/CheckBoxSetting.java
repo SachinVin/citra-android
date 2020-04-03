@@ -9,16 +9,16 @@ public final class CheckBoxSetting extends SettingsItem {
     private boolean mShowPerformanceWarning;
     private SettingsFragmentView mView;
 
-    public CheckBoxSetting(String key, String section, int file, int titleId, int descriptionId,
+    public CheckBoxSetting(String key, String section, int titleId, int descriptionId,
                            boolean defaultValue, Setting setting) {
-        super(key, section, file, setting, titleId, descriptionId);
+        super(key, section, setting, titleId, descriptionId);
         mDefaultValue = defaultValue;
         mShowPerformanceWarning = false;
     }
 
-    public CheckBoxSetting(String key, String section, int file, int titleId, int descriptionId,
+    public CheckBoxSetting(String key, String section, int titleId, int descriptionId,
                            boolean defaultValue, Setting setting, boolean show_performance_warning, SettingsFragmentView view) {
-        super(key, section, file, setting, titleId, descriptionId);
+        super(key, section, setting, titleId, descriptionId);
         mDefaultValue = defaultValue;
         mView = view;
         mShowPerformanceWarning = show_performance_warning;
@@ -47,7 +47,7 @@ public final class CheckBoxSetting extends SettingsItem {
         }
 
         if (getSetting() == null) {
-            IntSetting setting = new IntSetting(getKey(), getSection(), getFile(), checked ? 1 : 0);
+            IntSetting setting = new IntSetting(getKey(), getSection(), checked ? 1 : 0);
             setSetting(setting);
             return setting;
         } else {

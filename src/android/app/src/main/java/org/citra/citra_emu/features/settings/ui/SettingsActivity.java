@@ -18,12 +18,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.citra.citra_emu.R;
-import org.citra.citra_emu.features.settings.model.SettingSection;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class SettingsActivity extends AppCompatActivity implements SettingsActivityView {
     private static final String ARG_FILE_NAME = "file_name";
@@ -182,17 +178,17 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
     }
 
     @Override
-    public HashMap<String, SettingSection> getSettings(int file) {
-        return mPresenter.getSettings(file);
+    public org.citra.citra_emu.features.settings.model.Settings getSettings() {
+        return mPresenter.getSettings();
     }
 
     @Override
-    public void setSettings(ArrayList<HashMap<String, SettingSection>> settings) {
+    public void setSettings(org.citra.citra_emu.features.settings.model.Settings settings) {
         mPresenter.setSettings(settings);
     }
 
     @Override
-    public void onSettingsFileLoaded(ArrayList<HashMap<String, SettingSection>> settings) {
+    public void onSettingsFileLoaded(org.citra.citra_emu.features.settings.model.Settings settings) {
         SettingsFragmentView fragment = getFragment();
 
         if (fragment != null) {
