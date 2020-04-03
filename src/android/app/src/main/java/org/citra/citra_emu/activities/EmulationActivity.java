@@ -31,6 +31,7 @@ import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
+import org.citra.citra_emu.camera.StillImageCameraHelper;
 import org.citra.citra_emu.fragments.EmulationFragment;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
@@ -217,6 +218,14 @@ public final class EmulationActivity extends AppCompatActivity {
                 NativeLibrary.UnPauseEmulation())
                 .create()
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
+        if (requestCode == StillImageCameraHelper.REQUEST_CAMERA_FILE_PICKER) {
+            StillImageCameraHelper.OnFilePickerResult(resultCode == RESULT_OK ? result : null);
+        }
     }
 
     private void enableFullscreenImmersive() {
