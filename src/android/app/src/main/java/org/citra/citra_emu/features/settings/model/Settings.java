@@ -71,7 +71,7 @@ public class Settings {
             }
         } else {
             // custom game settings
-            sections.putAll(SettingsFile.readFile("../GameSettings/" + gameId, view));
+            sections.putAll(SettingsFile.readCustomGameSettings(gameId, view));
         }
     }
 
@@ -98,8 +98,7 @@ public class Settings {
             // custom game settings
             view.showToastMessage("Saved settings for " + gameId, false);
 
-            TreeMap<String, SettingSection> iniSections = new TreeMap<>(sections);
-            SettingsFile.saveFile("../GameSettings/" + gameId, iniSections, view);
+            SettingsFile.saveCustomGameSettings(gameId, sections);
         }
 
     }
