@@ -68,6 +68,7 @@
     <string name="internal_resolution">Internal resolution</string>
     <string name="internal_resolution_description">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games.</string>
     <string name="performance_warning">Turning off this setting will significantly reduce emulation performance! For the best experience, it is recommended that you leave this setting enabled.</string>
+    <string name="debug_warning">Warning: These settings will slow emulation</string>
 
     <!-- Audio settings strings -->
     <string name="audio_stretch">Enable audio stretching</string>
@@ -91,6 +92,7 @@
     <string name="preferences_controls">Gamepad</string>
     <string name="preferences_graphics">Graphics</string>
     <string name="preferences_audio">Audio</string>
+    <string name="preferences_debug">Debug</string>
 
     <!-- ROM loading errors -->
     <string name="loader_error_encrypted">Your ROM is encrypted</string>

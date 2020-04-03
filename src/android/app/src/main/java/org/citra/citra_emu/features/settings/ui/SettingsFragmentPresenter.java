@@ -97,6 +97,9 @@ public final class SettingsFragmentPresenter {
             case Settings.SECTION_AUDIO:
                 addAudioSettings(sl);
                 break;
+            case Settings.SECTION_DEBUG:
+                addDebugSettings(sl);
+                break;
             default:
                 mView.showToastMessage("Unimplemented menu", false);
                 return;
@@ -114,17 +117,16 @@ public final class SettingsFragmentPresenter {
         sl.add(new SubmenuSetting(null, null, R.string.preferences_controls, 0, Settings.SECTION_CONTROLS));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, Settings.SECTION_RENDERER));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_audio, 0, Settings.SECTION_AUDIO));
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_debug, 0, Settings.SECTION_DEBUG));
     }
 
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_general);
 
         SettingSection coreSection = mSettings.getSection(Settings.SECTION_CORE);
-        Setting useCpuJit = coreSection.getSetting(SettingsFile.KEY_CPU_JIT);
         Setting frameLimitEnable = coreSection.getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
         Setting frameLimitValue = coreSection.getSetting(SettingsFile.KEY_FRAME_LIMIT);
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, Settings.SECTION_CORE, R.string.cpu_jit, R.string.cpu_jit_description, true, useCpuJit, true, mView));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, Settings.SECTION_RENDERER, R.string.frame_limit_enable, R.string.frame_limit_enable_description, true, frameLimitEnable));
         sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, Settings.SECTION_RENDERER, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 0, 200, "%", 100, frameLimitValue));
     }
@@ -207,8 +209,6 @@ public final class SettingsFragmentPresenter {
         mView.getActivity().setTitle(R.string.preferences_graphics);
 
         SettingSection rendererSection = mSettings.getSection(Settings.SECTION_RENDERER);
-        Setting hardwareRenderer = rendererSection.getSetting(SettingsFile.KEY_HW_RENDERER);
-        Setting hardwareShader = rendererSection.getSetting(SettingsFile.KEY_HW_SHADER);
         Setting shadersAccurateMul = rendererSection.getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
         Setting resolutionFactor = rendererSection.getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
         Setting vsyncEnable = rendererSection.getSetting(SettingsFile.KEY_USE_VSYNC);
@@ -217,8 +217,6 @@ public final class SettingsFragmentPresenter {
 
         String[] textureFilterNames = NativeLibrary.GetTextureFilterNames();
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_RENDERER, Settings.SECTION_RENDERER, R.string.hw_renderer, R.string.hw_renderer_description, true, hardwareRenderer, true, mView));
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, Settings.SECTION_RENDERER, R.string.hw_shaders, R.string.hw_shaders_description, true, hardwareShader, true, mView));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, Settings.SECTION_RENDERER, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, false, shadersAccurateMul));
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, Settings.SECTION_RENDERER, R.string.internal_resolution, R.string.internal_resolution_description, 1, 4, "x", 1, resolutionFactor));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_VSYNC, Settings.SECTION_RENDERER, R.string.vsync, R.string.vsync_description, true, vsyncEnable));
@@ -233,5 +231,19 @@ public final class SettingsFragmentPresenter {
         Setting audioStretch = audioSection.getSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING);
 
         sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
+    }
+
+    private void addDebugSettings(ArrayList<SettingsItem> sl) {
+        mView.getActivity().setTitle(R.string.preferences_debug);
+
+        SettingSection debugSection = mSettings.getSection(Settings.SECTION_DEBUG);
+        Setting useCpuJit = debugSection.getSetting(SettingsFile.KEY_CPU_JIT);
+        Setting hardwareRenderer = debugSection.getSetting(SettingsFile.KEY_HW_RENDERER);
+        Setting hardwareShader = debugSection.getSetting(SettingsFile.KEY_HW_SHADER);
+
+        sl.add(new HeaderSetting(null, null, R.string.debug_warning, 0));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, Settings.SECTION_CORE, R.string.cpu_jit, R.string.cpu_jit_description, true, useCpuJit, true, mView));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_RENDERER, Settings.SECTION_RENDERER, R.string.hw_renderer, R.string.hw_renderer_description, true, hardwareRenderer, true, mView));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_HW_SHADER, Settings.SECTION_RENDERER, R.string.hw_shaders, R.string.hw_shaders_description, true, hardwareShader, true, mView));
     }
 }
