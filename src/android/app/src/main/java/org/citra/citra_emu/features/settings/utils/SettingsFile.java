@@ -117,15 +117,13 @@ public final class SettingsFile {
      * effectively a HashMap of key/value settings. If unsuccessful, outputs an error telling why it
      * failed.
      *
-     * @param fileName     The name of the settings file without a path or extension.
+     * @param ini          The ini file to load the settings from
      * @param isCustomGame
      * @param view         The current view.
      * @return An Observable that emits a HashMap of the file's contents, then completes.
      */
-    static HashMap<String, SettingSection> readFile(final String fileName, boolean isCustomGame, SettingsActivityView view) {
+    static HashMap<String, SettingSection> readFile(final File ini, boolean isCustomGame, SettingsActivityView view) {
         HashMap<String, SettingSection> sections = new Settings.SettingsSectionMap();
-
-        File ini = getSettingsFile(fileName);
 
         BufferedReader reader = null;
 
@@ -145,17 +143,17 @@ public final class SettingsFile {
                 }
             }
         } catch (FileNotFoundException e) {
-            Log.error("[SettingsFile] File not found: " + fileName + ".ini: " + e.getMessage());
+            Log.error("[SettingsFile] File not found: " + ini.getAbsolutePath() + e.getMessage());
             view.onSettingsFileNotFound();
         } catch (IOException e) {
-            Log.error("[SettingsFile] Error reading from: " + fileName + ".ini: " + e.getMessage());
+            Log.error("[SettingsFile] Error reading from: " + ini.getAbsolutePath() + e.getMessage());
             view.onSettingsFileNotFound();
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.error("[SettingsFile] Error closing: " + fileName + ".ini: " + e.getMessage());
+                    Log.error("[SettingsFile] Error closing: " + ini.getAbsolutePath() + e.getMessage());
                 }
             }
         }
@@ -164,7 +162,7 @@ public final class SettingsFile {
     }
 
     public static HashMap<String, SettingSection> readFile(final String fileName, SettingsActivityView view) {
-        return readFile(fileName, false, view);
+        return readFile(getSettingsFile(fileName), false, view);
     }
 
     /**
@@ -176,8 +174,7 @@ public final class SettingsFile {
      * @param view   The current view.
      */
     public static HashMap<String, SettingSection> readCustomGameSettings(final String gameId, SettingsActivityView view) {
-        String fileName = "../GameSettings/" + gameId;
-        return readFile(fileName, true, view);
+        return readFile(getCustomGameSettingsFile(gameId), true, view);
     }
 
     /**
@@ -244,6 +241,10 @@ public final class SettingsFile {
     private static File getSettingsFile(String fileName) {
         return new File(
                 DirectoryInitialization.getUserDirectory() + "/config/" + fileName + ".ini");
+    }
+
+    private static File getCustomGameSettingsFile(String gameId) {
+        return new File(DirectoryInitialization.getUserDirectory() + "/GameSettings/" + gameId + ".ini");
     }
 
     private static SettingSection sectionFromLine(String line, boolean isCustomGame) {
