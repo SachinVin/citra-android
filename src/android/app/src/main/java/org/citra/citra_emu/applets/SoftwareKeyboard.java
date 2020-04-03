@@ -4,8 +4,10 @@
 
 package org.citra.citra_emu.applets;
 
-import android.app.AlertDialog;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.ViewGroup;
@@ -18,7 +20,12 @@ import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.utils.Log;
 
+import java.util.Objects;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 public final class SoftwareKeyboard {
     /// Corresponds to Frontend::ButtonConfig
@@ -48,7 +55,7 @@ public final class SoftwareKeyboard {
         EmptyInputNotAllowed,
     }
 
-    public static class KeyboardConfig {
+    public static class KeyboardConfig implements java.io.Serializable {
         public int button_config;
         public int max_text_length;
         public boolean multiline_mode; /// True if the keyboard accepts multiple lines of input
@@ -81,6 +88,112 @@ public final class SoftwareKeyboard {
         }
     }
 
+    public static class KeyboardDialogFragment extends DialogFragment {
+        static KeyboardDialogFragment newInstance(KeyboardConfig config) {
+            KeyboardDialogFragment frag = new KeyboardDialogFragment();
+            Bundle args = new Bundle();
+            args.putSerializable("config", config);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Activity emulationActivity = getActivity();
+            assert emulationActivity != null;
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.leftMargin = params.rightMargin =
+                CitraApplication.getAppContext().getResources().getDimensionPixelSize(
+                    R.dimen.dialog_margin);
+
+            KeyboardConfig config = Objects.requireNonNull(
+                (KeyboardConfig)Objects.requireNonNull(getArguments()).getSerializable("config"));
+
+            // Set up the input
+            EditText editText = new EditText(CitraApplication.getAppContext());
+            editText.setHint(config.hint_text);
+            editText.setSingleLine(!config.multiline_mode);
+            editText.setLayoutParams(params);
+            editText.setFilters(new InputFilter[] {
+                new Filter(), new InputFilter.LengthFilter(config.max_text_length)});
+
+            FrameLayout container = new FrameLayout(emulationActivity);
+            container.addView(editText);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
+                                              .setTitle(R.string.software_keyboard)
+                                              .setView(container)
+                                              .setCancelable(false);
+
+            switch (config.button_config) {
+            case ButtonConfig.Triple: {
+                final String text = config.button_text == null
+                                        ? emulationActivity.getString(R.string.i_forgot)
+                                        : config.button_text[1];
+                builder.setNeutralButton(text, null);
+            }
+            // fallthrough
+            case ButtonConfig.Dual: {
+                final String text = config.button_text == null
+                                        ? emulationActivity.getString(android.R.string.cancel)
+                                        : config.button_text[0];
+                builder.setNegativeButton(text, null);
+            }
+            // fallthrough
+            case ButtonConfig.Single: {
+                final String text = config.button_text == null
+                                        ? emulationActivity.getString(android.R.string.ok)
+                                        : config.button_text[config.button_config];
+                builder.setPositiveButton(text, null);
+                break;
+            }
+            }
+
+            final AlertDialog dialog = builder.create();
+            dialog.create();
+            if (dialog.getButton(DialogInterface.BUTTON_POSITIVE) != null) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener((view) -> {
+                    data.button = config.button_config;
+                    data.text = editText.getText().toString();
+                    final ValidationError error = ValidateInput(data.text);
+                    if (error != ValidationError.None) {
+                        HandleValidationError(config, error);
+                        return;
+                    }
+
+                    dialog.dismiss();
+
+                    synchronized (finishLock) {
+                        finishLock.notifyAll();
+                    }
+                });
+            }
+            if (dialog.getButton(DialogInterface.BUTTON_NEUTRAL) != null) {
+                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener((view) -> {
+                    data.button = 1;
+                    dialog.dismiss();
+                    synchronized (finishLock) {
+                        finishLock.notifyAll();
+                    }
+                });
+            }
+            if (dialog.getButton(DialogInterface.BUTTON_NEGATIVE) != null) {
+                dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener((view) -> {
+                    data.button = 0;
+                    dialog.dismiss();
+                    synchronized (finishLock) {
+                        finishLock.notifyAll();
+                    }
+                });
+            }
+
+            return dialog;
+        }
+    }
+
     private static KeyboardData data;
     private static final Object finishLock = new Object();
 
@@ -89,90 +202,8 @@ public final class SoftwareKeyboard {
 
         data = new KeyboardData(0, "");
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = params.rightMargin =
-            CitraApplication.getAppContext().getResources().getDimensionPixelSize(
-                R.dimen.dialog_margin);
-
-        // Set up the input
-        EditText editText = new EditText(CitraApplication.getAppContext());
-        editText.setHint(config.hint_text);
-        editText.setSingleLine(!config.multiline_mode);
-        editText.setLayoutParams(params);
-        editText.setFilters(
-            new InputFilter[] {new Filter(), new InputFilter.LengthFilter(config.max_text_length)});
-
-        FrameLayout container = new FrameLayout(emulationActivity);
-        container.addView(editText);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
-                                          .setTitle(R.string.software_keyboard)
-                                          .setView(container)
-                                          .setCancelable(false);
-
-        switch (config.button_config) {
-        case ButtonConfig.Triple: {
-            final String text = config.button_text == null
-                                    ? emulationActivity.getString(R.string.i_forgot)
-                                    : config.button_text[1];
-            builder.setNeutralButton(text, null);
-        }
-        // fallthrough
-        case ButtonConfig.Dual: {
-            final String text = config.button_text == null
-                                    ? emulationActivity.getString(android.R.string.cancel)
-                                    : config.button_text[0];
-            builder.setNegativeButton(text, null);
-        }
-        // fallthrough
-        case ButtonConfig.Single: {
-            final String text = config.button_text == null
-                                    ? emulationActivity.getString(android.R.string.ok)
-                                    : config.button_text[config.button_config];
-            builder.setPositiveButton(text, null);
-            break;
-        }
-        }
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        if (dialog.getButton(DialogInterface.BUTTON_POSITIVE) != null) {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener((view) -> {
-                data.button = config.button_config;
-                data.text = editText.getText().toString();
-
-                final ValidationError error = ValidateInput(data.text);
-                if (error != ValidationError.None) {
-                    HandleValidationError(config, error);
-                    return;
-                }
-
-                dialog.dismiss();
-
-                synchronized (finishLock) {
-                    finishLock.notifyAll();
-                }
-            });
-        }
-        if (dialog.getButton(DialogInterface.BUTTON_NEUTRAL) != null) {
-            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener((view) -> {
-                data.button = 1;
-                dialog.dismiss();
-                synchronized (finishLock) {
-                    finishLock.notifyAll();
-                }
-            });
-        }
-        if (dialog.getButton(DialogInterface.BUTTON_NEGATIVE) != null) {
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener((view) -> {
-                data.button = 0;
-                dialog.dismiss();
-                synchronized (finishLock) {
-                    finishLock.notifyAll();
-                }
-            });
-        }
+        KeyboardDialogFragment fragment = KeyboardDialogFragment.newInstance(config);
+        fragment.show(emulationActivity.getSupportFragmentManager(), "keyboard");
     }
 
     private static void HandleValidationError(KeyboardConfig config, ValidationError error) {
