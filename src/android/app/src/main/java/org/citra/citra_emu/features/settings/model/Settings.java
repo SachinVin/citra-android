@@ -64,14 +64,34 @@ public class Settings {
 
     public void loadSettings(SettingsActivityView view) {
         sections = new Settings.SettingsSectionMap();
-        if (TextUtils.isEmpty(gameId)) {
-            for (Map.Entry<String, List<String>> entry : configFileSectionsMap.entrySet()) {
-                String fileName = entry.getKey();
-                sections.putAll(SettingsFile.readFile(fileName, view));
+        loadCitraSettings(view);
+
+        if (!TextUtils.isEmpty(gameId)) {
+            loadCustomGameSettings(gameId, view);
+        }
+    }
+
+    private void loadCitraSettings(SettingsActivityView view) {
+        for (Map.Entry<String, List<String>> entry : configFileSectionsMap.entrySet()) {
+            String fileName = entry.getKey();
+            sections.putAll(SettingsFile.readFile(fileName, view));
+        }
+    }
+
+    private void loadCustomGameSettings(String gameId, SettingsActivityView view) {
+        // custom game settings
+        mergeSections(SettingsFile.readCustomGameSettings(gameId, view));
+    }
+
+    private void mergeSections(HashMap<String, SettingSection> updatedSections) {
+        for (Map.Entry<String, SettingSection> entry : updatedSections.entrySet()) {
+            if (sections.containsKey(entry.getKey())) {
+                SettingSection originalSection = sections.get(entry.getKey());
+                SettingSection updatedSection = entry.getValue();
+                originalSection.mergeSection(updatedSection);
+            } else {
+                sections.put(entry.getKey(), entry.getValue());
             }
-        } else {
-            // custom game settings
-            sections.putAll(SettingsFile.readCustomGameSettings(gameId, view));
         }
     }
 
