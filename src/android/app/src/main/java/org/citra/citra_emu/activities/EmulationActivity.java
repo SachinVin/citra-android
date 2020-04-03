@@ -35,11 +35,11 @@ import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.fragments.EmulationFragment;
 import org.citra.citra_emu.fragments.MenuFragment;
-import org.citra.citra_emu.model.settings.view.InputBindingSetting;
-import org.citra.citra_emu.ui.settings.SettingsActivity;
+import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
+import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
-import org.citra.citra_emu.utils.SettingsFile;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.lang.annotation.Retention;
 import java.util.List;

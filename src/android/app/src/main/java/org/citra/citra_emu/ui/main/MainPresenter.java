@@ -6,7 +6,7 @@ import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.model.GameDatabase;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
-import org.citra.citra_emu.utils.SettingsFile;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
