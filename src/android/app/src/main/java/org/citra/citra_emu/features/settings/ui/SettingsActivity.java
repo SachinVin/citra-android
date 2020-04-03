@@ -70,11 +70,6 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return mPresenter.handleOptionsItem(item.getItemId());
-    }
-
-    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         // Critical: If super method is not called, rotations will be busted.
         super.onSaveInstanceState(outState);

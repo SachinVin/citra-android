@@ -97,8 +97,6 @@
     <string name="loader_error_invalid_format">Invalid ROM format</string>
 
     <!-- Emulation Menu -->
-    <string name="emulation_screenshot">Take Screenshot</string>
-    <string name="emulation_exit">Exit</string>
     <string name="emulation_show_fps">Show FPS</string>
     <string name="emulation_configure_controls">Configure Controls</string>
     <string name="emulation_edit_layout">Edit Layout</string>
