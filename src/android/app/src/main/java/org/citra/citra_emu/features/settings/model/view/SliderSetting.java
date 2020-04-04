@@ -3,8 +3,8 @@ package org.citra.citra_emu.features.settings.model.view;
 import org.citra.citra_emu.features.settings.model.FloatSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
-import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
+import org.citra.citra_emu.utils.Log;
 
 public final class SliderSetting extends SettingsItem {
     private int mMin;

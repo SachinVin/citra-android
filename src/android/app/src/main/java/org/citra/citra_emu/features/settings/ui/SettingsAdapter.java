@@ -2,15 +2,16 @@ package org.citra.citra_emu.features.settings.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.dialogs.MotionAlertDialog;

@@ -6,11 +6,11 @@ import android.text.TextUtils;
 
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.features.settings.model.Settings;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 import org.citra.citra_emu.utils.Log;
-import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.io.File;
 
