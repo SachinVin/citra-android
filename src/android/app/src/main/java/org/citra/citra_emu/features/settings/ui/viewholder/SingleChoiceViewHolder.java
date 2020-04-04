@@ -7,6 +7,7 @@ import android.widget.TextView;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.features.settings.model.view.SingleChoiceSetting;
+import org.citra.citra_emu.features.settings.model.view.StringSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsAdapter;
 
 public final class SingleChoiceViewHolder extends SettingViewHolder {
@@ -54,6 +55,8 @@ public final class SingleChoiceViewHolder extends SettingViewHolder {
         int position = getAdapterPosition();
         if (mItem instanceof SingleChoiceSetting) {
             getAdapter().onSingleChoiceClick((SingleChoiceSetting) mItem, position);
+        } else if (mItem instanceof StringSingleChoiceSetting) {
+            getAdapter().onStringSingleChoiceClick((StringSingleChoiceSetting) mItem, position);
         }
     }
 }
