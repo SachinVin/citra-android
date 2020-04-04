@@ -6,9 +6,9 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
-import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.features.settings.model.Setting;
 import org.citra.citra_emu.features.settings.model.StringSetting;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
