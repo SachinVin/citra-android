@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 
 public class DirectoryStateReceiver extends BroadcastReceiver {
