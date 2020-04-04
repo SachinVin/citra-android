@@ -1,23 +1,12 @@
 package org.citra.citra_emu.activities;
 
 import android.app.Activity;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-
-import androidx.annotation.IntDef;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.SparseIntArray;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -29,14 +18,22 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
-import org.citra.citra_emu.fragments.EmulationFragment;
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.features.settings.ui.SettingsActivity;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
+import org.citra.citra_emu.fragments.EmulationFragment;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
-import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.lang.annotation.Retention;
 import java.util.List;

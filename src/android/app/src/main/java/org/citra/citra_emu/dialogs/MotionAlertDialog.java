@@ -1,12 +1,12 @@
 package org.citra.citra_emu.dialogs;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-
 import android.content.Context;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.utils.Log;
