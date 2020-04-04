@@ -1,13 +1,11 @@
 package org.citra.citra_emu.utils;
 
-import androidx.appcompat.app.AlertDialog;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.FragmentActivity;
-
 import android.text.TextUtils;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
