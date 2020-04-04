@@ -125,8 +125,8 @@ public final class SoftwareKeyboard {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
                                               .setTitle(R.string.software_keyboard)
-                                              .setView(container)
-                                              .setCancelable(false);
+                                              .setView(container);
+            setCancelable(false);
 
             switch (config.button_config) {
             case ButtonConfig.Triple: {
