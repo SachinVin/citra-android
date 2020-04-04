@@ -53,6 +53,8 @@
     <string name="vsync_description">Synchronizes the game frame rate to the refresh rate of your device.</string>
     <string name="linear_filtering">Enable linear filtering</string>
     <string name="linear_filtering_description">Enables linear filtering, which causes game visuals to appear smoother.</string>
+    <string name="texture_filter_name">Texture Filter</string>
+    <string name="texture_filter_description">Applies a filter to textures.</string>
     <string name="hw_renderer">Enable hardware renderer</string>
     <string name="hw_renderer_description">Uses hardware to emulate 3DS graphics. When enabled, game performance will be significantly improved.</string>
     <string name="hw_shaders">Enable hardware shader</string>

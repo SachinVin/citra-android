@@ -28,6 +28,7 @@
 #include "jni/native.h"
 #include "jni/ndk_motion.h"
 #include "video_core/renderer_base.h"
+#include "video_core/renderer_opengl/texture_filters/texture_filterer.h"
 
 namespace {
 
@@ -490,6 +491,17 @@ void Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2(JNIEnv* en
         env->CallStaticVoidMethod(IDCache::GetNativeLibraryClass(),
                                   IDCache::GetExitEmulationActivity(), static_cast<int>(result));
     }
+}
+
+jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetTextureFilterNames(JNIEnv* env,
+                                                                           jclass clazz) {
+    auto names = OpenGL::TextureFilterer::GetFilterNames();
+    jobjectArray ret = (jobjectArray)env->NewObjectArray(static_cast<jsize>(names.size()),
+                                                         env->FindClass("java/lang/String"),
+                                                         env->NewStringUTF(""));
+    for (jsize i = 0; i < names.size(); ++i)
+        env->SetObjectArrayElement(ret, i, env->NewStringUTF(names[i].data()));
+    return ret;
 }
 
 } // extern "C"
