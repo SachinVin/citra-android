@@ -4,9 +4,9 @@ package org.citra.citra_emu.ui.main;
 import org.citra.citra_emu.BuildConfig;
 import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.model.GameDatabase;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
-import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 public final class MainPresenter {
     public static final int REQUEST_ADD_DIRECTORY = 1;
