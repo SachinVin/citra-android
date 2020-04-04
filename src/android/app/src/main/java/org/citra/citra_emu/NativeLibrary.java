@@ -217,6 +217,8 @@ public final class NativeLibrary {
      */
     public static native void Run(String path);
 
+    public static native String[] GetTextureFilterNames();
+
     /**
      * Begins emulation from the specified savestate.
      */
