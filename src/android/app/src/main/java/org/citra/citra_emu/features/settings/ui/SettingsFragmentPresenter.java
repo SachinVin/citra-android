@@ -19,7 +19,6 @@ import org.citra.citra_emu.features.settings.model.view.SubmenuSetting;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class SettingsFragmentPresenter {
     private SettingsFragmentView mView;

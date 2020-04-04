@@ -6,8 +6,6 @@
 
 package org.citra.citra_emu;
 
-import androidx.appcompat.app.AlertDialog;
-
 import android.content.res.Configuration;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -16,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
