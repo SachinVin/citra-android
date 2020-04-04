@@ -23,6 +23,7 @@ import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.features.settings.model.view.SingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SliderSetting;
+import org.citra.citra_emu.features.settings.model.view.StringSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SubmenuSetting;
 import org.citra.citra_emu.features.settings.ui.viewholder.CheckBoxSettingViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.DateTimeViewHolder;
@@ -70,6 +71,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 return new CheckBoxSettingViewHolder(view, this);
 
             case SettingsItem.TYPE_SINGLE_CHOICE:
+            case SettingsItem.TYPE_STRING_SINGLE_CHOICE:
                 view = inflater.inflate(R.layout.list_item_setting, parent, false);
                 return new SingleChoiceViewHolder(view, this);
 
@@ -145,6 +147,19 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
 
         builder.setTitle(item.getNameId());
         builder.setSingleChoiceItems(item.getChoicesId(), value, this);
+
+        mDialog = builder.show();
+    }
+
+    public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position)
+    {
+        mClickedItem = item;
+        mClickedPosition = position;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
+
+        builder.setTitle(item.getNameId());
+        builder.setSingleChoiceItems(item.getChoicesId(), item.getSelectValueIndex(), this);
 
         mDialog = builder.show();
     }
@@ -281,6 +296,18 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
 
             // Get the backing Setting, which may be null (if for example it was missing from the file)
             IntSetting setting = scSetting.setSelectedValue(value);
+            if (setting != null) {
+                mView.putSetting(setting);
+            }
+
+            closeDialog();
+        } else if (mClickedItem instanceof StringSingleChoiceSetting) {
+            StringSingleChoiceSetting scSetting = (StringSingleChoiceSetting) mClickedItem;
+            String value = scSetting.getValueAt(which);
+            if (!scSetting.getSelectedValue().equals(value))
+                mView.onSettingChanged();
+
+            StringSetting setting = scSetting.setSelectedValue(value);
             if (setting != null) {
                 mView.putSetting(setting);
             }
