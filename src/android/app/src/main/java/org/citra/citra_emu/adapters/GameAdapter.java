@@ -5,18 +5,14 @@ import android.database.DataSetObserver;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.SystemClock;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
@@ -24,6 +20,9 @@ import org.citra.citra_emu.model.GameDatabase;
 import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.utils.PicassoUtils;
 import org.citra.citra_emu.viewholders.GameViewHolder;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This adapter gets its information from a database Cursor. This fact, paired with the usage of

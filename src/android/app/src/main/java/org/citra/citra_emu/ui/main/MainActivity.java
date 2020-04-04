@@ -3,23 +3,22 @@ package org.citra.citra_emu.ui.main;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
-import org.citra.citra_emu.model.GameProvider;
-import org.citra.citra_emu.utils.DirectoryInitialization;
-import org.citra.citra_emu.ui.platform.PlatformGamesFragment;
 import org.citra.citra_emu.features.settings.ui.SettingsActivity;
+import org.citra.citra_emu.model.GameProvider;
+import org.citra.citra_emu.ui.platform.PlatformGamesFragment;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
+import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.PermissionsHandler;
 import org.citra.citra_emu.utils.StartupHandler;

@@ -1,7 +1,8 @@
 package org.citra.citra_emu.features.settings.ui.viewholder;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.features.settings.ui.SettingsAdapter;

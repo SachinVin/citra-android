@@ -1,9 +1,10 @@
 package org.citra.citra_emu.viewholders;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.citra.citra_emu.R;
 
