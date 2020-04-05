@@ -236,10 +236,11 @@ public final class SettingsFragmentPresenter {
     private void addDebugSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_debug);
 
-        SettingSection debugSection = mSettings.getSection(Settings.SECTION_DEBUG);
-        Setting useCpuJit = debugSection.getSetting(SettingsFile.KEY_CPU_JIT);
-        Setting hardwareRenderer = debugSection.getSetting(SettingsFile.KEY_HW_RENDERER);
-        Setting hardwareShader = debugSection.getSetting(SettingsFile.KEY_HW_SHADER);
+        SettingSection coreSection = mSettings.getSection(Settings.SECTION_CORE);
+        SettingSection rendererSection = mSettings.getSection(Settings.SECTION_RENDERER);
+        Setting useCpuJit = coreSection.getSetting(SettingsFile.KEY_CPU_JIT);
+        Setting hardwareRenderer = rendererSection.getSetting(SettingsFile.KEY_HW_RENDERER);
+        Setting hardwareShader = rendererSection.getSetting(SettingsFile.KEY_HW_SHADER);
 
         sl.add(new HeaderSetting(null, null, R.string.debug_warning, 0));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_CPU_JIT, Settings.SECTION_CORE, R.string.cpu_jit, R.string.cpu_jit_description, true, useCpuJit, true, mView));
