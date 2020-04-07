@@ -83,6 +83,8 @@ public final class EmulationActivity extends AppCompatActivity {
                 .append(R.id.menu_emulation_reset_overlay, EmulationActivity.MENU_ACTION_RESET_OVERLAY);
         buttonsActionsMap
                 .append(R.id.menu_emulation_show_overlay, EmulationActivity.MENU_ACTION_SHOW_OVERLAY);
+        buttonsActionsMap
+                .append(R.id.menu_emulation_open_settings,EmulationActivity.MENU_ACTION_OPEN_SETTINGS);
     }
 
     private View mDecorView;
