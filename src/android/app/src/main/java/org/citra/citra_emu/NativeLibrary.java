@@ -6,6 +6,7 @@
 
 package org.citra.citra_emu;
 
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -20,8 +21,11 @@ import androidx.appcompat.app.AlertDialog;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
 import org.citra.citra_emu.utils.Log;
+import org.citra.citra_emu.utils.PermissionsHandler;
 
 import java.lang.ref.WeakReference;
+
+import static android.Manifest.permission.CAMERA;
 
 /**
  * Class which contains methods that interact
@@ -399,6 +403,38 @@ public final class NativeLibrary {
         Log.verbose("[NativeLibrary] Unregistering EmulationActivity.");
 
         sEmulationActivity.clear();
+    }
+
+    private static final Object cameraPermissionLock = new Object();
+    private static boolean cameraPermissionGranted = false;
+    public static final int REQUEST_CODE_NATIVE_CAMERA = 800;
+
+    public static boolean RequestCameraPermission() {
+        final EmulationActivity emulationActivity = sEmulationActivity.get();
+        if (emulationActivity == null) {
+            Log.error("[NativeLibrary] EmulationActivity not present");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(emulationActivity, CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Permission already granted
+            return true;
+        }
+        emulationActivity.requestPermissions(new String[]{CAMERA}, REQUEST_CODE_NATIVE_CAMERA);
+
+        // Wait until result is returned
+        synchronized (cameraPermissionLock) {
+            try {
+                cameraPermissionLock.wait();
+            } catch (InterruptedException ignored) {}
+        }
+        return cameraPermissionGranted;
+    }
+
+    public static void CameraPermissionResult(boolean granted) {
+        cameraPermissionGranted = granted;
+        synchronized (cameraPermissionLock) {
+            cameraPermissionLock.notify();
+        }
     }
 
     /**

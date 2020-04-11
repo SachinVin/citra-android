@@ -3,6 +3,8 @@ add_library(main SHARED
     applets/swkbd.h
     button_manager.cpp
     button_manager.h
+    camera/ndk_camera.cpp
+    camera/ndk_camera.h
     camera/still_image_camera.cpp
     camera/still_image_camera.h
     config.cpp
@@ -21,6 +23,6 @@ add_library(main SHARED
 )
 
 target_link_libraries(main PRIVATE common core input_common network)
-target_link_libraries(main PRIVATE android jnigraphics EGL glad inih log yuv)
+target_link_libraries(main PRIVATE android camera2ndk mediandk jnigraphics EGL glad inih log yuv)
 
 set(CPACK_PACKAGE_EXECUTABLES ${CPACK_PACKAGE_EXECUTABLES} main)
