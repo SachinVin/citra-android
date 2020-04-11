@@ -24,6 +24,7 @@ static jmethodID s_alert_prompt_button;
 static jmethodID s_is_portrait_mode;
 static jmethodID s_landscape_screen_layout;
 static jmethodID s_exit_emulation_activity;
+static jmethodID s_request_camera_permission;
 
 namespace IDCache {
 
@@ -74,6 +75,10 @@ jmethodID GetExitEmulationActivity() {
     return s_exit_emulation_activity;
 }
 
+jmethodID GetRequestCameraPermission() {
+    return s_request_camera_permission;
+}
+
 } // namespace IDCache
 
 #ifdef __cplusplus
@@ -112,6 +117,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         env->GetStaticMethodID(s_native_library_class, "landscapeScreenLayout", "()I");
     s_exit_emulation_activity =
         env->GetStaticMethodID(s_native_library_class, "exitEmulationActivity", "(I)V");
+    s_request_camera_permission =
+        env->GetStaticMethodID(s_native_library_class, "RequestCameraPermission", "()Z");
 
     SoftwareKeyboard::InitJNI(env);
     Camera::StillImage::InitJNI(env);

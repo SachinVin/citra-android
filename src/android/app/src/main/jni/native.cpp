@@ -22,6 +22,7 @@
 #include "core/settings.h"
 #include "jni/applets/swkbd.h"
 #include "jni/button_manager.h"
+#include "jni/camera/ndk_camera.h"
 #include "jni/camera/still_image_camera.h"
 #include "jni/config.h"
 #include "jni/emu_window/emu_window.h"
@@ -109,6 +110,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     Settings::Apply();
 
     Camera::RegisterFactory("image", std::make_unique<Camera::StillImage::Factory>());
+    Camera::RegisterFactory("ndk", std::make_unique<Camera::NDK::Factory>());
 
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
