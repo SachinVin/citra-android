@@ -16,5 +16,6 @@ jmethodID GetAlertPromptButton();
 jmethodID GetIsPortraitMode();
 jmethodID GetLandscapeScreenLayout();
 jmethodID GetExitEmulationActivity();
+jmethodID GetRequestCameraPermission();
 
 } // namespace IDCache
