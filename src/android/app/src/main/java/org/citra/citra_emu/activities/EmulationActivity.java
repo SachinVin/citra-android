@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -225,6 +226,18 @@ public final class EmulationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, result);
         if (requestCode == StillImageCameraHelper.REQUEST_CAMERA_FILE_PICKER) {
             StillImageCameraHelper.OnFilePickerResult(resultCode == RESULT_OK ? result : null);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+        case NativeLibrary.REQUEST_CODE_NATIVE_CAMERA:
+            NativeLibrary.CameraPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+            break;
+        default:
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            break;
         }
     }
 
