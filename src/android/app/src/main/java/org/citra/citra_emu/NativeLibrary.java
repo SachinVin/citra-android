@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
