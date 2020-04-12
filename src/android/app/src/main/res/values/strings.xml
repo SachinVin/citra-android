@@ -79,6 +79,9 @@
     <!-- Miscellaneous -->
     <string name="clear">Clear</string>
     <string name="slider_default">Default</string>
+    <string name="ini_saved">Saved settings to INI files</string>
+    <string name="gameid_saved">Saved settings for %1$s</string>
+    <string name="error_saving">Error saving %1$s.ini: %2$s</string>
 
     <!-- Game Grid Screen-->
     <string name="grid_menu_core_settings">Settings</string>
