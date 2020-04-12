@@ -49,6 +49,14 @@
     <string name="emulated_region">Emulated region</string>
     <string name="emulated_language">Emulated language</string>
 
+    <!-- Camera settings strings -->
+    <string name="inner_camera">Inner Camera</string>
+    <string name="outer_left_camera">Outer Left Camera</string>
+    <string name="outer_right_camera">Outer Right Camera</string>
+    <string name="image_source">Image Source</string>
+    <string name="image_source_description">Sets the image source of the virtual camera. You can use an image file, or a device camera.</string>
+    <string name="image_flip">Image Flip</string>
+
     <!-- Graphics settings strings -->
     <string name="vsync">Enable V-Sync</string>
     <string name="vsync_description">Synchronizes the game frame rate to the refresh rate of your device.</string>
@@ -103,6 +111,7 @@
     <string name="preferences_premium">Premium</string>
     <string name="preferences_general">General</string>
     <string name="preferences_system">System</string>
+    <string name="preferences_camera">Camera</string>
     <string name="preferences_controls">Gamepad</string>
     <string name="preferences_graphics">Graphics</string>
     <string name="preferences_audio">Audio</string>
