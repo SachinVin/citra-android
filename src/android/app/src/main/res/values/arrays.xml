@@ -2,7 +2,7 @@
 
 <!-- All lists for ListPreference keys/values are placed here -->
 <resources>
-    <string-array name="systemClockNames" translatable="false">
+    <string-array name="systemClockNames" translatable="true">
         <item>Device clock</item>
         <item>Simulated clock</item>
     </string-array>
