@@ -74,4 +74,7 @@ private:
     friend class Interface;
 };
 
+// Device rotation. Updated in native.cpp.
+inline int g_rotation = 0;
+
 } // namespace Camera::NDK
