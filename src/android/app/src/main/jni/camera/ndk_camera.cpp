@@ -210,8 +210,13 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
 #undef CAMERA_CALL
 #undef CREATE
 
-Interface::Interface(Factory& factory_, const std::string& id_, const Service::CAM::Flip& flip_)
-    : factory(factory_), id(id_), flip(flip_) {}
+Interface::Interface(Factory& factory_, const std::string& id_, const Service::CAM::Flip& flip)
+    : factory(factory_), id(id_) {
+    mirror = base_mirror =
+        flip == Service::CAM::Flip::Horizontal || flip == Service::CAM::Flip::Reverse;
+    invert = base_invert =
+        flip == Service::CAM::Flip::Vertical || flip == Service::CAM::Flip::Reverse;
+}
 
 Interface::~Interface() = default;
 
@@ -227,8 +232,11 @@ void Interface::SetResolution(const Service::CAM::Resolution& resolution_) {
     resolution = resolution_;
 }
 
-void Interface::SetFlip(Service::CAM::Flip flip_) {
-    flip = flip_;
+void Interface::SetFlip(Service::CAM::Flip flip) {
+    mirror = base_mirror ^
+             (flip == Service::CAM::Flip::Horizontal || flip == Service::CAM::Flip::Reverse);
+    invert =
+        base_invert ^ (flip == Service::CAM::Flip::Vertical || flip == Service::CAM::Flip::Reverse);
 }
 
 void Interface::SetFormat(Service::CAM::OutputFormat format_) {
@@ -265,19 +273,32 @@ std::vector<u16> Interface::ReceiveFrame() {
                       scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
                       scaled_v.data(), resolution.width / 4, resolution.width, resolution.height,
                       libyuv::kFilterBilinear);
-    // TODO: Record and apply flip
+
+    if (mirror) {
+        std::vector<u8> mirrored_y(scaled_y.size());
+        std::vector<u8> mirrored_u(scaled_u.size());
+        std::vector<u8> mirrored_v(scaled_v.size());
+        libyuv::I420Mirror(scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
+                           scaled_v.data(), resolution.width / 4, mirrored_y.data(),
+                           resolution.width, mirrored_u.data(), resolution.width / 4,
+                           mirrored_v.data(), resolution.width / 4, resolution.width,
+                           resolution.height);
+        scaled_y.swap(mirrored_y);
+        scaled_u.swap(mirrored_u);
+        scaled_v.swap(mirrored_v);
+    }
 
     std::vector<u16> output(resolution.width * resolution.height);
     if (format == Service::CAM::OutputFormat::RGB565) {
         libyuv::I420ToRGB565(scaled_y.data(), resolution.width, scaled_u.data(),
                              resolution.width / 4, scaled_v.data(), resolution.width / 4,
                              reinterpret_cast<u8*>(output.data()), resolution.width * 2,
-                             resolution.width, resolution.height);
+                             resolution.width, invert ? -resolution.height : resolution.height);
     } else {
         libyuv::I420ToYUY2(scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
                            scaled_v.data(), resolution.width / 4,
                            reinterpret_cast<u8*>(output.data()), resolution.width * 2,
-                           resolution.width, resolution.height);
+                           resolution.width, invert ? -resolution.height : resolution.height);
     }
     return output;
 }
