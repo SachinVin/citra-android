@@ -37,7 +37,13 @@ private:
     std::string id;
 
     Service::CAM::Resolution resolution;
-    Service::CAM::Flip flip;
+
+    // Flipping parameters. mirror = horizontal, invert = vertical.
+    bool base_mirror{};
+    bool base_invert{};
+    bool mirror{};
+    bool invert{};
+
     Service::CAM::OutputFormat format;
     // std::vector<u16> image; // Data fetched from the frontend
     // bool opened{};          // Whether the camera was successfully opened
