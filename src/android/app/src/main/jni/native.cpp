@@ -184,6 +184,7 @@ void Java_org_citra_citra_1emu_NativeLibrary_NotifyOrientationChange(JNIEnv* env
     Settings::values.layout_option = static_cast<Settings::LayoutOption>(layout_option);
     VideoCore::g_renderer->UpdateCurrentFramebufferLayout(!(rotation % 2));
     InputManager::screen_rotation = rotation;
+    Camera::NDK::g_rotation = rotation;
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(JNIEnv* env, [[maybe_unused]] jclass clazz,
@@ -193,6 +194,7 @@ void Java_org_citra_citra_1emu_NativeLibrary_SwapScreens(JNIEnv* env, [[maybe_un
         VideoCore::g_renderer->UpdateCurrentFramebufferLayout(!(rotation % 2));
     }
     InputManager::screen_rotation = rotation;
+    Camera::NDK::g_rotation = rotation;
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(JNIEnv* env,
