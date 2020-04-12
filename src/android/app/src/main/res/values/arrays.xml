@@ -91,4 +91,30 @@
         <item>Circle Pad</item>
         <item>C Stick</item>
     </string-array>
+
+    <string-array name="cameraImageSourceNames">
+        <item>Blank</item>
+        <item>Still Image</item>
+        <item>Device Camera</item>
+    </string-array>
+
+    <string-array name="cameraImageSourceValues">
+        <item>blank</item>
+        <item>image</item>
+        <item>ndk</item>
+    </string-array>
+
+    <string-array name="cameraFlipNames">
+        <item>None</item>
+        <item>Horizontal</item>
+        <item>Vertical</item>
+        <item>Reverse</item>
+    </string-array>
+
+    <integer-array name="cameraFlipValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
 </resources>

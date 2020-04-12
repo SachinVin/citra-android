@@ -92,6 +92,9 @@ public final class SettingsFragmentPresenter {
             case Settings.SECTION_SYSTEM:
                 addSystemSettings(sl);
                 break;
+            case Settings.SECTION_CAMERA:
+                addCameraSettings(sl);
+                break;
             case Settings.SECTION_CONTROLS:
                 addInputSettings(sl);
                 break;
@@ -119,6 +122,7 @@ public final class SettingsFragmentPresenter {
         sl.add(new SubmenuSetting(null, null, R.string.preferences_premium, 0, Settings.SECTION_PREMIUM));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_general, 0, Settings.SECTION_CORE));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_system, 0, Settings.SECTION_SYSTEM));
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_camera, 0, Settings.SECTION_CAMERA));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_controls, 0, Settings.SECTION_CONTROLS));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, Settings.SECTION_RENDERER));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_audio, 0, Settings.SECTION_AUDIO));
@@ -161,6 +165,32 @@ public final class SettingsFragmentPresenter {
         sl.add(new DateTimeSetting(SettingsFile.KEY_INIT_TIME, Settings.SECTION_SYSTEM, R.string.init_time, R.string.init_time_description, "2000-01-01 00:00:01", dateTime));
     }
 
+    private void addCameraSettings(ArrayList<SettingsItem> sl) {
+        mView.getActivity().setTitle(R.string.preferences_camera);
+
+        final String[] imageSourceNames = mView.getActivity().getResources().getStringArray(R.array.cameraImageSourceNames);
+        final String[] imageSourceValues = mView.getActivity().getResources().getStringArray(R.array.cameraImageSourceValues);
+
+        SettingSection cameraSection = mSettings.getSection(Settings.SECTION_CAMERA);
+
+        Setting innerCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_NAME);
+        Setting innerCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_FLIP);
+        sl.add(new HeaderSetting(null, null, R.string.inner_camera, 0));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], innerCameraImageSource));
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, innerCameraFlip));
+
+        Setting outerLeftCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME);
+        Setting outerLeftCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP);
+        sl.add(new HeaderSetting(null, null, R.string.outer_left_camera, 0));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], outerLeftCameraImageSource));
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, outerLeftCameraFlip));
+
+        Setting outerRightCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME);
+        Setting outerRightCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_FLIP);
+        sl.add(new HeaderSetting(null, null, R.string.outer_right_camera, 0));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], outerRightCameraImageSource));
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, outerRightCameraFlip));
+    }
 
     private void addInputSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_controls);
