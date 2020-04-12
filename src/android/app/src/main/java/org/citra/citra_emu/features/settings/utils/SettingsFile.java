@@ -2,7 +2,9 @@ package org.citra.citra_emu.features.settings.utils;
 
 import androidx.annotation.NonNull;
 
+import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.NativeLibrary;
+import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.FloatSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
@@ -202,7 +204,7 @@ public final class SettingsFile {
             writer.store();
         } catch (IOException e) {
             Log.error("[SettingsFile] File not found: " + fileName + ".ini: " + e.getMessage());
-            view.showToastMessage("Error saving " + fileName + ".ini: " + e.getMessage(), false);
+            view.showToastMessage(CitraApplication.getAppContext().getString(R.string.error_saving, fileName, e.getMessage()), false);
         }
     }
 
