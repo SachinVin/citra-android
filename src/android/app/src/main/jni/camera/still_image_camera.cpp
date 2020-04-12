@@ -29,7 +29,12 @@ void CleanupJNI(JNIEnv* env) {
     env->DeleteGlobalRef(s_still_image_camera_helper_class);
 }
 
-Interface::Interface(jstring path_, const Service::CAM::Flip& flip_) : path(path_), flip(flip_) {}
+Interface::Interface(jstring path_, const Service::CAM::Flip& flip) : path(path_) {
+    mirror = base_mirror =
+        flip == Service::CAM::Flip::Horizontal || flip == Service::CAM::Flip::Reverse;
+    invert = base_invert =
+        flip == Service::CAM::Flip::Vertical || flip == Service::CAM::Flip::Reverse;
+}
 
 Interface::~Interface() {
     Factory::last_path = nullptr;
@@ -70,13 +75,20 @@ void Interface::StartCapture() {
                        info.width, info.height);
     BITMAP_CALL(unlockPixels(env, bitmap));
 
+    if (mirror) {
+        std::vector<u8> mirrored(data.size());
+        libyuv::ARGBMirror(data.data(), info.stride, mirrored.data(), info.stride, info.width,
+                           info.height);
+        data.swap(mirrored);
+    }
+
     image.resize(info.height * info.width);
     if (format == Service::CAM::OutputFormat::RGB565) {
         libyuv::ARGBToRGB565(data.data(), info.stride, reinterpret_cast<u8*>(image.data()),
-                             info.width * 2, info.width, info.height);
+                             info.width * 2, info.width, invert ? -info.height : info.height);
     } else {
         libyuv::ARGBToYUY2(data.data(), info.stride, reinterpret_cast<u8*>(image.data()),
-                           info.width * 2, info.width, info.height);
+                           info.width * 2, info.width, invert ? -info.height : info.height);
     }
     opened = true;
 
@@ -87,8 +99,11 @@ void Interface::SetResolution(const Service::CAM::Resolution& resolution_) {
     resolution = resolution_;
 }
 
-void Interface::SetFlip(Service::CAM::Flip flip_) {
-    flip = flip_;
+void Interface::SetFlip(Service::CAM::Flip flip) {
+    mirror = base_mirror ^
+             (flip == Service::CAM::Flip::Horizontal || flip == Service::CAM::Flip::Reverse);
+    invert =
+        base_invert ^ (flip == Service::CAM::Flip::Vertical || flip == Service::CAM::Flip::Reverse);
 }
 
 void Interface::SetFormat(Service::CAM::OutputFormat format_) {
