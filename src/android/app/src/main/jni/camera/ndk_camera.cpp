@@ -11,6 +11,7 @@
 #include <libyuv.h>
 #include <media/NdkImageReader.h>
 #include "common/scope_exit.h"
+#include "common/thread.h"
 #include "core/frontend/camera/blank_camera.h"
 #include "jni/camera/ndk_camera.h"
 #include "jni/id_cache.h"
@@ -21,8 +22,8 @@ namespace Camera::NDK {
  * Implementation detail of NDK camera interface, holding a ton of different structs.
  * As long as the object lives, the camera is opened and capturing image. To turn off the camera,
  * one needs to destruct the object.
- * It captures at the maximum resolution supported by the device, capped at the 3DS camera's maximum
- * resolution (640x480). The pixel format is I420.
+ * The pixel format is 'Android 420' which can contain a variety of YUV420 formats. The exact
+ * format used can be determined by examing the 'pixel stride'.
  */
 class CaptureSession final {
 public:
@@ -64,7 +65,13 @@ private:
     std::mutex data_mutex;
 
     // Clang does not yet have shared_ptr to arrays support. Managed data are actually arrays.
-    std::array<std::shared_ptr<u8>, 3> data; // I420 format, planes are Y, U, V.
+    std::array<std::shared_ptr<u8>, 3> data{}; // I420 format, planes are Y, U, V.
+    std::array<int, 3> row_stride{};           // Row stride for the planes.
+    int pixel_stride{};                        // Pixel stride for the UV planes.
+    Common::Event active_event;                // Signals that the session has become ready
+
+    int sensor_orientation{}; // Sensor Orientation
+    bool facing_front{};      // Whether this camera faces front. Used for handling device rotation.
 
     friend class Interface;
     friend void ImageCallback(void* context, AImageReader* reader);
@@ -72,16 +79,10 @@ private:
 
 static void OnDisconnected(void* context, ACameraDevice* device) {
     LOG_ERROR(Service_CAM, "Camera device disconnected");
-    // TODO: Do something here?
-    // CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
-    // that->CloseCamera();
 }
 
 static void OnError(void* context, ACameraDevice* device, int error) {
     LOG_ERROR(Service_CAM, "Camera device error {}", error);
-    // TODO: Do something here?
-    // CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
-    // that->CloseCamera();
 }
 
 #define MEDIA_CALL(func)                                                                           \
@@ -108,18 +109,28 @@ void ImageCallback(void* context, AImageReader* reader) {
     SCOPE_EXIT({ AImage_delete(image); });
 
     std::array<std::shared_ptr<u8>, 3> data;
+    std::array<int, 3> row_stride;
     for (const int plane : {0, 1, 2}) {
         u8* ptr;
         int size;
         MEDIA_CALL(AImage_getPlaneData(image, plane, &ptr, &size));
+        LOG_CRITICAL(Service_CAM, "Plane data for {} got, size {}", plane, size);
         data[plane].reset(new u8[size], std::default_delete<u8[]>());
-        std::memcpy(data[plane].get(), ptr, static_cast<size_t>(size));
+        std::memcpy(data[plane].get(), ptr, static_cast<std::size_t>(size));
+
+        MEDIA_CALL(AImage_getPlaneRowStride(image, plane, &row_stride[plane]));
+    }
+
+    CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
+    if (!that->ready) {
+        that->active_event.Set(); // Mark the session as active
     }
 
     {
-        CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
         std::lock_guard lock{that->data_mutex};
         that->data = data;
+        that->row_stride = row_stride;
+        MEDIA_CALL(AImage_getPlanePixelStride(image, 1, &that->pixel_stride));
     }
 }
 
@@ -129,6 +140,11 @@ void ImageCallback(void* context, AImageReader* reader) {
         statement;                                                                                 \
         name.reset(raw);                                                                           \
     }
+
+// We have to define these no-op callbacks
+static void OnClosed(void* context, ACameraCaptureSession* session) {}
+static void OnReady(void* context, ACameraCaptureSession* session) {}
+static void OnActive(void* context, ACameraCaptureSession* session) {}
 
 CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
     device_callbacks = {
@@ -146,6 +162,8 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
     ACameraMetadata_const_entry entry;
     CAMERA_CALL(ACameraMetadata_getConstEntry(
         metadata, ACAMERA_SCALER_AVAILABLE_STREAM_CONFIGURATIONS, &entry));
+
+    // We select the minimum resolution larger than 640x640 if any, or the maximum resolution.
     selected_resolution = {};
     for (std::size_t i = 0; i < entry.count; i += 4) {
         // (format, width, height, input?)
@@ -158,10 +176,22 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
         if (format == AIMAGE_FORMAT_YUV_420_888) {
             int width = entry.data.i32[i + 1];
             int height = entry.data.i32[i + 2];
-            if (width <= 640 && height <= 480) { // Maximum size the 3DS supports
+            if (selected_resolution.first <= 640 || selected_resolution.second <= 640) {
+                // Selected resolution is not large enough
                 selected_resolution = std::max(selected_resolution, std::make_pair(width, height));
+            } else if (width >= 640 && height >= 640) {
+                // Selected resolution and this one are both large enough
+                selected_resolution = std::min(selected_resolution, std::make_pair(width, height));
             }
         }
+    }
+
+    CAMERA_CALL(ACameraMetadata_getConstEntry(metadata, ACAMERA_SENSOR_ORIENTATION, &entry));
+    sensor_orientation = entry.data.i32[0];
+
+    CAMERA_CALL(ACameraMetadata_getConstEntry(metadata, ACAMERA_LENS_FACING, &entry));
+    if (entry.data.i32[0] == ACAMERA_LENS_FACING_FRONT) {
+        facing_front = true;
     }
     ACameraMetadata_free(metadata);
 
@@ -188,6 +218,12 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
            CAMERA_CALL(ACaptureSessionOutputContainer_create(&raw)));
     CAMERA_CALL(ACaptureSessionOutputContainer_add(outputs.get(), output.get()));
 
+    session_callbacks = {
+        /*context*/ nullptr,
+        /*onClosed*/ &OnClosed,
+        /*onReady*/ &OnReady,
+        /*onActive*/ &OnActive,
+    };
     CREATE(ACameraCaptureSession, session,
            CAMERA_CALL(ACameraDevice_createCaptureSession(device.get(), outputs.get(),
                                                           &session_callbacks, &raw)));
@@ -203,6 +239,8 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
     CAMERA_CALL(ACameraCaptureSession_setRepeatingRequest(session.get(), nullptr, 1,
                                                           requests.data(), nullptr));
 
+    // Wait until the first image comes
+    active_event.Wait();
     ready = true;
 }
 
@@ -243,15 +281,69 @@ void Interface::SetFormat(Service::CAM::OutputFormat format_) {
     format = format_;
 }
 
+struct YUVImage {
+    int width{};
+    int height{};
+    std::vector<u8> y;
+    std::vector<u8> u;
+    std::vector<u8> v;
+
+    explicit YUVImage(int width_, int height_)
+        : width(width_), height(height_), y(static_cast<std::size_t>(width * height)),
+          u(static_cast<std::size_t>(width * height / 4)),
+          v(static_cast<std::size_t>(width * height / 4)) {}
+
+    void Swap(YUVImage& other) {
+        y.swap(other.y);
+        u.swap(other.u);
+        v.swap(other.v);
+        std::swap(width, other.width);
+        std::swap(height, other.height);
+    }
+
+    void Clear() {
+        y.clear();
+        u.clear();
+        v.clear();
+        width = height = 0;
+    }
+};
+
+#define YUV(image)                                                                                 \
+    image.y.data(), image.width, image.u.data(), image.width / 2, image.v.data(), image.width / 2
+
 std::vector<u16> Interface::ReceiveFrame() {
     std::array<std::shared_ptr<u8>, 3> data;
+    std::array<int, 3> row_stride;
     {
         std::lock_guard lock{session->data_mutex};
         data = session->data;
+        row_stride = session->row_stride;
     }
+
+    ASSERT_MSG(data[0] && data[1] && data[2], "Camera is not active yet");
 
     auto [width, height] = session->selected_resolution;
 
+    YUVImage converted(width, height);
+    libyuv::Android420ToI420(data[0].get(), row_stride[0], data[1].get(), row_stride[1],
+                             data[2].get(), row_stride[2], session->pixel_stride, YUV(converted),
+                             width, height);
+
+    // Rotate the image to get it in upright position
+    // The g_rotation here is the display rotation which is opposite of the device rotation
+    const int rotation =
+        (session->sensor_orientation + (session->facing_front ? g_rotation : 4 - g_rotation) * 90) %
+        360;
+    if (rotation == 90 || rotation == 270) {
+        std::swap(width, height);
+    }
+    YUVImage rotated(width, height);
+    libyuv::I420Rotate(YUV(converted), YUV(rotated), height, width,
+                       static_cast<libyuv::RotationMode>(rotation));
+    converted.Clear();
+
+    // Calculate crop coordinates
     int crop_width{}, crop_height{};
     if (resolution.width * height > resolution.height * width) {
         crop_width = width;
@@ -260,48 +352,37 @@ std::vector<u16> Interface::ReceiveFrame() {
         crop_height = height;
         crop_width = height * resolution.width / resolution.height;
     }
+    const int crop_x = (width - crop_width) / 2;
+    const int crop_y = (height - crop_height) / 2;
 
-    int crop_x = (width - crop_width) / 2;
-    int crop_y = (height - crop_height) / 2;
-    int offset = crop_y * width + crop_x;
-    std::vector<u8> scaled_y(resolution.width * resolution.height);
-    std::vector<u8> scaled_u(resolution.width * resolution.height / 4ul);
-    std::vector<u8> scaled_v(resolution.width * resolution.height / 4ul);
+    const int y_offset = crop_y * width + crop_x;
+    const int uv_offset = crop_y / 2 * width / 2 + crop_x / 2;
+    YUVImage scaled(resolution.width, resolution.height);
     // Crop and scale
-    libyuv::I420Scale(data[0].get() + offset, width, data[1].get() + offset / 4, width / 4,
-                      data[2].get() + offset / 4, width / 4, crop_width, crop_height,
-                      scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
-                      scaled_v.data(), resolution.width / 4, resolution.width, resolution.height,
-                      libyuv::kFilterBilinear);
+    libyuv::I420Scale(rotated.y.data() + y_offset, width, rotated.u.data() + uv_offset, width / 2,
+                      rotated.v.data() + uv_offset, width / 2, crop_width, crop_height, YUV(scaled),
+                      resolution.width, resolution.height, libyuv::kFilterBilinear);
+    rotated.Clear();
 
     if (mirror) {
-        std::vector<u8> mirrored_y(scaled_y.size());
-        std::vector<u8> mirrored_u(scaled_u.size());
-        std::vector<u8> mirrored_v(scaled_v.size());
-        libyuv::I420Mirror(scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
-                           scaled_v.data(), resolution.width / 4, mirrored_y.data(),
-                           resolution.width, mirrored_u.data(), resolution.width / 4,
-                           mirrored_v.data(), resolution.width / 4, resolution.width,
-                           resolution.height);
-        scaled_y.swap(mirrored_y);
-        scaled_u.swap(mirrored_u);
-        scaled_v.swap(mirrored_v);
+        YUVImage mirrored(scaled.width, scaled.height);
+        libyuv::I420Mirror(YUV(scaled), YUV(mirrored), resolution.width, resolution.height);
+        scaled.Swap(mirrored);
     }
 
     std::vector<u16> output(resolution.width * resolution.height);
     if (format == Service::CAM::OutputFormat::RGB565) {
-        libyuv::I420ToRGB565(scaled_y.data(), resolution.width, scaled_u.data(),
-                             resolution.width / 4, scaled_v.data(), resolution.width / 4,
-                             reinterpret_cast<u8*>(output.data()), resolution.width * 2,
-                             resolution.width, invert ? -resolution.height : resolution.height);
+        libyuv::I420ToRGB565(YUV(scaled), reinterpret_cast<u8*>(output.data()),
+                             resolution.width * 2, resolution.width,
+                             invert ? -resolution.height : resolution.height);
     } else {
-        libyuv::I420ToYUY2(scaled_y.data(), resolution.width, scaled_u.data(), resolution.width / 4,
-                           scaled_v.data(), resolution.width / 4,
-                           reinterpret_cast<u8*>(output.data()), resolution.width * 2,
+        libyuv::I420ToYUY2(YUV(scaled), reinterpret_cast<u8*>(output.data()), resolution.width * 2,
                            resolution.width, invert ? -resolution.height : resolution.height);
     }
     return output;
 }
+
+#undef YUV
 
 bool Interface::IsPreviewAvailable() {
     return session && session->ready;
