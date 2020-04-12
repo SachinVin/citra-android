@@ -2,6 +2,8 @@ package org.citra.citra_emu.features.settings.model;
 
 import android.text.TextUtils;
 
+import org.citra.citra_emu.CitraApplication;
+import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.ui.SettingsActivityView;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
@@ -103,7 +105,7 @@ public class Settings {
 
     public void saveSettings(SettingsActivityView view) {
         if (TextUtils.isEmpty(gameId)) {
-            view.showToastMessage("Saved settings to INI files", false);
+            view.showToastMessage(CitraApplication.getAppContext().getString(R.string.ini_saved), false);
 
             for (Map.Entry<String, List<String>> entry : configFileSectionsMap.entrySet()) {
                 String fileName = entry.getKey();
@@ -117,7 +119,7 @@ public class Settings {
             }
         } else {
             // custom game settings
-            view.showToastMessage("Saved settings for " + gameId, false);
+            view.showToastMessage(CitraApplication.getAppContext().getString(R.string.gameid_saved, gameId), false);
 
             SettingsFile.saveCustomGameSettings(gameId, sections);
         }
