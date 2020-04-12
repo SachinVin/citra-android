@@ -46,6 +46,7 @@
 
         <activity
             android:name="org.citra.citra_emu.activities.EmulationActivity"
+            android:resizeableActivity="false"
             android:theme="@style/CitraEmulation"
             android:launchMode="singleTop"/>
 
