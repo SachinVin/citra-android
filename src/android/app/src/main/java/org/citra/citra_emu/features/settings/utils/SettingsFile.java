@@ -101,6 +101,8 @@ public final class SettingsFile {
     public static final String KEY_CAMERA_OUTER_RIGHT_NAME = "camera_outer_right_name";
     public static final String KEY_CAMERA_OUTER_RIGHT_CONFIG = "camera_outer_right_config";
     public static final String KEY_CAMERA_OUTER_RIGHT_FLIP = "camera_outer_right_flip";
+    public static final String KEY_CAMERA_OUTER_LEFT_NAME = "camera_outer_left_name";
+    public static final String KEY_CAMERA_OUTER_LEFT_CONFIG = "camera_outer_left_config";
     public static final String KEY_CAMERA_OUTER_LEFT_FLIP = "camera_outer_left_flip";
     public static final String KEY_CAMERA_INNER_NAME = "camera_inner_name";
     public static final String KEY_CAMERA_INNER_CONFIG = "camera_inner_config";
