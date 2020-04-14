@@ -124,9 +124,6 @@ std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
                                                  const Service::CAM::Flip& flip) {
 
     JNIEnv* env = IDCache::GetEnvForThread();
-    if (!config.empty()) {
-        return std::make_unique<Interface>(env->NewStringUTF(config.c_str()), flip);
-    }
     if (last_path != nullptr) {
         return std::make_unique<Interface>(last_path, flip);
     }
