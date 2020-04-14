@@ -3,7 +3,6 @@ package org.citra.citra_emu.features.settings.model.view;
 import org.citra.citra_emu.features.settings.model.FloatSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
-import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.utils.Log;
 
 public final class SliderSetting extends SettingsItem {
@@ -46,19 +45,11 @@ public final class SliderSetting extends SettingsItem {
             return intSetting.getValue();
         } else if (setting instanceof FloatSetting) {
             FloatSetting floatSetting = (FloatSetting) setting;
-            if (isPercentSetting()) {
-                return Math.round(floatSetting.getValue() * 100);
-            } else {
-                return Math.round(floatSetting.getValue());
-            }
+            return Math.round(floatSetting.getValue());
         } else {
             Log.error("[SliderSetting] Error casting setting type.");
             return -1;
         }
-    }
-
-    public boolean isPercentSetting() {
-        return getKey().equals(SettingsFile.KEY_FRAME_LIMIT);
     }
 
     /**

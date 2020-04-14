@@ -115,7 +115,7 @@ void Config::ReadValues() {
     Settings::values.use_vsync_new = sdl2_config->GetBoolean("Renderer", "use_vsync_new", true);
     Settings::values.use_frame_limit = sdl2_config->GetBoolean("Renderer", "use_frame_limit", true);
     Settings::values.frame_limit =
-        static_cast<u16>(sdl2_config->GetReal("Renderer", "frame_limit", 1.0) * 100.0);
+        static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
     Settings::values.texture_filter_name =
             sdl2_config->GetString("Renderer", "texture_filter_name", "none");
 
