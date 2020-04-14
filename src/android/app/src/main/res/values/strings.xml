@@ -54,7 +54,12 @@
     <string name="outer_left_camera">Outer Left Camera</string>
     <string name="outer_right_camera">Outer Right Camera</string>
     <string name="image_source">Image Source</string>
-    <string name="image_source_description">Sets the image source of the virtual camera. You can use an image file, or a device camera.</string>
+    <string name="image_source_description">Sets the image source of the virtual camera. You can use an image file, or a device camera when supported.</string>
+    <string name="camera_device">Camera Device</string>
+    <string name="camera_device_description">If the \"Image Source\" setting is set to \"Device Camera\", this sets the physical camera to use.</string>
+    <string name="camera_facing_front">Front</string>
+    <string name="camera_facing_back">Back</string>
+    <string name="camera_facing_external">External</string>
     <string name="image_flip">Image Flip</string>
 
     <!-- Graphics settings strings -->
@@ -158,4 +163,6 @@
 
     <!-- Camera -->
     <string name="camera_select_image">Select Image</string>
+    <string name="camera">Camera</string>
+    <string name="camera_permission_needed">Citra needs to access your camera to emulate the 3DS\'s cameras.\n\nAlternatively, you can also set \"Image Source\" to \"Still Image\" in Camera Settings.</string>
 </resources>

@@ -49,6 +49,10 @@ private:
     // bool opened{};          // Whether the camera was successfully opened
 };
 
+// Placeholders to mean 'use any front/back camera'
+constexpr char FrontCameraPlaceholder[] = "_front";
+constexpr char BackCameraPlaceholder[] = "_back";
+
 class Factory final : public CameraFactory {
 public:
     explicit Factory();
@@ -58,6 +62,10 @@ public:
                                             const Service::CAM::Flip& flip) override;
 
 private:
+    // Avoid requesting for permisson more than once on each call
+    bool camera_permission_requested = false;
+    bool camera_permission_granted = false;
+
     std::shared_ptr<CaptureSession> CreateCaptureSession(const std::string& id);
 
     // The session is cached, to avoid opening the same camera twice.
