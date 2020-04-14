@@ -18,6 +18,7 @@
 #include "input_common/main.h"
 #include "input_common/udp/client.h"
 #include "jni/button_manager.h"
+#include "jni/camera/ndk_camera.h"
 #include "jni/config.h"
 #include "jni/default_ini.h"
 
@@ -117,7 +118,7 @@ void Config::ReadValues() {
     Settings::values.frame_limit =
         static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
     Settings::values.texture_filter_name =
-            sdl2_config->GetString("Renderer", "texture_filter_name", "none");
+        sdl2_config->GetString("Renderer", "texture_filter_name", "none");
 
     Settings::values.render_3d = static_cast<Settings::StereoRenderOption>(
         sdl2_config->GetInteger("Renderer", "render_3d", 0));
@@ -205,21 +206,21 @@ void Config::ReadValues() {
     // Camera
     using namespace Service::CAM;
     Settings::values.camera_name[OuterRightCamera] =
-        sdl2_config->GetString("Camera", "camera_outer_right_name", "blank");
-    Settings::values.camera_config[OuterRightCamera] =
-        sdl2_config->GetString("Camera", "camera_outer_right_config", "");
+        sdl2_config->GetString("Camera", "camera_outer_right_name", "ndk");
+    Settings::values.camera_config[OuterRightCamera] = sdl2_config->GetString(
+        "Camera", "camera_outer_right_config", Camera::NDK::BackCameraPlaceholder);
     Settings::values.camera_flip[OuterRightCamera] =
         sdl2_config->GetInteger("Camera", "camera_outer_right_flip", 0);
     Settings::values.camera_name[InnerCamera] =
-        sdl2_config->GetString("Camera", "camera_inner_name", "blank");
-    Settings::values.camera_config[InnerCamera] =
-        sdl2_config->GetString("Camera", "camera_inner_config", "");
+        sdl2_config->GetString("Camera", "camera_inner_name", "ndk");
+    Settings::values.camera_config[InnerCamera] = sdl2_config->GetString(
+        "Camera", "camera_inner_config", Camera::NDK::FrontCameraPlaceholder);
     Settings::values.camera_flip[InnerCamera] =
         sdl2_config->GetInteger("Camera", "camera_inner_flip", 0);
     Settings::values.camera_name[OuterLeftCamera] =
-        sdl2_config->GetString("Camera", "camera_outer_left_name", "blank");
-    Settings::values.camera_config[OuterLeftCamera] =
-        sdl2_config->GetString("Camera", "camera_outer_left_config", "");
+        sdl2_config->GetString("Camera", "camera_outer_left_name", "ndk");
+    Settings::values.camera_config[OuterLeftCamera] = sdl2_config->GetString(
+        "Camera", "camera_outer_left_config", Camera::NDK::BackCameraPlaceholder);
     Settings::values.camera_flip[OuterLeftCamera] =
         sdl2_config->GetInteger("Camera", "camera_outer_left_flip", 0);
 

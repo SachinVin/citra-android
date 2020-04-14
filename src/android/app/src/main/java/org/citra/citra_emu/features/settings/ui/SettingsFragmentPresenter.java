@@ -1,5 +1,10 @@
 package org.citra.citra_emu.features.settings.ui;
 
+import android.app.Activity;
+import android.content.Context;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.text.TextUtils;
 
 import org.citra.citra_emu.NativeLibrary;
@@ -18,8 +23,11 @@ import org.citra.citra_emu.features.settings.model.view.StringSingleChoiceSettin
 import org.citra.citra_emu.features.settings.model.view.SubmenuSetting;
 import org.citra.citra_emu.features.settings.model.view.PremiumHeader;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
+import org.citra.citra_emu.utils.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public final class SettingsFragmentPresenter {
     private SettingsFragmentView mView;
@@ -166,29 +174,90 @@ public final class SettingsFragmentPresenter {
     }
 
     private void addCameraSettings(ArrayList<SettingsItem> sl) {
-        mView.getActivity().setTitle(R.string.preferences_camera);
+        final Activity activity = mView.getActivity();
+        activity.setTitle(R.string.preferences_camera);
 
-        final String[] imageSourceNames = mView.getActivity().getResources().getStringArray(R.array.cameraImageSourceNames);
-        final String[] imageSourceValues = mView.getActivity().getResources().getStringArray(R.array.cameraImageSourceValues);
+        // Get the camera IDs
+        CameraManager cameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        ArrayList<String> supportedCameraNameList = new ArrayList<>();
+        ArrayList<String> supportedCameraIdList = new ArrayList<>();
+        if (cameraManager != null) {
+            try {
+                for (String id : cameraManager.getCameraIdList()) {
+                    final CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                    if (Objects.requireNonNull(characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)) == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY) {
+                        continue; // Legacy cameras cannot be used with the NDK
+                    }
+
+                    supportedCameraIdList.add(id);
+
+                    final int facing = Objects.requireNonNull(characteristics.get(CameraCharacteristics.LENS_FACING));
+                    switch (facing) {
+                    case CameraCharacteristics.LENS_FACING_FRONT:
+                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_front)));
+                        break;
+                    case CameraCharacteristics.LENS_FACING_BACK:
+                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_back)));
+                        break;
+                    case CameraCharacteristics.LENS_FACING_EXTERNAL:
+                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_external)));
+                        break;
+                    }
+                }
+            } catch (CameraAccessException e) {
+                Log.error("Couldn't retrieve camera list");
+                e.printStackTrace();
+            }
+        }
+
+        // Create the names and values for display
+        ArrayList<String> cameraDeviceNameList = new ArrayList<>(Arrays.asList(activity.getResources().getStringArray(R.array.cameraDeviceNames)));
+        cameraDeviceNameList.addAll(supportedCameraNameList);
+        ArrayList<String> cameraDeviceValueList = new ArrayList<>(Arrays.asList(activity.getResources().getStringArray(R.array.cameraDeviceValues)));
+        cameraDeviceValueList.addAll(supportedCameraIdList);
+
+        final String[] cameraDeviceNames = cameraDeviceNameList.toArray(new String[]{});
+        final String[] cameraDeviceValues = cameraDeviceValueList.toArray(new String[]{});
+
+        final boolean haveCameraDevices = !supportedCameraIdList.isEmpty();
+
+        String[] imageSourceNames = activity.getResources().getStringArray(R.array.cameraImageSourceNames);
+        String[] imageSourceValues = activity.getResources().getStringArray(R.array.cameraImageSourceValues);
+        if (!haveCameraDevices) {
+            // Remove the last entry (ndk / Device Camera)
+            imageSourceNames = Arrays.copyOfRange(imageSourceNames, 0, imageSourceNames.length - 1);
+            imageSourceValues = Arrays.copyOfRange(imageSourceValues, 0, imageSourceValues.length - 1);
+        }
+
+        final String defaultImageSource = haveCameraDevices ? "ndk" : "image";
 
         SettingSection cameraSection = mSettings.getSection(Settings.SECTION_CAMERA);
 
         Setting innerCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_NAME);
+        Setting innerCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_CONFIG);
         Setting innerCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.inner_camera, 0));
-        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], innerCameraImageSource));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, innerCameraImageSource));
+        if (haveCameraDevices)
+            sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_CONFIG, Settings.SECTION_CAMERA, R.string.camera_device, R.string.camera_device_description, cameraDeviceNames, cameraDeviceValues, "_front", innerCameraConfig));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, innerCameraFlip));
 
         Setting outerLeftCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME);
+        Setting outerLeftCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_CONFIG);
         Setting outerLeftCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.outer_left_camera, 0));
-        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], outerLeftCameraImageSource));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, outerLeftCameraImageSource));
+        if (haveCameraDevices)
+            sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_CONFIG, Settings.SECTION_CAMERA, R.string.camera_device, R.string.camera_device_description, cameraDeviceNames, cameraDeviceValues, "_back", outerLeftCameraConfig));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, outerLeftCameraFlip));
 
         Setting outerRightCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME);
+        Setting outerRightCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_CONFIG);
         Setting outerRightCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.outer_right_camera, 0));
-        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, imageSourceValues[0], outerRightCameraImageSource));
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, outerRightCameraImageSource));
+        if (haveCameraDevices)
+            sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_CONFIG, Settings.SECTION_CAMERA, R.string.camera_device, R.string.camera_device_description, cameraDeviceNames, cameraDeviceValues, "_back", outerRightCameraConfig));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, outerRightCameraFlip));
     }
 
