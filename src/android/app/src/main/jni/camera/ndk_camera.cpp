@@ -14,6 +14,7 @@
 #include "common/thread.h"
 #include "core/frontend/camera/blank_camera.h"
 #include "jni/camera/ndk_camera.h"
+#include "jni/camera/still_image_camera.h"
 #include "jni/id_cache.h"
 
 namespace Camera::NDK {
@@ -256,7 +257,9 @@ Interface::Interface(Factory& factory_, const std::string& id_, const Service::C
         flip == Service::CAM::Flip::Vertical || flip == Service::CAM::Flip::Reverse;
 }
 
-Interface::~Interface() = default;
+Interface::~Interface() {
+    factory.camera_permission_requested = false;
+}
 
 void Interface::StartCapture() {
     session = factory.CreateCaptureSession(id);
@@ -404,17 +407,7 @@ std::shared_ptr<CaptureSession> Factory::CreateCaptureSession(const std::string&
 std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
                                                  const Service::CAM::Flip& flip) {
 
-    if (!manager) {
-        JNIEnv* env = IDCache::GetEnvForThread();
-        jboolean result = env->CallStaticBooleanMethod(IDCache::GetNativeLibraryClass(),
-                                                       IDCache::GetRequestCameraPermission());
-        if (result != JNI_TRUE) {
-            LOG_ERROR(Service_CAM, "Camera permissions denied");
-            return std::make_unique<Camera::BlankCamera>();
-        }
-
-        manager.reset(ACameraManager_create());
-    }
+    manager.reset(ACameraManager_create());
     ACameraIdList* id_list = nullptr;
 
     auto ret = ACameraManager_getCameraIdList(manager.get(), &id_list);
@@ -426,9 +419,28 @@ std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
     SCOPE_EXIT({ ACameraManager_deleteCameraIdList(id_list); });
 
     if (id_list->numCameras <= 0) {
-        LOG_ERROR(Service_CAM, "No camera devices found");
-        return std::make_unique<Camera::BlankCamera>();
+        LOG_WARNING(Service_CAM, "No camera devices found, falling back to StillImage");
+        // TODO: A better way of doing this?
+        return std::make_unique<StillImage::Factory>()->Create("", flip);
     }
+
+    // Request camera permission
+    if (!camera_permission_granted) {
+        if (camera_permission_requested) { // Permissions already denied
+            return std::make_unique<Camera::BlankCamera>();
+        }
+        camera_permission_requested = true;
+
+        JNIEnv* env = IDCache::GetEnvForThread();
+        jboolean result = env->CallStaticBooleanMethod(IDCache::GetNativeLibraryClass(),
+                                                       IDCache::GetRequestCameraPermission());
+        if (result != JNI_TRUE) {
+            LOG_ERROR(Service_CAM, "Camera permissions denied");
+            return std::make_unique<Camera::BlankCamera>();
+        }
+        camera_permission_granted = true;
+    }
+
     if (config.empty()) {
         LOG_WARNING(Service_CAM, "Camera ID not set, using default camera");
         return std::make_unique<Interface>(*this, id_list->cameraIds[0], flip);
@@ -437,6 +449,21 @@ std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
     for (int i = 0; i < id_list->numCameras; ++i) {
         const char* id = id_list->cameraIds[i];
         if (config == id) {
+            return std::make_unique<Interface>(*this, id, flip);
+        }
+
+        if (config != FrontCameraPlaceholder && config != BackCameraPlaceholder) {
+            continue;
+        }
+
+        ACameraMetadata* metadata;
+        ACameraManager_getCameraCharacteristics(manager.get(), id, &metadata);
+        SCOPE_EXIT({ ACameraMetadata_free(metadata); });
+
+        ACameraMetadata_const_entry entry;
+        ACameraMetadata_getConstEntry(metadata, ACAMERA_LENS_FACING, &entry);
+        if ((entry.data.i32[0] == ACAMERA_LENS_FACING_FRONT && config == FrontCameraPlaceholder) ||
+            (entry.data.i32[0] == ACAMERA_LENS_FACING_BACK && config == BackCameraPlaceholder)) {
             return std::make_unique<Interface>(*this, id, flip);
         }
     }

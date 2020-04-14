@@ -104,6 +104,18 @@
         <item>ndk</item>
     </string-array>
 
+    <string-array name="cameraDeviceNames">
+        <item>Default</item>
+        <item>Any Front Camera</item>
+        <item>Any Back Camera</item>
+    </string-array>
+
+    <string-array name="cameraDeviceValues">
+        <item/>
+        <item>_front</item>
+        <item>_back</item>
+    </string-array>
+
     <string-array name="cameraFlipNames">
         <item>None</item>
         <item>Horizontal</item>

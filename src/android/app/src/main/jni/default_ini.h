@@ -245,7 +245,13 @@ init_time =
 
 [Camera]
 # Which camera engine to use for the right outer camera
-# blank (default): a dummy camera that always returns black image
+# blank: a dummy camera that always returns black image
+# image: loads a still image from the storage. When the camera is started, you will be prompted
+#        to select an image.
+# ndk (Default): uses the device camera. You can specify the camera ID to use in the config field.
+#                If you don't specify an ID, the default setting will be used. For outer cameras,
+#                the back-facing camera will be used. For the inner camera, the front-facing
+#                camera will be used. Please note that 'Legacy' cameras are not supported.
 camera_outer_right_name =
 
 # A config string for the right outer camera. Its meaning is defined by the camera engine
