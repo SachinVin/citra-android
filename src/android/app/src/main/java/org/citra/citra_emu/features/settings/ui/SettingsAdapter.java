@@ -152,8 +152,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mDialog = builder.show();
     }
 
-    public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position)
-    {
+    public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position) {
         mClickedItem = item;
         mClickedPosition = position;
 
@@ -320,14 +319,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 mView.onSettingChanged();
             }
 
-            if (sliderSetting.isPercentSetting() || sliderSetting.getSetting() instanceof FloatSetting) {
-                float value;
-
-                if (sliderSetting.isPercentSetting()) {
-                    value = mSeekbarProgress / 100.0f;
-                } else {
-                    value = (float) mSeekbarProgress;
-                }
+            if (sliderSetting.getSetting() instanceof FloatSetting) {
+                float value = (float) mSeekbarProgress;
 
                 FloatSetting setting = sliderSetting.setSelectedValue(value);
                 if (setting != null) {
