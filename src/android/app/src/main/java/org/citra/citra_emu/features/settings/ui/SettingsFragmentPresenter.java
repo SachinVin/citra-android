@@ -123,12 +123,12 @@ public final class SettingsFragmentPresenter {
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_general);
 
-        SettingSection coreSection = mSettings.getSection(Settings.SECTION_CORE);
-        Setting frameLimitEnable = coreSection.getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
-        Setting frameLimitValue = coreSection.getSetting(SettingsFile.KEY_FRAME_LIMIT);
+        SettingSection rendererSection = mSettings.getSection(Settings.SECTION_RENDERER);
+        Setting frameLimitEnable = rendererSection.getSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED);
+        Setting frameLimitValue = rendererSection.getSetting(SettingsFile.KEY_FRAME_LIMIT);
 
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FRAME_LIMIT_ENABLED, Settings.SECTION_RENDERER, R.string.frame_limit_enable, R.string.frame_limit_enable_description, true, frameLimitEnable));
-        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, Settings.SECTION_RENDERER, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 0, 200, "%", 100, frameLimitValue));
+        sl.add(new SliderSetting(SettingsFile.KEY_FRAME_LIMIT, Settings.SECTION_RENDERER, R.string.frame_limit_slider, R.string.frame_limit_slider_description, 1, 200, "%", 100, frameLimitValue));
     }
 
     private void addSystemSettings(ArrayList<SettingsItem> sl) {
