@@ -28,7 +28,7 @@
 
         <activity
             android:name="org.citra.citra_emu.ui.main.MainActivity"
-            android:theme="@style/Citra">
+            android:theme="@style/CitraBase">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
             <intent-filter>
@@ -41,13 +41,13 @@
         <activity
             android:name="org.citra.citra_emu.features.settings.ui.SettingsActivity"
             android:configChanges="orientation|screenSize|uiMode"
-            android:theme="@style/CitraSettings"
+            android:theme="@style/CitraSettingsBase"
             android:label="@string/preferences_settings"/>
 
         <activity
             android:name="org.citra.citra_emu.activities.EmulationActivity"
             android:resizeableActivity="false"
-            android:theme="@style/CitraEmulation"
+            android:theme="@style/CitraEmulationBase"
             android:launchMode="singleTop"/>
 
         <activity
