@@ -160,7 +160,7 @@ public final class EmulationActivity extends AppCompatActivity {
         // Set these options now so that the SurfaceView the game renders into is the right size.
         enableFullscreenImmersive();
 
-        setTheme(R.style.CitraEmulation);
+        setTheme(R.style.CitraEmulationBase);
 
         setContentView(R.layout.activity_emulation);
 
