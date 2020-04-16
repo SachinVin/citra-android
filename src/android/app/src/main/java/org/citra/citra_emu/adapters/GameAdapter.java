@@ -83,7 +83,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         if (mDatasetValid) {
             if (mCursor.moveToPosition(position)) {
-                PicassoUtils.loadGameBanner(holder.imageScreenshot,
+                PicassoUtils.loadGameIcon(holder.imageIcon,
                         mCursor.getString(GameDatabase.GAME_COLUMN_PATH));
 
                 holder.textGameTitle.setText(mCursor.getString(GameDatabase.GAME_COLUMN_TITLE).replaceAll("[\\t\\n\\r]+", " "));
@@ -97,9 +97,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 holder.path = mCursor.getString(GameDatabase.GAME_COLUMN_PATH);
                 holder.title = mCursor.getString(GameDatabase.GAME_COLUMN_TITLE);
                 holder.description = mCursor.getString(GameDatabase.GAME_COLUMN_DESCRIPTION);
-                holder.country = mCursor.getInt(GameDatabase.GAME_COLUMN_COUNTRY);
                 holder.company = mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY);
-                holder.screenshotPath = mCursor.getString(GameDatabase.GAME_COLUMN_SCREENSHOT_PATH);
 
                 final int backgroundColorId = isValidGame(holder.path) ? R.color.card_view_background : R.color.card_view_disabled;
                 holder.setBackgroundColor(ContextCompat.getColor(CitraApplication.getAppContext(), backgroundColorId));

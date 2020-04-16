@@ -264,9 +264,9 @@ void Java_org_citra_citra_1emu_NativeLibrary_onTouchMoved(JNIEnv* env,
     window->OnTouchMoved((int)x, (int)y);
 }
 
-jintArray Java_org_citra_citra_1emu_NativeLibrary_GetBanner(JNIEnv* env,
-                                                            [[maybe_unused]] jclass clazz,
-                                                            jstring j_file) {
+jintArray Java_org_citra_citra_1emu_NativeLibrary_GetIcon(JNIEnv* env,
+                                                          [[maybe_unused]] jclass clazz,
+                                                          jstring j_file) {
     std::string filepath = GetJString(env, j_file);
 
     std::vector<u16> icon_data = GameInfo::GetIcon(filepath);
@@ -274,11 +274,11 @@ jintArray Java_org_citra_citra_1emu_NativeLibrary_GetBanner(JNIEnv* env,
         return 0;
     }
 
-    jintArray banner = env->NewIntArray(static_cast<jsize>(icon_data.size()));
-    env->SetIntArrayRegion(banner, 0, env->GetArrayLength(banner),
+    jintArray icon = env->NewIntArray(static_cast<jsize>(icon_data.size()));
+    env->SetIntArrayRegion(icon, 0, env->GetArrayLength(icon),
                            reinterpret_cast<jint*>(icon_data.data()));
 
-    return banner;
+    return icon;
 }
 
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetTitle(JNIEnv* env, [[maybe_unused]] jclass clazz,
@@ -306,11 +306,6 @@ jstring Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIEnv* env,
     return j_filename;
 }
 
-jint Java_org_citra_citra_1emu_NativeLibrary_GetCountry(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                        jstring j_filename) {
-    return 0;
-}
-
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                            [[maybe_unused]] jclass clazz,
                                                            jstring j_filename) {
@@ -325,59 +320,8 @@ jstring Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
     return env->NewStringUTF(Common::UTF16ToUTF8(publisher).data());
 }
 
-jlong Java_org_citra_citra_1emu_NativeLibrary_GetFilesize(JNIEnv* env,
-                                                          [[maybe_unused]] jclass clazz,
-                                                          jstring j_filename) {
-    return 0;
-}
-
-jstring Java_org_citra_citra_1emu_NativeLibrary_GetVersionString(JNIEnv* env,
-                                                                 [[maybe_unused]] jclass clazz) {
-    return nullptr;
-}
-
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetGitRevision(JNIEnv* env,
                                                                [[maybe_unused]] jclass clazz) {
-    return nullptr;
-}
-
-void Java_org_citra_citra_1emu_NativeLibrary_SaveScreenShot(JNIEnv* env,
-                                                            [[maybe_unused]] jclass clazz) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_eglBindAPI(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                        jint api) {}
-
-jstring Java_org_citra_citra_1emu_NativeLibrary_GetConfig(JNIEnv* env,
-                                                          [[maybe_unused]] jclass clazz,
-                                                          jstring j_file, jstring j_section,
-                                                          jstring j_key, jstring j_default) {
-    return nullptr;
-}
-
-void Java_org_citra_citra_1emu_NativeLibrary_SetConfig(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                       jstring j_file, jstring j_section,
-                                                       jstring j_key, jstring j_value) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_SetFilename(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                         jstring j_file) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                       jint slot, jboolean wait) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_SaveStateAs(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                         jstring path, jboolean wait) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                       jint slot) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_LoadStateAs(JNIEnv* env, [[maybe_unused]] jclass clazz,
-                                                         jstring path) {}
-
-void Java_org_citra_citra_1emu_utils_DirectoryInitialization_CreateUserDirectories(
-    JNIEnv* env, [[maybe_unused]] jclass clazz) {}
-
-jstring Java_org_citra_citra_1emu_NativeLibrary_GetUserDirectory(JNIEnv* env,
-                                                                 [[maybe_unused]] jclass clazz) {
     return nullptr;
 }
 
@@ -390,13 +334,6 @@ jint Java_org_citra_citra_1emu_NativeLibrary_DefaultCPUCore(JNIEnv* env,
                                                             [[maybe_unused]] jclass clazz) {
     return 0;
 }
-
-void Java_org_citra_citra_1emu_NativeLibrary_SetProfiling(JNIEnv* env,
-                                                          [[maybe_unused]] jclass clazz,
-                                                          jboolean enable) {}
-
-void Java_org_citra_citra_1emu_NativeLibrary_WriteProfileResults(JNIEnv* env,
-                                                                 [[maybe_unused]] jclass clazz) {}
 
 void Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_String_2Z(
     JNIEnv* env, [[maybe_unused]] jclass clazz, jstring j_file, jstring j_savestate,
