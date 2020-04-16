@@ -97,6 +97,7 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 holder.path = mCursor.getString(GameDatabase.GAME_COLUMN_PATH);
                 holder.title = mCursor.getString(GameDatabase.GAME_COLUMN_TITLE);
                 holder.description = mCursor.getString(GameDatabase.GAME_COLUMN_DESCRIPTION);
+                holder.regions = mCursor.getString(GameDatabase.GAME_COLUMN_REGIONS);
                 holder.company = mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY);
 
                 final int backgroundColorId = isValidGame(holder.path) ? R.color.card_view_background : R.color.card_view_disabled;

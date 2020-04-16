@@ -3,6 +3,7 @@
 // Refer to the license.txt file included.
 
 #include <cstring>
+#include <string>
 
 #include "common/common_types.h"
 
@@ -12,6 +13,8 @@ std::vector<u8> GetSMDHData(std::string physical_name);
 char16_t* GetTitle(std::string physical_name);
 
 char16_t* GetPublisher(std::string physical_name);
+
+std::string GetRegions(std::string physical_name);
 
 std::vector<u16> GetIcon(std::string physical_name);
 } // namespace GameInfo
