@@ -129,6 +129,8 @@ public final class NativeLibrary {
 
     public static native String GetGameId(String filename);
 
+    public static native String GetRegions(String filename);
+
     public static native String GetCompany(String filename);
 
     public static native String GetGitRevision();
