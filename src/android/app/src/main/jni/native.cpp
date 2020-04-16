@@ -306,6 +306,16 @@ jstring Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIEnv* env,
     return j_filename;
 }
 
+jstring Java_org_citra_citra_1emu_NativeLibrary_GetRegions(JNIEnv* env,
+                                                           [[maybe_unused]] jclass clazz,
+                                                           jstring j_filename) {
+    std::string filepath = GetJString(env, j_filename);
+
+    std::string regions = GameInfo::GetRegions(filepath);
+
+    return env->NewStringUTF(regions.c_str());
+}
+
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                            [[maybe_unused]] jclass clazz,
                                                            jstring j_filename) {

@@ -57,6 +57,9 @@ JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIE
                                                                             jclass clazz,
                                                                             jstring j_filename);
 
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetRegions(JNIEnv* env, jclass clazz,
+                                                                          jstring j_filename);
+
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                                              jclass clazz,
                                                                              jstring j_filename);
