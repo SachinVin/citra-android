@@ -110,34 +110,12 @@ public final class NativeLibrary {
     public static native void InitGameIni(String gameID);
 
     /**
-     * Gets a value from a key in the given ini-based config file.
+     * Gets the embedded icon within the given ROM.
      *
-     * @param configFile The ini-based config file to get the value from.
-     * @param Section    The section key that the actual key is in.
-     * @param Key        The key to get the value from.
-     * @param Default    The value to return in the event the given key doesn't exist.
-     * @return the value stored at the key, or a default value if it doesn't exist.
+     * @param filename the file path to the ROM.
+     * @return an integer array containing the color data for the icon.
      */
-    public static native String GetConfig(String configFile, String Section, String Key,
-                                          String Default);
-
-    /**
-     * Sets a value to a key in the given ini config file.
-     *
-     * @param configFile The ini-based config file to add the value to.
-     * @param Section    The section key for the ini key
-     * @param Key        The actual ini key to set.
-     * @param Value      The string to set the ini key to.
-     */
-    public static native void SetConfig(String configFile, String Section, String Key, String Value);
-
-    /**
-     * Gets the embedded banner within the given ISO/ROM.
-     *
-     * @param filename the file path to the ISO/ROM.
-     * @return an integer array containing the color data for the banner.
-     */
-    public static native int[] GetBanner(String filename);
+    public static native int[] GetIcon(String filename);
 
     /**
      * Gets the embedded title of the given ISO/ROM.
@@ -151,61 +129,15 @@ public final class NativeLibrary {
 
     public static native String GetGameId(String filename);
 
-    public static native int GetCountry(String filename);
-
     public static native String GetCompany(String filename);
 
-    public static native long GetFilesize(String filename);
-
     public static native String GetGitRevision();
-
-    /**
-     * Saves a screen capture of the game
-     */
-    public static native void SaveScreenShot();
-
-    /**
-     * Saves a game state to the slot number.
-     *
-     * @param slot The slot location to save state to.
-     * @param wait If false, returns as early as possible.
-     *             If true, returns once the savestate has been written to disk.
-     */
-    public static native void SaveState(int slot, boolean wait);
-
-    /**
-     * Saves a game state to the specified path.
-     *
-     * @param path The path to save state to.
-     * @param wait If false, returns as early as possible.
-     *             If true, returns once the savestate has been written to disk.
-     */
-    public static native void SaveStateAs(String path, boolean wait);
-
-    /**
-     * Loads a game state from the slot number.
-     *
-     * @param slot The slot location to load state from.
-     */
-    public static native void LoadState(int slot);
-
-    /**
-     * Loads a game state from the specified path.
-     *
-     * @param path The path to load state from.
-     */
-    public static native void LoadStateAs(String path);
 
     /**
      * Sets the current working user directory
      * If not set, it auto-detects a location
      */
     public static native void SetUserDirectory(String directory);
-
-    /**
-     * Returns the current working user directory
-     */
-    public static native String GetUserDirectory();
 
     // Create the config.ini file.
     public static native void CreateConfigFile();
@@ -248,23 +180,6 @@ public final class NativeLibrary {
      * Returns true if emulation is running (or is paused).
      */
     public static native boolean IsRunning();
-
-    /**
-     * Enables or disables CPU block profiling
-     *
-     * @param enable
-     */
-    public static native void SetProfiling(boolean enable);
-
-    /**
-     * Writes out the block profile results
-     */
-    public static native void WriteProfileResults();
-
-    /**
-     * Native EGL functions not exposed by Java bindings
-     **/
-    public static native void eglBindAPI(int api);
 
     /**
      * Returns the performance stats for the current game
