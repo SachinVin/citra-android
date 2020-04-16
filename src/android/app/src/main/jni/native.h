@@ -41,9 +41,9 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchMoved(JNIE
                                                                             jclass clazz, jfloat x,
                                                                             jfloat y);
 
-JNIEXPORT jintArray JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetBanner(JNIEnv* env,
-                                                                              jclass clazz,
-                                                                              jstring j_file);
+JNIEXPORT jintArray JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetIcon(JNIEnv* env,
+                                                                            jclass clazz,
+                                                                            jstring j_file);
 
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetTitle(JNIEnv* env,
                                                                            jclass clazz,
@@ -57,56 +57,12 @@ JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIE
                                                                             jclass clazz,
                                                                             jstring j_filename);
 
-JNIEXPORT jint JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCountry(JNIEnv* env, jclass clazz,
-                                                                          jstring j_filename);
-
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                                              jclass clazz,
                                                                              jstring j_filename);
 
-JNIEXPORT jlong JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetFilesize(JNIEnv* env,
-                                                                            jclass clazz,
-                                                                            jstring j_filename);
-
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetVersionString(JNIEnv* env,
-                                                                                   jclass clazz);
-
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGitRevision(JNIEnv* env,
                                                                                  jclass clazz);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveScreenShot(JNIEnv* env,
-                                                                              jclass clazz);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_eglBindAPI(JNIEnv* env, jclass clazz,
-                                                                          jint api);
-
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetConfig(
-        JNIEnv* env, jclass clazz, jstring j_file, jstring j_section, jstring j_key, jstring j_default);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetConfig(
-        JNIEnv* env, jclass clazz, jstring j_file, jstring j_section, jstring j_key, jstring j_value);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetFilename(JNIEnv* env, jclass clazz,
-                                                                           jstring j_file);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env, jclass clazz,
-                                                                         jint slot, jboolean wait);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveStateAs(JNIEnv* env,
-                                                                           jclass clazz,
-                                                                           jstring path,
-                                                                           jboolean wait);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, jclass clazz,
-                                                                         jint slot);
-
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadStateAs(JNIEnv* env,
-                                                                           jclass clazz,
-                                                                           jstring path);
-
-JNIEXPORT void JNICALL
-Java_org_citra_citra_1emu_utils_DirectoryInitialization_CreateUserDirectories(JNIEnv* env,
-                                                                              jclass clazz);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(JNIEnv* env,
                                                                                 jclass clazz,
@@ -114,9 +70,6 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jclass clazz, jstring path_);
-
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetUserDirectory(JNIEnv* env,
-                                                                                   jclass clazz);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetSysDirectory(JNIEnv* env,
                                                                                jclass clazz,
