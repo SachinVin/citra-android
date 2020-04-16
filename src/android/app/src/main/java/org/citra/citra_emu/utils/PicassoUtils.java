@@ -9,9 +9,9 @@ import com.squareup.picasso.Picasso;
 import org.citra.citra_emu.R;
 
 public class PicassoUtils {
-    public static void loadGameBanner(ImageView imageView, String gamePath) {
+    public static void loadGameIcon(ImageView imageView, String gamePath) {
         Picasso picassoInstance = new Picasso.Builder(imageView.getContext())
-                .addRequestHandler(new GameBannerRequestHandler())
+                .addRequestHandler(new GameIconRequestHandler())
                 .build();
 
         picassoInstance
@@ -21,7 +21,7 @@ public class PicassoUtils {
                 .fit()
                 .centerInside()
                 .config(Bitmap.Config.RGB_565)
-                .error(R.drawable.no_banner)
+                .error(R.drawable.no_icon)
                 .transform(new PicassoRoundedCornersTransformation())
                 .into(imageView);
     }

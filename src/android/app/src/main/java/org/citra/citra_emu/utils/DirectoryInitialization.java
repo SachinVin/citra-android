@@ -49,7 +49,6 @@ public final class DirectoryInitialization {
             if (PermissionsHandler.hasWriteAccess(context)) {
                 if (setCitraUserDirectory()) {
                     initializeInternalStorage(context);
-                    CreateUserDirectories();
                     NativeLibrary.CreateConfigFile();
                     directoryState = DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED;
                 } else {
@@ -86,8 +85,6 @@ public final class DirectoryInitialization {
         return userPath;
 
     }
-
-    private static native void CreateUserDirectories();
 
     private static native void SetSysDirectory(String path);
 
