@@ -14,7 +14,7 @@ import org.citra.citra_emu.R;
  */
 public class GameViewHolder extends RecyclerView.ViewHolder {
     private View itemView;
-    public ImageView imageScreenshot;
+    public ImageView imageIcon;
     public TextView textGameTitle;
     public TextView textCompany;
     public TextView textFileName;
@@ -25,9 +25,7 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public String path;
     public String title;
     public String description;
-    public int country;
     public String company;
-    public String screenshotPath;
 
     public GameViewHolder(View itemView) {
         super(itemView);
@@ -35,7 +33,7 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         this.itemView = itemView;
         itemView.setTag(this);
 
-        imageScreenshot = itemView.findViewById(R.id.image_game_screen);
+        imageIcon = itemView.findViewById(R.id.image_game_screen);
         textGameTitle = itemView.findViewById(R.id.text_game_title);
         textCompany = itemView.findViewById(R.id.text_company);
         textFileName = itemView.findViewById(R.id.text_filename);
