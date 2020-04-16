@@ -10,7 +10,7 @@ import org.citra.citra_emu.NativeLibrary;
 
 import java.nio.IntBuffer;
 
-public class GameBannerRequestHandler extends RequestHandler {
+public class GameIconRequestHandler extends RequestHandler {
     @Override
     public boolean canHandleRequest(Request data) {
         return "iso".equals(data.uri.getScheme());
@@ -19,7 +19,7 @@ public class GameBannerRequestHandler extends RequestHandler {
     @Override
     public Result load(Request request, int networkPolicy) {
         String url = request.uri.getHost() + request.uri.getPath();
-        int[] vector = NativeLibrary.GetBanner(url);
+        int[] vector = NativeLibrary.GetIcon(url);
         Bitmap bitmap = Bitmap.createBitmap(48, 48, Bitmap.Config.RGB_565);
         bitmap.copyPixelsFromBuffer(IntBuffer.wrap(vector));
         return new Result(bitmap, Picasso.LoadedFrom.DISK);
