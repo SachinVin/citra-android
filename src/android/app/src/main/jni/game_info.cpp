@@ -5,6 +5,7 @@
 #include <cstring>
 #include <memory>
 #include <vector>
+#include <map>
 
 #include "common/string_util.h"
 #include "core/hle/service/am/am.h"
@@ -89,11 +90,58 @@ char16_t* GetPublisher(std::string physical_name) {
     // Get the Publisher's name from SMDH in UTF-16 format
     char16_t* publisher;
     publisher =
-        reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
+            reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
 
     LOG_INFO(Frontend, "Publisher: {}", Common::UTF16ToUTF8(publisher));
 
     return publisher;
+}
+
+std::string GetRegions(std::string physical_name) {
+    std::vector<u8> smdh_data = GetSMDHData(physical_name);
+
+    if (!Loader::IsValidSMDH(smdh_data)) {
+        // SMDH is not valid, return null
+        LOG_ERROR(Frontend, "SMDH is Invalid");
+        return "Invalid region";
+    }
+
+    Loader::SMDH smdh;
+    memcpy(&smdh, smdh_data.data(), sizeof(Loader::SMDH));
+
+    using GameRegion = Loader::SMDH::GameRegion;
+    static const std::map<GameRegion, const char*> regions_map = {
+            {GameRegion::Japan, "Japan"},
+            {GameRegion::NorthAmerica, "North America"},
+            {GameRegion::Europe, "Europe"},
+            {GameRegion::Australia, "Australia"},
+            {GameRegion::China, "China"},
+            {GameRegion::Korea, "Korea"},
+            {GameRegion::Taiwan, "Taiwan"}};
+    std::vector<GameRegion> regions = smdh.GetRegions();
+
+    if (regions.empty()) {
+        return "Invalid region";
+    }
+
+    const bool region_free =
+            std::all_of(regions_map.begin(), regions_map.end(), [&regions](const auto& it) {
+                return std::find(regions.begin(), regions.end(), it.first) != regions.end();
+            });
+
+    if (region_free) {
+        return "Region free";
+    }
+
+    const std::string separator = ", ";
+    std::string result = regions_map.at(regions.front());
+    for (auto region = ++regions.begin(); region != regions.end(); ++region) {
+        result += separator + regions_map.at(*region);
+    }
+
+    LOG_INFO(Frontend, "Regions: {}", result);
+
+    return result;
 }
 
 std::vector<u16> GetIcon(std::string physical_name) {

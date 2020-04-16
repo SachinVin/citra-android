@@ -25,6 +25,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
     public static final int GAME_COLUMN_PATH = 1;
     public static final int GAME_COLUMN_TITLE = 2;
     public static final int GAME_COLUMN_DESCRIPTION = 3;
+    public static final int GAME_COLUMN_REGIONS = 4;
     public static final int GAME_COLUMN_GAME_ID = 5;
     public static final int GAME_COLUMN_COMPANY = 6;
     public static final int FOLDER_COLUMN_PATH = 1;
@@ -32,6 +33,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
     public static final String KEY_GAME_PATH = "path";
     public static final String KEY_GAME_TITLE = "title";
     public static final String KEY_GAME_DESCRIPTION = "description";
+    public static final String KEY_GAME_REGIONS = "regions";
     public static final String KEY_GAME_ID = "game_id";
     public static final String KEY_GAME_COMPANY = "company";
     public static final String KEY_FOLDER_PATH = "path";
@@ -51,6 +53,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
             + KEY_GAME_PATH + TYPE_STRING + SEPARATOR
             + KEY_GAME_TITLE + TYPE_STRING + SEPARATOR
             + KEY_GAME_DESCRIPTION + TYPE_STRING + SEPARATOR
+            + KEY_GAME_REGIONS + TYPE_STRING + SEPARATOR
             + KEY_GAME_ID + TYPE_STRING + SEPARATOR
             + KEY_GAME_COMPANY + TYPE_STRING + ")";
 
@@ -186,6 +189,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
 
                                 ContentValues game = Game.asContentValues(name,
                                         NativeLibrary.GetDescription(filePath).replace("\n", " "),
+                                        NativeLibrary.GetRegions(filePath),
                                         filePath,
                                         gameId,
                                         NativeLibrary.GetCompany(filePath));

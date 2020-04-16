@@ -25,6 +25,7 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public String path;
     public String title;
     public String description;
+    public String regions;
     public String company;
 
     public GameViewHolder(View itemView) {
