@@ -40,7 +40,7 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         textFileName = itemView.findViewById(R.id.text_filename);
     }
 
-    public void setBackgroundColor(int color){
-        itemView.setBackgroundColor(color);
+    public View getItemView() {
+        return itemView;
     }
 }
