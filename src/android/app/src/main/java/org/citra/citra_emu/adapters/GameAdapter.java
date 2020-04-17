@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
 import org.citra.citra_emu.model.GameDatabase;
@@ -101,7 +100,8 @@ public final class GameAdapter extends RecyclerView.Adapter<GameViewHolder> impl
                 holder.company = mCursor.getString(GameDatabase.GAME_COLUMN_COMPANY);
 
                 final int backgroundColorId = isValidGame(holder.path) ? R.color.card_view_background : R.color.card_view_disabled;
-                holder.setBackgroundColor(ContextCompat.getColor(CitraApplication.getAppContext(), backgroundColorId));
+                View itemView = holder.getItemView();
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), backgroundColorId));
             } else {
                 Log.error("[GameAdapter] Can't bind view; Cursor is not valid.");
             }
