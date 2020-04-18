@@ -26,11 +26,13 @@ namespace Camera::NDK {
  * The pixel format is 'Android 420' which can contain a variety of YUV420 formats. The exact
  * format used can be determined by examing the 'pixel stride'.
  */
-class CaptureSession final {
-public:
-    explicit CaptureSession(ACameraManager* manager, const std::string& id);
+struct CaptureSession final {
+    explicit CaptureSession(ACameraManager* manager, const std::string& id) {
+        Load(manager, id);
+    }
 
-private:
+    void Load(ACameraManager* manager, const std::string& id);
+
     std::pair<int, int> selected_resolution{};
 
     ACameraDevice_StateCallbacks device_callbacks{};
@@ -48,9 +50,7 @@ private:
 
     MEMBER(ACameraDevice, device, close);
     MEMBER(AImageReader, image_reader, delete);
-
-    // This window doesn't need to be destructed as it is managed by AImageReader
-    ANativeWindow* native_window{};
+    MEMBER(ANativeWindow, native_window, release);
 
     MEMBER(ACaptureSessionOutputContainer, outputs, free);
     MEMBER(ACaptureSessionOutput, output, free);
@@ -74,12 +74,19 @@ private:
     int sensor_orientation{}; // Sensor Orientation
     bool facing_front{};      // Whether this camera faces front. Used for handling device rotation.
 
-    friend class Interface;
-    friend void ImageCallback(void* context, AImageReader* reader);
+    std::mutex status_mutex;
+    bool disconnected{}; // Whether this device has been closed and should be reopened
+    bool reload_requested{};
 };
 
-static void OnDisconnected(void* context, ACameraDevice* device) {
-    LOG_ERROR(Service_CAM, "Camera device disconnected");
+void OnDisconnected(void* context, ACameraDevice* device) {
+    LOG_WARNING(Service_CAM, "Camera device disconnected");
+
+    CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
+    {
+        std::lock_guard lock{that->status_mutex};
+        that->disconnected = true;
+    }
 }
 
 static void OnError(void* context, ACameraDevice* device, int error) {
@@ -106,7 +113,7 @@ static void OnError(void* context, ACameraDevice* device, int error) {
 
 void ImageCallback(void* context, AImageReader* reader) {
     AImage* image{};
-    MEDIA_CALL(AImageReader_acquireLatestImage(reader, &image))
+    MEDIA_CALL(AImageReader_acquireLatestImage(reader, &image));
     SCOPE_EXIT({ AImage_delete(image); });
 
     std::array<std::shared_ptr<u8>, 3> data;
@@ -115,7 +122,6 @@ void ImageCallback(void* context, AImageReader* reader) {
         u8* ptr;
         int size;
         MEDIA_CALL(AImage_getPlaneData(image, plane, &ptr, &size));
-        LOG_CRITICAL(Service_CAM, "Plane data for {} got, size {}", plane, size);
         data[plane].reset(new u8[size], std::default_delete<u8[]>());
         std::memcpy(data[plane].get(), ptr, static_cast<std::size_t>(size));
 
@@ -123,15 +129,14 @@ void ImageCallback(void* context, AImageReader* reader) {
     }
 
     CaptureSession* that = reinterpret_cast<CaptureSession*>(context);
-    if (!that->ready) {
-        that->active_event.Set(); // Mark the session as active
-    }
-
     {
         std::lock_guard lock{that->data_mutex};
         that->data = data;
         that->row_stride = row_stride;
         MEDIA_CALL(AImage_getPlanePixelStride(image, 1, &that->pixel_stride));
+    }
+    if (!that->ready) {
+        that->active_event.Set(); // Mark the session as active
     }
 }
 
@@ -147,9 +152,16 @@ static void OnClosed(void* context, ACameraCaptureSession* session) {}
 static void OnReady(void* context, ACameraCaptureSession* session) {}
 static void OnActive(void* context, ACameraCaptureSession* session) {}
 
-CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
+void CaptureSession::Load(ACameraManager* manager, const std::string& id) {
+    if (ready) {
+        // If already open, we'd like to first shutdown the session
+        // session.reset();
+        // native_window.reset();
+    }
+    ready = disconnected = reload_requested = false;
+
     device_callbacks = {
-        /*context*/ nullptr,
+        /*context*/ this,
         /*onDisconnected*/ &OnDisconnected,
         /*onError*/ &OnError,
     };
@@ -211,9 +223,12 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
     };
     MEDIA_CALL(AImageReader_setImageListener(image_reader.get(), &listener));
 
-    MEDIA_CALL(AImageReader_getWindow(image_reader.get(), &native_window));
+    CREATE(ANativeWindow, native_window,
+           MEDIA_CALL(AImageReader_getWindow(image_reader.get(), &raw)));
+    ANativeWindow_acquire(native_window.get());
+
     CREATE(ACaptureSessionOutput, output,
-           CAMERA_CALL(ACaptureSessionOutput_create(native_window, &raw)));
+           CAMERA_CALL(ACaptureSessionOutput_create(native_window.get(), &raw)));
 
     CREATE(ACaptureSessionOutputContainer, outputs,
            CAMERA_CALL(ACaptureSessionOutputContainer_create(&raw)));
@@ -231,9 +246,8 @@ CaptureSession::CaptureSession(ACameraManager* manager, const std::string& id) {
     CREATE(ACaptureRequest, request,
            CAMERA_CALL(ACameraDevice_createCaptureRequest(device.get(), TEMPLATE_PREVIEW, &raw)));
 
-    ANativeWindow_acquire(native_window);
     CREATE(ACameraOutputTarget, target,
-           CAMERA_CALL(ACameraOutputTarget_create(native_window, &raw)));
+           CAMERA_CALL(ACameraOutputTarget_create(native_window.get(), &raw)));
     CAMERA_CALL(ACaptureRequest_addTarget(request.get(), target.get()));
 
     requests = {request.get()};
@@ -316,6 +330,19 @@ struct YUVImage {
     image.y.data(), image.width, image.u.data(), image.width / 2, image.v.data(), image.width / 2
 
 std::vector<u16> Interface::ReceiveFrame() {
+    bool should_reload = false;
+    {
+        std::lock_guard lock{session->status_mutex};
+        if (session->reload_requested) {
+            session->reload_requested = false;
+            should_reload = session->disconnected;
+        }
+    }
+    if (should_reload) {
+        LOG_INFO(Service_CAM, "Reloading camera session");
+        session->Load(factory.manager.get(), id);
+    }
+
     std::array<std::shared_ptr<u8>, 3> data;
     std::array<int, 3> row_stride;
     {
@@ -470,6 +497,15 @@ std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
 
     LOG_ERROR(Service_CAM, "Camera ID {} not found", config);
     return std::make_unique<Camera::BlankCamera>();
+}
+
+void Factory::ReloadCameraDevices() {
+    for (const auto& [id, ptr] : opened_camera_map) {
+        if (auto session = ptr.lock()) {
+            std::lock_guard lock{session->status_mutex};
+            session->reload_requested = true;
+        }
+    }
 }
 
 } // namespace Camera::NDK
