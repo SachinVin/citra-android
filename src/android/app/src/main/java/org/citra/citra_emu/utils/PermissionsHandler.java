@@ -8,12 +8,10 @@ import android.os.Build;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class PermissionsHandler {
     public static final int REQUEST_CODE_WRITE_PERMISSION = 500;
-    public static final int REQUEST_CODE_CAMERA = 700;
 
     // We use permissions acceptance as an indicator if this is a first boot for the user.
     public static boolean isFirstBoot(final FragmentActivity activity) {
