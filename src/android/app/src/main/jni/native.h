@@ -27,10 +27,10 @@ JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadEven
     JNIEnv* env, jclass clazz, jstring j_device, jint j_button, jint action);
 
 JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadMoveEvent(
-        JNIEnv* env, jclass clazz, jstring j_device, jint axis, jfloat x, jfloat y);
+    JNIEnv* env, jclass clazz, jstring j_device, jint axis, jfloat x, jfloat y);
 
 JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadAxisEvent(
-        JNIEnv* env, jclass clazz, jstring j_device, jint axis_id, jfloat axis_val);
+    JNIEnv* env, jclass clazz, jstring j_device, jint axis_id, jfloat axis_val);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchEvent(JNIEnv* env,
                                                                             jclass clazz, jfloat x,
@@ -49,16 +49,16 @@ JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetTitle(JNIEn
                                                                            jclass clazz,
                                                                            jstring j_filename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetDescription(JNIEnv* env,
-                                                                                 jclass clazz,
-                                                                                 jstring j_filename);
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetDescription(
+    JNIEnv* env, jclass clazz, jstring j_filename);
 
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGameId(JNIEnv* env,
                                                                             jclass clazz,
                                                                             jstring j_filename);
 
-JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetRegions(JNIEnv* env, jclass clazz,
-                                                                          jstring j_filename);
+JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetRegions(JNIEnv* env,
+                                                                             jclass clazz,
+                                                                             jstring j_filename);
 
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                                              jclass clazz,
@@ -67,9 +67,8 @@ JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNI
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGitRevision(JNIEnv* env,
                                                                                  jclass clazz);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(JNIEnv* env,
-                                                                                jclass clazz,
-                                                                                jstring j_directory);
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(
+    JNIEnv* env, jclass clazz, jstring j_directory);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jclass clazz, jstring path_);
@@ -103,7 +102,7 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_S
 
 JNIEXPORT void JNICALL
 Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_String_2Z(
-        JNIEnv* env, jclass clazz, jstring j_file, jstring j_savestate, jboolean j_delete_savestate);
+    JNIEnv* env, jclass clazz, jstring j_file, jstring j_savestate, jboolean j_delete_savestate);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SurfaceChanged(JNIEnv* env,
                                                                               jclass clazz,
@@ -112,23 +111,28 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SurfaceChanged(JN
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(JNIEnv* env,
                                                                                 jclass clazz);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InitGameIni(JNIEnv* env, jclass clazz,
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InitGameIni(JNIEnv* env,
+                                                                           jclass clazz,
                                                                            jstring j_game_id);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_ReloadSettings(JNIEnv* env,
                                                                               jclass clazz);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserSetting(
-        JNIEnv* env, jclass clazz, jstring j_game_id, jstring j_section, jstring j_key, jstring j_value);
+    JNIEnv* env, jclass clazz, jstring j_game_id, jstring j_section, jstring j_key,
+    jstring j_value);
 
 JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetUserSetting(
-        JNIEnv* env, jclass clazz, jstring game_id, jstring section, jstring key);
+    JNIEnv* env, jclass clazz, jstring game_id, jstring section, jstring key);
 
 JNIEXPORT jdoubleArray JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetPerfStats(JNIEnv* env,
                                                                                     jclass clazz);
 
-JNIEXPORT jobjectArray JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetTextureFilterNames(
-        JNIEnv* env, jclass clazz);
+JNIEXPORT jobjectArray JNICALL
+Java_org_citra_citra_1emu_NativeLibrary_GetTextureFilterNames(JNIEnv* env, jclass clazz);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_ReloadCameraDevices(JNIEnv* env,
+                                                                                   jclass clazz);
 
 #ifdef __cplusplus
 }
