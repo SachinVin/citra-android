@@ -229,7 +229,7 @@ public final class SettingsFragmentPresenter {
         Setting audioStretch = audioSection.getSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING);
         Setting realtimeAudio = audioSection.getSetting(SettingsFile.KEY_ENABLE_REALTIME_AUDIO);
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, true, audioStretch));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_REALTIME_AUDIO, Settings.SECTION_AUDIO, R.string.realtime_audio, R.string.realtime_audio_description, true, realtimeAudio));
     }
 
