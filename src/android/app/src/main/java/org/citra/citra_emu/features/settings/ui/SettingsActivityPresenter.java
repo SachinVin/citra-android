@@ -11,6 +11,7 @@ import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryInitialization.DirectoryInitializationState;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 import org.citra.citra_emu.utils.Log;
+import org.citra.citra_emu.utils.ThemeUtil;
 
 import java.io.File;
 
@@ -108,6 +109,7 @@ public final class SettingsActivityPresenter {
         if (mSettings != null && finishing && mShouldSave) {
             Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
             mSettings.saveSettings(mView);
+            ThemeUtil.applyTheme(mSettings);
         }
 
         NativeLibrary.ReloadSettings();
