@@ -84,7 +84,7 @@ public final class EmulationActivity extends AppCompatActivity {
         buttonsActionsMap
                 .append(R.id.menu_emulation_show_overlay, EmulationActivity.MENU_ACTION_SHOW_OVERLAY);
         buttonsActionsMap
-                .append(R.id.menu_emulation_open_settings,EmulationActivity.MENU_ACTION_OPEN_SETTINGS);
+                .append(R.id.menu_emulation_open_settings, EmulationActivity.MENU_ACTION_OPEN_SETTINGS);
     }
 
     private View mDecorView;
@@ -439,6 +439,7 @@ public final class EmulationActivity extends AppCompatActivity {
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
+                setControlScale(seekbar.getProgress());
             }
         });
 
@@ -448,24 +449,27 @@ public final class EmulationActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.emulation_control_scale);
         builder.setView(view);
+        final int previousProgress = seekbar.getProgress();
         builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+            setControlScale(previousProgress);
         });
         builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
         {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putInt("controlScale", seekbar.getProgress());
-            editor.apply();
-            mEmulationFragment.refreshInputOverlay();
+            setControlScale(seekbar.getProgress());
         });
         builder.setNeutralButton(R.string.slider_default, (dialogInterface, i) -> {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putInt("controlScale", 50);
-            editor.apply();
-            mEmulationFragment.refreshInputOverlay();
+            setControlScale(50);
         });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void setControlScale(int scale) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt("controlScale", scale);
+        editor.apply();
+        mEmulationFragment.refreshInputOverlay();
     }
 
     private void resetOverlay() {
