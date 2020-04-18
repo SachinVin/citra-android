@@ -12,6 +12,18 @@
         <item>1</item>
     </integer-array>
 
+    <string-array name="designNames" translatable="true">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>System default</item>
+    </string-array>
+
+    <integer-array name="designValues" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
     <string-array name="regionNames">
         <item>Auto-select</item>
         <item>Japan</item>
