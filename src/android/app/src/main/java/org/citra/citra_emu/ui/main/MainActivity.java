@@ -22,6 +22,7 @@ import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.PermissionsHandler;
 import org.citra.citra_emu.utils.StartupHandler;
+import org.citra.citra_emu.utils.ThemeUtil;
 
 /**
  * The main Activity of the Lollipop style UI. Manages several PlatformGamesFragments, which
@@ -47,6 +48,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         mPresenter.onCreate();
 
         if (savedInstanceState == null) {
+            ThemeUtil.applyTheme();
             StartupHandler.HandleInit(this);
             if (PermissionsHandler.hasWriteAccess(this)) {
                 mPlatformGamesFragment = new PlatformGamesFragment();
