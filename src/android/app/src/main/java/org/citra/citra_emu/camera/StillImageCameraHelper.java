@@ -6,17 +6,12 @@ package org.citra.citra_emu.camera;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.provider.MediaStore;
-
-import com.squareup.picasso.Picasso;
 
 import org.citra.citra_emu.NativeLibrary;
 import org.citra.citra_emu.R;
 import org.citra.citra_emu.activities.EmulationActivity;
-import org.citra.citra_emu.utils.FileBrowserHelper;
-
-import java.io.IOException;
+import org.citra.citra_emu.utils.PicassoUtils;
 
 import androidx.annotation.Nullable;
 
@@ -53,11 +48,7 @@ public final class StillImageCameraHelper {
 
     // Called from EmulationActivity.
     public static void OnFilePickerResult(Intent result) {
-        if (result == null) {
-            filePickerPath = null;
-        } else {
-            filePickerPath = result.getDataString();
-        }
+        filePickerPath = result == null ? null : result.getDataString();
 
         synchronized (filePickerLock) {
             filePickerLock.notifyAll();
@@ -67,15 +58,6 @@ public final class StillImageCameraHelper {
     // Blocking call. Load image from file and crop/resize it to fit in width x height.
     @Nullable
     public static Bitmap LoadImageFromFile(String uri, int width, int height) {
-        try {
-            return Picasso.get()
-                .load(Uri.parse(uri))
-                .config(Bitmap.Config.ARGB_8888)
-                .centerCrop()
-                .resize(width, height)
-                .get();
-        } catch (IOException e) {
-            return null;
-        }
+        return PicassoUtils.LoadBitmapFromFile(uri, width, height);
     }
 }
