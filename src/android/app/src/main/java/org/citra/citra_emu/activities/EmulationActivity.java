@@ -203,6 +203,12 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRestart() {
+        super.onRestart();
+        NativeLibrary.ReloadCameraDevices();
+    }
+
+    @Override
     public void onBackPressed() {
         NativeLibrary.PauseEmulation();
         new AlertDialog.Builder(this)
