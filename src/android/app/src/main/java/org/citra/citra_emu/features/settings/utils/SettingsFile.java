@@ -35,6 +35,8 @@ public final class SettingsFile {
 
     public static final String KEY_CPU_JIT = "use_cpu_jit";
 
+    public static final String KEY_DESIGN = "design";
+
     public static final String KEY_HW_RENDERER = "use_hw_renderer";
     public static final String KEY_HW_SHADER = "use_hw_shader";
     public static final String KEY_SHADERS_ACCURATE_MUL = "shaders_accurate_mul";
@@ -148,10 +150,12 @@ public final class SettingsFile {
             }
         } catch (FileNotFoundException e) {
             Log.error("[SettingsFile] File not found: " + ini.getAbsolutePath() + e.getMessage());
-            view.onSettingsFileNotFound();
+            if (view != null)
+                view.onSettingsFileNotFound();
         } catch (IOException e) {
             Log.error("[SettingsFile] Error reading from: " + ini.getAbsolutePath() + e.getMessage());
-            view.onSettingsFileNotFound();
+            if (view != null)
+                view.onSettingsFileNotFound();
         } finally {
             if (reader != null) {
                 try {
