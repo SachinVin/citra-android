@@ -5,6 +5,7 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <camera/NdkCameraManager.h>
 #include "common/common_types.h"
@@ -47,8 +48,8 @@ private:
 };
 
 // Placeholders to mean 'use any front/back camera'
-constexpr char FrontCameraPlaceholder[] = "_front";
-constexpr char BackCameraPlaceholder[] = "_back";
+constexpr std::string_view FrontCameraPlaceholder = "_front";
+constexpr std::string_view BackCameraPlaceholder = "_back";
 
 class Factory final : public CameraFactory {
 public:
