@@ -192,17 +192,19 @@ public final class SettingsFragmentPresenter {
                     supportedCameraIdList.add(id);
 
                     final int facing = Objects.requireNonNull(characteristics.get(CameraCharacteristics.LENS_FACING));
+                    int stringId = R.string.camera_facing_external;
                     switch (facing) {
                     case CameraCharacteristics.LENS_FACING_FRONT:
-                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_front)));
+                        stringId = R.string.camera_facing_front;
                         break;
                     case CameraCharacteristics.LENS_FACING_BACK:
-                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_back)));
+                        stringId = R.string.camera_facing_back;
                         break;
                     case CameraCharacteristics.LENS_FACING_EXTERNAL:
-                        supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(R.string.camera_facing_external)));
+                        stringId = R.string.camera_facing_external;
                         break;
                     }
+                    supportedCameraNameList.add(String.format("%1$s (%2$s)", id, stringId));
                 }
             } catch (CameraAccessException e) {
                 Log.error("Couldn't retrieve camera list");
