@@ -13,7 +13,7 @@
 
 namespace Camera::NDK {
 
-class CaptureSession;
+struct CaptureSession;
 class Factory;
 
 class Interface : public CameraInterface {
@@ -31,7 +31,6 @@ public:
     bool IsPreviewAvailable() override;
 
 private:
-    // jstring path;
     Factory& factory;
     std::shared_ptr<CaptureSession> session;
     std::string id;
@@ -45,8 +44,6 @@ private:
     bool invert{};
 
     Service::CAM::OutputFormat format;
-    // std::vector<u16> image; // Data fetched from the frontend
-    // bool opened{};          // Whether the camera was successfully opened
 };
 
 // Placeholders to mean 'use any front/back camera'
@@ -61,8 +58,12 @@ public:
     std::unique_ptr<CameraInterface> Create(const std::string& config,
                                             const Service::CAM::Flip& flip) override;
 
+    // Request the reopening of all previously disconnected camera devices.
+    // Called when the application is brought to foreground (i.e. we have priority with the camera)
+    void ReloadCameraDevices();
+
 private:
-    // Avoid requesting for permisson more than once on each call
+    // Avoid requesting for permission more than once on each call
     bool camera_permission_requested = false;
     bool camera_permission_granted = false;
 

@@ -88,6 +88,8 @@ static int AlertPromptButton() {
                                                      IDCache::GetAlertPromptButton()));
 }
 
+static Camera::NDK::Factory* g_ndk_factory{};
+
 static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
@@ -110,7 +112,10 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     Settings::Apply();
 
     Camera::RegisterFactory("image", std::make_unique<Camera::StillImage::Factory>());
-    Camera::RegisterFactory("ndk", std::make_unique<Camera::NDK::Factory>());
+
+    auto ndk_factory = std::make_unique<Camera::NDK::Factory>();
+    g_ndk_factory = ndk_factory.get();
+    Camera::RegisterFactory("ndk", std::move(ndk_factory));
 
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
@@ -456,6 +461,12 @@ jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetTextureFilterNames(JNIEn
     for (jsize i = 0; i < names.size(); ++i)
         env->SetObjectArrayElement(ret, i, env->NewStringUTF(names[i].data()));
     return ret;
+}
+
+void Java_org_citra_citra_1emu_NativeLibrary_ReloadCameraDevices(JNIEnv* env, jclass clazz) {
+    if (g_ndk_factory) {
+        g_ndk_factory->ReloadCameraDevices();
+    }
 }
 
 } // extern "C"
