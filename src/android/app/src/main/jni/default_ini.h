@@ -7,6 +7,11 @@
 namespace DefaultINI {
 
 const char* sdl2_config_file = R"(
+[Premium]
+# What Android design to use
+# 0 (default): Light, 1: Dark, 2: System default
+design =
+
 [Controls]
 # The input devices and parameters for each 3DS native input
 # It should be in the format of "engine:[engine_name],[param1]:[value1],[param2]:[value2]..."

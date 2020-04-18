@@ -82,6 +82,9 @@ public final class SettingsFragmentPresenter {
             case SettingsFile.FILE_NAME_CONFIG:
                 addConfigSettings(sl);
                 break;
+            case Settings.SECTION_PREMIUM:
+                addPremiumSettings(sl);
+                break;
             case Settings.SECTION_CORE:
                 addGeneralSettings(sl);
                 break;
@@ -112,12 +115,22 @@ public final class SettingsFragmentPresenter {
     private void addConfigSettings(ArrayList<SettingsItem> sl) {
         mView.getActivity().setTitle(R.string.preferences_settings);
 
+        sl.add(new SubmenuSetting(null, null, R.string.preferences_premium, 0, Settings.SECTION_PREMIUM));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_general, 0, Settings.SECTION_CORE));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_system, 0, Settings.SECTION_SYSTEM));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_controls, 0, Settings.SECTION_CONTROLS));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_graphics, 0, Settings.SECTION_RENDERER));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_audio, 0, Settings.SECTION_AUDIO));
         sl.add(new SubmenuSetting(null, null, R.string.preferences_debug, 0, Settings.SECTION_DEBUG));
+    }
+
+    private void addPremiumSettings(ArrayList<SettingsItem> sl) {
+        mView.getActivity().setTitle(R.string.preferences_premium);
+
+        SettingSection premiumSection = mSettings.getSection(Settings.SECTION_PREMIUM);
+        Setting design = premiumSection.getSetting(SettingsFile.KEY_DESIGN);
+
+        sl.add(new SingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design));
     }
 
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
