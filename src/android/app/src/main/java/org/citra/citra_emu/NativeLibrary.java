@@ -438,6 +438,9 @@ public final class NativeLibrary {
         }
     }
 
+    /// Notifies that the activity is now in foreground and camera devices can now be reloaded
+    public static native void ReloadCameraDevices();
+
     /**
      * Button type for use in onTouchEvent
      */
