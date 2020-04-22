@@ -39,7 +39,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
     public static final String KEY_FOLDER_PATH = "path";
     public static final String TABLE_NAME_FOLDERS = "folders";
     public static final String TABLE_NAME_GAMES = "games";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String TYPE_PRIMARY = " INTEGER PRIMARY KEY";
     private static final String TYPE_INTEGER = " INTEGER";
     private static final String TYPE_STRING = " TEXT";
@@ -152,7 +152,6 @@ public final class GameDatabase extends SQLiteOpenHelper {
 
         // Iterate through all results of the DB query (i.e. all folders in the library.)
         while (folderCursor.moveToNext()) {
-
             String folderPath = folderCursor.getString(FOLDER_COLUMN_PATH);
             File folder = new File(folderPath);
 
