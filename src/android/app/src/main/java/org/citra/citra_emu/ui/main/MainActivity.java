@@ -48,12 +48,14 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         mPresenter.onCreate();
 
         if (savedInstanceState == null) {
-            ThemeUtil.applyTheme();
             StartupHandler.HandleInit(this);
             if (PermissionsHandler.hasWriteAccess(this)) {
                 mPlatformGamesFragment = new PlatformGamesFragment();
                 getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
                         .commit();
+
+                // Apply current theme setting
+                ThemeUtil.applyTheme();
             }
         } else {
             mPlatformGamesFragment = (PlatformGamesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "mPlatformGamesFragment");
