@@ -95,9 +95,6 @@ public final class GameDatabase extends SQLiteOpenHelper {
         // Delete all the games
         execSqlAndLog(database, SQL_DELETE_GAMES);
         execSqlAndLog(database, SQL_CREATE_GAMES);
-
-        Log.verbose("[GameDatabase] Re-scanning library with new schema.");
-        scanLibrary(database);
     }
 
     public void resetDatabase(SQLiteDatabase database) {
