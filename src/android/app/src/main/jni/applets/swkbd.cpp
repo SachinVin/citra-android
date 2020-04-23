@@ -116,7 +116,7 @@ jobject ToJavaValidationError(Frontend::ValidationError error) {
         {Frontend::ValidationError::None, "None"},
         {Frontend::ValidationError::ButtonOutOfRange, "ButtonOutOfRange"},
         {Frontend::ValidationError::MaxDigitsExceeded, "MaxDigitsExceeded"},
-        {Frontend::ValidationError::AtSignNotAllowed, "AtSignsNotAllowed"},
+        {Frontend::ValidationError::AtSignNotAllowed, "AtSignNotAllowed"},
         {Frontend::ValidationError::PercentNotAllowed, "PercentNotAllowed"},
         {Frontend::ValidationError::BackslashNotAllowed, "BackslashNotAllowed"},
         {Frontend::ValidationError::ProfanityNotAllowed, "ProfanityNotAllowed"},
