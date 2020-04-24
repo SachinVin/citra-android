@@ -204,7 +204,6 @@ struct Values {
     bool enable_dsp_lle_multithread;
     std::string sink_id;
     bool enable_audio_stretching;
-    bool enable_realtime_audio;
     std::string audio_device_id;
     float volume;
     MicInputType mic_input_type;

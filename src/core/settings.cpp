@@ -109,7 +109,6 @@ void LogSettings() {
     log_setting("Audio_OutputDevice", values.audio_device_id);
     log_setting("Audio_InputDeviceType", values.mic_input_type);
     log_setting("Audio_InputDevice", values.mic_input_device);
-    log_setting("Audio_EnableRealTime", Settings::values.enable_realtime_audio);
     using namespace Service::CAM;
     log_setting("Camera_OuterRightName", values.camera_name[OuterRightCamera]);
     log_setting("Camera_OuterRightConfig", values.camera_config[OuterRightCamera]);
