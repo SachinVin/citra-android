@@ -41,7 +41,7 @@
     <string name="cpu_jit_description">Uses the Just-in-Time (JIT) compiler for CPU emulation. When enabled, game performance will be significantly improved.</string>
     <string name="init_clock">System clock type</string>
     <string name="init_clock_description">Set the emulated 3DS clock to either reflect that of your device or start at a simulated date and time.</string>
-    <string name="design">Design</string>
+    <string name="design">Change Theme (Light, Dark)</string>
 
     <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>
@@ -70,6 +70,13 @@
     <string name="internal_resolution_description">Specifies the resolution used to render at. A high resolution will improve visual quality a lot but is also quite heavy on performance and might cause glitches in certain games.</string>
     <string name="performance_warning">Turning off this setting will significantly reduce emulation performance! For the best experience, it is recommended that you leave this setting enabled.</string>
     <string name="debug_warning">Warning: Modifying these settings will slow emulation</string>
+
+    <!-- Premium strings -->
+    <string name="premium_text">Premium</string>
+    <string name="premium_settings_upsell">Upgrade to Premium and support Citra!</string>
+    <string name="premium_settings_upsell_description">With Premium, you will support the developers to continue improving Citra, and gain access to these exclusive features!</string>
+    <string name="premium_settings_welcome">Welcome to Premium.</string>
+    <string name="premium_settings_welcome_description">Thank you for your support!</string>
 
     <!-- Audio settings strings -->
     <string name="audio_stretch">Enable audio stretching</string>

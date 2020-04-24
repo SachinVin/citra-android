@@ -16,6 +16,7 @@ import org.citra.citra_emu.features.settings.model.view.SingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SliderSetting;
 import org.citra.citra_emu.features.settings.model.view.StringSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SubmenuSetting;
+import org.citra.citra_emu.features.settings.model.view.PremiumHeader;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 import java.util.ArrayList;
@@ -130,6 +131,7 @@ public final class SettingsFragmentPresenter {
         SettingSection premiumSection = mSettings.getSection(Settings.SECTION_PREMIUM);
         Setting design = premiumSection.getSetting(SettingsFile.KEY_DESIGN);
 
+        sl.add(new PremiumHeader());
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design));
     }
 
