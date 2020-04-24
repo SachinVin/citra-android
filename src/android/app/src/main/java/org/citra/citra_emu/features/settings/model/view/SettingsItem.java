@@ -1,6 +1,7 @@
 package org.citra.citra_emu.features.settings.model.view;
 
 import org.citra.citra_emu.features.settings.model.Setting;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.features.settings.ui.SettingsAdapter;
 
 /**
@@ -19,6 +20,7 @@ public abstract class SettingsItem {
     public static final int TYPE_INPUT_BINDING = 5;
     public static final int TYPE_STRING_SINGLE_CHOICE = 6;
     public static final int TYPE_DATETIME_SETTING = 7;
+    public static final int TYPE_PREMIUM = 8;
 
     private String mKey;
     private String mSection;
@@ -27,6 +29,7 @@ public abstract class SettingsItem {
 
     private int mNameId;
     private int mDescriptionId;
+    private boolean mIsPremium;
 
     /**
      * Base constructor. Takes a key / section name in case the third parameter, the Setting,
@@ -45,6 +48,7 @@ public abstract class SettingsItem {
         mSetting = setting;
         mNameId = nameId;
         mDescriptionId = descriptionId;
+        mIsPremium = (section == Settings.SECTION_PREMIUM);
     }
 
     /**
@@ -87,6 +91,10 @@ public abstract class SettingsItem {
 
     public int getDescriptionId() {
         return mDescriptionId;
+    }
+
+    public boolean isPremium() {
+        return mIsPremium;
     }
 
     /**
