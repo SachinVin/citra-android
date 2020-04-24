@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
 
 import java.io.IOException;
@@ -13,15 +14,25 @@ import java.io.IOException;
 import androidx.annotation.Nullable;
 
 public class PicassoUtils {
-    public static void loadGameIcon(ImageView imageView, String gamePath) {
-        Picasso picassoInstance = new Picasso.Builder(imageView.getContext())
+    private static boolean mPicassoInitialized = false;
+    public static void init() {
+        if (mPicassoInitialized) {
+            return;
+        }
+        Picasso picassoInstance = new Picasso.Builder(CitraApplication.getAppContext())
                 .addRequestHandler(new GameIconRequestHandler())
                 .build();
 
-        picassoInstance
+        Picasso.setSingletonInstance(picassoInstance);
+        mPicassoInitialized = true;
+    }
+
+    public static void loadGameIcon(ImageView imageView, String gamePath) {
+        Picasso
+                .get()
                 .load(Uri.parse("iso:/" + gamePath))
                 .noFade()
-                .noPlaceholder()
+                .placeholder(R.drawable.no_icon)
                 .fit()
                 .centerInside()
                 .config(Bitmap.Config.RGB_565)
