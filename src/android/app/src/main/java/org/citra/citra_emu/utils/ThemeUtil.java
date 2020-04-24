@@ -12,18 +12,16 @@ public class ThemeUtil {
 
     public static void applyTheme() {
         Settings settings = new Settings();
-        settings.loadSettings(null);
-        applyTheme(settings);
+
+        try {
+            settings.loadSettings(null);
+            applyTheme(settings);
+        } catch (Exception e) {
+            applyTheme(0);
+        }
     }
 
-    public static void applyTheme(Settings settings) {
-        Setting design = settings.getSection(Settings.SECTION_PREMIUM).getSetting((SettingsFile.KEY_DESIGN));
-        if (design == null) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            return;
-        }
-
-        int designValue = Integer.parseInt(design.getValueAsString());
+    private static void applyTheme(int designValue) {
         switch (designValue) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -39,4 +37,13 @@ public class ThemeUtil {
         }
     }
 
+    public static void applyTheme(Settings settings) {
+        Setting design = settings.getSection(Settings.SECTION_PREMIUM).getSetting((SettingsFile.KEY_DESIGN));
+        if (design == null) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            return;
+        }
+
+        applyTheme(Integer.parseInt(design.getValueAsString()));
+    }
 }
