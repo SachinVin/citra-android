@@ -30,10 +30,12 @@ import org.citra.citra_emu.features.settings.ui.viewholder.CheckBoxSettingViewHo
 import org.citra.citra_emu.features.settings.ui.viewholder.DateTimeViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.HeaderViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.InputBindingSettingViewHolder;
+import org.citra.citra_emu.features.settings.ui.viewholder.PremiumViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.SettingViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.SingleChoiceViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.SliderViewHolder;
 import org.citra.citra_emu.features.settings.ui.viewholder.SubmenuViewHolder;
+import org.citra.citra_emu.ui.main.MainActivity;
 import org.citra.citra_emu.utils.Log;
 
 import java.util.ArrayList;
@@ -92,6 +94,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
                 view = inflater.inflate(R.layout.list_item_setting, parent, false);
                 return new DateTimeViewHolder(view, this);
 
+            case SettingsItem.TYPE_PREMIUM:
+                view = inflater.inflate(R.layout.premium_item_setting, parent, false);
+                return new PremiumViewHolder(view, this, mView);
 
             default:
                 Log.error("[SettingsAdapter] Invalid view type: " + viewType);
@@ -138,9 +143,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mView.onSettingChanged();
     }
 
-    public void onSingleChoiceClick(SingleChoiceSetting item, int position) {
+    public void onSingleChoiceClick(SingleChoiceSetting item) {
         mClickedItem = item;
-        mClickedPosition = position;
 
         int value = getSelectionForSingleChoiceValue(item);
 
@@ -150,6 +154,19 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         builder.setSingleChoiceItems(item.getChoicesId(), value, this);
 
         mDialog = builder.show();
+    }
+
+    public void onSingleChoiceClick(SingleChoiceSetting item, int position) {
+        mClickedPosition = position;
+
+        if (!item.isPremium() || MainActivity.isPremiumActive()) {
+            // Setting is either not Premium, or the user has Premium
+            onSingleChoiceClick(item);
+            return;
+        }
+
+        // User needs Premium, invoke the billing flow
+        MainActivity.invokePremiumBilling(() -> onSingleChoiceClick(item));
     }
 
     public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position) {
