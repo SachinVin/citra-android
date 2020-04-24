@@ -4,6 +4,7 @@ package org.citra.citra_emu.ui.main;
 import org.citra.citra_emu.BuildConfig;
 import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
+import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.model.GameDatabase;
 import org.citra.citra_emu.utils.AddDirectoryHelper;
@@ -32,6 +33,10 @@ public final class MainPresenter {
 
             case R.id.button_add_directory:
                 mView.launchFileListActivity();
+                return true;
+
+            case R.id.button_premium:
+                mView.launchSettingsActivity(Settings.SECTION_PREMIUM);
                 return true;
         }
 
