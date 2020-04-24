@@ -41,6 +41,8 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeUtil.applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -57,9 +59,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
                 mPlatformGamesFragment = new PlatformGamesFragment();
                 getSupportFragmentManager().beginTransaction().add(mFrameLayoutId, mPlatformGamesFragment)
                         .commit();
-
-                // Apply current theme setting
-                ThemeUtil.applyTheme();
             }
         } else {
             mPlatformGamesFragment = (PlatformGamesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "mPlatformGamesFragment");
