@@ -169,7 +169,7 @@ void Config::ReadValues() {
     Settings::values.mic_input_type =
         static_cast<Settings::MicInputType>(sdl2_config->GetInteger("Audio", "mic_input_type", 0));
     Settings::values.enable_realtime_audio =
-            sdl2_config->GetBoolean("Audio", "enable_realtime_audio", true);
+            sdl2_config->GetBoolean("Audio", "enable_realtime_audio", false);
 
     // Data Storage
     Settings::values.use_virtual_sd =
