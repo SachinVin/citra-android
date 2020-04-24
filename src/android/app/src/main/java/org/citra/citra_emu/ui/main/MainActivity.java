@@ -22,6 +22,7 @@ import org.citra.citra_emu.utils.BillingManager;
 import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.PermissionsHandler;
+import org.citra.citra_emu.utils.PicassoUtils;
 import org.citra.citra_emu.utils.StartupHandler;
 import org.citra.citra_emu.utils.ThemeUtil;
 
@@ -63,6 +64,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         } else {
             mPlatformGamesFragment = (PlatformGamesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "mPlatformGamesFragment");
         }
+        PicassoUtils.init();
 
         // Setup billing manager, so we can globally query for Premium status
         mBillingManager = new BillingManager(this);
