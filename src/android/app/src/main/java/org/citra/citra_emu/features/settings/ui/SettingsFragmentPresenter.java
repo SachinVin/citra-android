@@ -145,7 +145,13 @@ public final class SettingsFragmentPresenter {
         Setting design = premiumSection.getSetting(SettingsFile.KEY_DESIGN);
 
         sl.add(new PremiumHeader());
-        sl.add(new PremiumSingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design, mView));
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            sl.add(new PremiumSingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design, mView));
+        } else {
+            // Pre-Android 10 does not support System Default
+            sl.add(new PremiumSingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNamesOld, R.array.designValuesOld, 0, design, mView));
+        }
     }
 
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
