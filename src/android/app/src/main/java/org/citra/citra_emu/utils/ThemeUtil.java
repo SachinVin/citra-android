@@ -1,25 +1,16 @@
 package org.citra.citra_emu.utils;
 
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import org.citra.citra_emu.features.settings.model.Setting;
-import org.citra.citra_emu.features.settings.model.Settings;
+import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 
 public class ThemeUtil {
-
-    public static void applyTheme() {
-        Settings settings = new Settings();
-
-        try {
-            settings.loadSettings(null);
-            applyTheme(settings);
-        } catch (Exception e) {
-            applyTheme(0);
-        }
-    }
+    private static SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
 
     private static void applyTheme(int designValue) {
         switch (designValue) {
@@ -37,13 +28,7 @@ public class ThemeUtil {
         }
     }
 
-    public static void applyTheme(Settings settings) {
-        Setting design = settings.getSection(Settings.SECTION_PREMIUM).getSetting((SettingsFile.KEY_DESIGN));
-        if (design == null) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            return;
-        }
-
-        applyTheme(Integer.parseInt(design.getValueAsString()));
+    public static void applyTheme() {
+        applyTheme(mPreferences.getInt(SettingsFile.KEY_DESIGN, 0));
     }
 }
