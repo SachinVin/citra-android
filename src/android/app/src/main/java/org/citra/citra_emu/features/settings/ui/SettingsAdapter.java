@@ -21,6 +21,7 @@ import org.citra.citra_emu.features.settings.model.StringSetting;
 import org.citra.citra_emu.features.settings.model.view.CheckBoxSetting;
 import org.citra.citra_emu.features.settings.model.view.DateTimeSetting;
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
+import org.citra.citra_emu.features.settings.model.view.PremiumSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.features.settings.model.view.SingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SliderSetting;
@@ -143,6 +144,19 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         mView.onSettingChanged();
     }
 
+    public void onSingleChoiceClick(PremiumSingleChoiceSetting item) {
+        mClickedItem = item;
+
+        int value = getSelectionForSingleChoiceValue(item);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
+
+        builder.setTitle(item.getNameId());
+        builder.setSingleChoiceItems(item.getChoicesId(), value, this);
+
+        mDialog = builder.show();
+    }
+
     public void onSingleChoiceClick(SingleChoiceSetting item) {
         mClickedItem = item;
 
@@ -157,6 +171,19 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
     }
 
     public void onSingleChoiceClick(SingleChoiceSetting item, int position) {
+        mClickedPosition = position;
+
+        if (!item.isPremium() || MainActivity.isPremiumActive()) {
+            // Setting is either not Premium, or the user has Premium
+            onSingleChoiceClick(item);
+            return;
+        }
+
+        // User needs Premium, invoke the billing flow
+        MainActivity.invokePremiumBilling(() -> onSingleChoiceClick(item));
+    }
+
+    public void onSingleChoiceClick(PremiumSingleChoiceSetting item, int position) {
         mClickedPosition = position;
 
         if (!item.isPremium() || MainActivity.isPremiumActive()) {
@@ -318,6 +345,18 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
             }
 
             closeDialog();
+        } else if (mClickedItem instanceof PremiumSingleChoiceSetting) {
+            PremiumSingleChoiceSetting scSetting = (PremiumSingleChoiceSetting) mClickedItem;
+
+            int value = getValueForSingleChoiceSelection(scSetting, which);
+            if (scSetting.getSelectedValue() != value) {
+                //mView.onSettingChanged();
+            }
+
+            // Get the backing Setting, which may be null (if for example it was missing from the file)
+            scSetting.setSelectedValue(value);
+
+            closeDialog();
         } else if (mClickedItem instanceof StringSingleChoiceSetting) {
             StringSingleChoiceSetting scSetting = (StringSingleChoiceSetting) mClickedItem;
             String value = scSetting.getValueAt(which);
@@ -393,7 +432,37 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         }
     }
 
+    private int getValueForSingleChoiceSelection(PremiumSingleChoiceSetting item, int which) {
+        int valuesId = item.getValuesId();
+
+        if (valuesId > 0) {
+            int[] valuesArray = mContext.getResources().getIntArray(valuesId);
+            return valuesArray[which];
+        } else {
+            return which;
+        }
+    }
+
     private int getSelectionForSingleChoiceValue(SingleChoiceSetting item) {
+        int value = item.getSelectedValue();
+        int valuesId = item.getValuesId();
+
+        if (valuesId > 0) {
+            int[] valuesArray = mContext.getResources().getIntArray(valuesId);
+            for (int index = 0; index < valuesArray.length; index++) {
+                int current = valuesArray[index];
+                if (current == value) {
+                    return index;
+                }
+            }
+        } else {
+            return value;
+        }
+
+        return -1;
+    }
+
+    private int getSelectionForSingleChoiceValue(PremiumSingleChoiceSetting item) {
         int value = item.getSelectedValue();
         int valuesId = item.getValuesId();
 
