@@ -16,12 +16,13 @@ import org.citra.citra_emu.features.settings.model.view.CheckBoxSetting;
 import org.citra.citra_emu.features.settings.model.view.DateTimeSetting;
 import org.citra.citra_emu.features.settings.model.view.HeaderSetting;
 import org.citra.citra_emu.features.settings.model.view.InputBindingSetting;
+import org.citra.citra_emu.features.settings.model.view.PremiumHeader;
+import org.citra.citra_emu.features.settings.model.view.PremiumSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SettingsItem;
 import org.citra.citra_emu.features.settings.model.view.SingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SliderSetting;
 import org.citra.citra_emu.features.settings.model.view.StringSingleChoiceSetting;
 import org.citra.citra_emu.features.settings.model.view.SubmenuSetting;
-import org.citra.citra_emu.features.settings.model.view.PremiumHeader;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.utils.Log;
 
@@ -144,7 +145,7 @@ public final class SettingsFragmentPresenter {
         Setting design = premiumSection.getSetting(SettingsFile.KEY_DESIGN);
 
         sl.add(new PremiumHeader());
-        sl.add(new SingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design));
+        sl.add(new PremiumSingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNames, R.array.designValues, 0, design, mView));
     }
 
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
@@ -194,15 +195,15 @@ public final class SettingsFragmentPresenter {
                     final int facing = Objects.requireNonNull(characteristics.get(CameraCharacteristics.LENS_FACING));
                     int stringId = R.string.camera_facing_external;
                     switch (facing) {
-                    case CameraCharacteristics.LENS_FACING_FRONT:
-                        stringId = R.string.camera_facing_front;
-                        break;
-                    case CameraCharacteristics.LENS_FACING_BACK:
-                        stringId = R.string.camera_facing_back;
-                        break;
-                    case CameraCharacteristics.LENS_FACING_EXTERNAL:
-                        stringId = R.string.camera_facing_external;
-                        break;
+                        case CameraCharacteristics.LENS_FACING_FRONT:
+                            stringId = R.string.camera_facing_front;
+                            break;
+                        case CameraCharacteristics.LENS_FACING_BACK:
+                            stringId = R.string.camera_facing_back;
+                            break;
+                        case CameraCharacteristics.LENS_FACING_EXTERNAL:
+                            stringId = R.string.camera_facing_external;
+                            break;
                     }
                     supportedCameraNameList.add(String.format("%1$s (%2$s)", id, stringId));
                 }
