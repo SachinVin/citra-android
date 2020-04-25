@@ -109,8 +109,9 @@ public final class SettingsActivityPresenter {
         if (mSettings != null && finishing && mShouldSave) {
             Log.debug("[SettingsActivity] Settings activity stopping. Saving settings to INI...");
             mSettings.saveSettings(mView);
-            ThemeUtil.applyTheme(mSettings);
         }
+
+        ThemeUtil.applyTheme();
 
         NativeLibrary.ReloadSettings();
     }
