@@ -36,12 +36,15 @@
     <!-- Generic buttons (Shared with lots of stuff) -->
     <string name="generic_buttons">Buttons</string>
 
+    <!-- Premium settings strings -->
+    <string name="design">Change Theme (Light, Dark)</string>
+    <string name="design_updated">Theme will update when exiting Settings</string>
+
     <!-- Core settings strings -->
     <string name="cpu_jit">Enable CPU JIT</string>
     <string name="cpu_jit_description">Uses the Just-in-Time (JIT) compiler for CPU emulation. When enabled, game performance will be significantly improved.</string>
     <string name="init_clock">System clock type</string>
     <string name="init_clock_description">Set the emulated 3DS clock to either reflect that of your device or start at a simulated date and time.</string>
-    <string name="design">Change Theme (Light, Dark)</string>
 
     <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>
@@ -98,7 +101,7 @@
     <!-- Miscellaneous -->
     <string name="clear">Clear</string>
     <string name="slider_default">Default</string>
-    <string name="ini_saved">Saved settings to INI files</string>
+    <string name="ini_saved">Saved settings</string>
     <string name="gameid_saved">Saved settings for %1$s</string>
     <string name="error_saving">Error saving %1$s.ini: %2$s</string>
 
