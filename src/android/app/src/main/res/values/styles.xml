@@ -29,6 +29,7 @@
     <style name="CitraEmulationBase" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
+        <item name="colorAccent">@color/citra_accent</item>
         <item name="android:windowTranslucentNavigation">true</item>
 
         <item name="android:windowBackground">@android:color/black</item>
