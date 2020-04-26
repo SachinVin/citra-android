@@ -26,6 +26,8 @@ import org.citra.citra_emu.utils.PicassoUtils;
 import org.citra.citra_emu.utils.StartupHandler;
 import org.citra.citra_emu.utils.ThemeUtil;
 
+import java.util.Arrays;
+
 /**
  * The main Activity of the Lollipop style UI. Manages several PlatformGamesFragments, which
  * individually display a grid of available games for each Fragment, in a tabbed layout.
@@ -127,7 +129,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     public void launchFileListActivity() {
         if (PermissionsHandler.hasWriteAccess(this)) {
             FileBrowserHelper.openDirectoryPicker(this, MainPresenter.REQUEST_ADD_DIRECTORY,
-                    R.string.select_game_folder);
+                    R.string.select_game_folder, Arrays.asList("elf", "axf", "cci", "3ds", "cxi", "app", "3dsx", "cia"));
         } else {
             PermissionsHandler.checkWritePermission(this);
         }

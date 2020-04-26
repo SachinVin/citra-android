@@ -26,6 +26,20 @@
     </item>
 
     <item
+        android:id="@+id/menu_emulation_amiibo"
+        android:title="@string/menu_emulation_amiibo">
+        <menu>
+            <item
+                android:id="@+id/menu_emulation_amiibo_load"
+                android:title="@string/menu_emulation_amiibo_load"/>
+
+            <item
+                android:id="@+id/menu_emulation_amiibo_remove"
+                android:title="@string/menu_emulation_amiibo_remove"/>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/menu_emulation_switch_screen_layout"
         app:showAsAction="never"
         android:title="@string/emulation_switch_screen_layout">

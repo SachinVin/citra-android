@@ -19,6 +19,7 @@
 #include "core/frontend/camera/factory.h"
 #include "core/frontend/scope_acquire_context.h"
 #include "core/hle/service/am/am.h"
+#include "core/hle/service/nfc/nfc.h"
 #include "core/settings.h"
 #include "jni/applets/swkbd.h"
 #include "jni/button_manager.h"
@@ -479,6 +480,32 @@ void Java_org_citra_citra_1emu_NativeLibrary_ReloadCameraDevices(JNIEnv* env, jc
     if (g_ndk_factory) {
         g_ndk_factory->ReloadCameraDevices();
     }
+}
+
+jboolean Java_org_citra_citra_1emu_NativeLibrary_LoadAmiibo(JNIEnv *env, jclass clazz, jbyteArray bytes) {
+    Core::System& system{Core::System::GetInstance()};
+    Service::SM::ServiceManager& sm = system.ServiceManager();
+    auto nfc = sm.GetService<Service::NFC::Module::Interface>("nfc:u");
+    if (nfc == nullptr || env->GetArrayLength(bytes) != sizeof(Service::NFC::AmiiboData)) {
+        return static_cast<jboolean>(false);
+    }
+
+    Service::NFC::AmiiboData amiibo_data{};
+    env->GetByteArrayRegion(bytes, 0,  sizeof(Service::NFC::AmiiboData), reinterpret_cast<jbyte*>(&amiibo_data));
+
+    nfc->LoadAmiibo(amiibo_data);
+    return static_cast<jboolean>(true);
+}
+
+void Java_org_citra_citra_1emu_NativeLibrary_RemoveAmiibo(JNIEnv *env, jclass clazz) {
+    Core::System &system{Core::System::GetInstance()};
+    Service::SM::ServiceManager &sm = system.ServiceManager();
+    auto nfc = sm.GetService<Service::NFC::Module::Interface>("nfc:u");
+    if (nfc == nullptr) {
+        return;
+    }
+
+    nfc->RemoveAmiibo();
 }
 
 } // extern "C"

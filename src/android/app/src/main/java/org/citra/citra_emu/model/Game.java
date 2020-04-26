@@ -2,7 +2,6 @@ package org.citra.citra_emu.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Environment;
 
 import java.nio.file.Paths;
 
