@@ -21,6 +21,7 @@
 #include "core/hle/service/am/am.h"
 #include "core/hle/service/nfc/nfc.h"
 #include "core/settings.h"
+#include "jni/applets/mii_selector.h"
 #include "jni/applets/swkbd.h"
 #include "jni/button_manager.h"
 #include "jni/camera/ndk_camera.h"
@@ -135,6 +136,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     // Register frontend applets
     Frontend::RegisterDefaultApplets();
+    system.RegisterMiiSelector(std::make_shared<MiiSelector::AndroidMiiSelector>());
     system.RegisterSoftwareKeyboard(std::make_shared<SoftwareKeyboard::AndroidKeyboard>());
 
     InputManager::Init();

@@ -7,6 +7,7 @@
 #include "common/logging/filter.h"
 #include "common/logging/log.h"
 #include "core/settings.h"
+#include "jni/applets/mii_selector.h"
 #include "jni/applets/swkbd.h"
 #include "jni/camera/still_image_camera.h"
 #include "jni/id_cache.h"
@@ -120,6 +121,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_request_camera_permission =
         env->GetStaticMethodID(s_native_library_class, "RequestCameraPermission", "()Z");
 
+    MiiSelector::InitJNI(env);
     SoftwareKeyboard::InitJNI(env);
     Camera::StillImage::InitJNI(env);
 
@@ -133,6 +135,7 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
     }
 
     env->DeleteGlobalRef(s_native_library_class);
+    MiiSelector::CleanupJNI(env);
     SoftwareKeyboard::CleanupJNI(env);
     Camera::StillImage::CleanupJNI(env);
 }
