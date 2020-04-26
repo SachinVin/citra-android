@@ -20,19 +20,18 @@ import org.citra.citra_emu.utils.DirectoryInitialization;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
 
 public final class SettingsActivity extends AppCompatActivity implements SettingsActivityView {
-    private static final String ARG_FILE_NAME = "file_name";
+    private static final String ARG_MENU_TAG = "menu_tag";
     private static final String ARG_GAME_ID = "game_id";
-
     private static final String FRAGMENT_TAG = "settings";
     private SettingsActivityPresenter mPresenter = new SettingsActivityPresenter(this);
 
     private ProgressDialog dialog;
 
-    public static void launch(Context context, String menuTag, String gameId) {
+    public static void launch(Context context, String menuTag, String gameId)
+    {
         Intent settings = new Intent(context, SettingsActivity.class);
-        settings.putExtra(ARG_FILE_NAME, menuTag);
+        settings.putExtra(ARG_MENU_TAG, menuTag);
         settings.putExtra(ARG_GAME_ID, gameId);
-
         context.startActivity(settings);
     }
 
@@ -43,10 +42,10 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
         setContentView(R.layout.activity_settings);
 
         Intent launcher = getIntent();
-        String filename = launcher.getStringExtra(ARG_FILE_NAME);
         String gameID = launcher.getStringExtra(ARG_GAME_ID);
+        String menuTag = launcher.getStringExtra(ARG_MENU_TAG);
 
-        mPresenter.onCreate(savedInstanceState, filename, gameID);
+        mPresenter.onCreate(savedInstanceState, menuTag, gameID);
 
         // Show "Back" button in the action bar for navigation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
