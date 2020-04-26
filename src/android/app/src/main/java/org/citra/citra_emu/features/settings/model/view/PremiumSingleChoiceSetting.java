@@ -35,10 +35,7 @@ public final class PremiumSingleChoiceSetting extends SettingsItem {
     }
 
     public int getSelectedValue() {
-        if (getSetting() == null) {
-            return 0;
-        }
-        return mPreferences.getInt(getSetting().getKey(), 0);
+        return mPreferences.getInt(getKey(), mDefaultValue);
     }
 
     /**
@@ -49,9 +46,6 @@ public final class PremiumSingleChoiceSetting extends SettingsItem {
      * @return null if overwritten successfully otherwise; a newly created IntSetting.
      */
     public void setSelectedValue(int selection) {
-        if (selection == getSelectedValue()) {
-            return;
-        }
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(getKey(), selection);
         editor.apply();
