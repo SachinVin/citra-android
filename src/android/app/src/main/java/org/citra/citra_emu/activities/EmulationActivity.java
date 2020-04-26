@@ -241,14 +241,6 @@ public final class EmulationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent result) {
-        super.onActivityResult(requestCode, resultCode, result);
-        if (requestCode == StillImageCameraHelper.REQUEST_CAMERA_FILE_PICKER) {
-            StillImageCameraHelper.OnFilePickerResult(resultCode == RESULT_OK ? result : null);
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
         case NativeLibrary.REQUEST_CODE_NATIVE_CAMERA:
@@ -447,6 +439,9 @@ public final class EmulationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent result) {
         super.onActivityResult(requestCode, resultCode, result);
         switch (requestCode) {
+            case StillImageCameraHelper.REQUEST_CAMERA_FILE_PICKER:
+                StillImageCameraHelper.OnFilePickerResult(resultCode == RESULT_OK ? result : null);
+                break;
             case REQUEST_SELECT_AMIIBO:
                 // If the user picked a file, as opposed to just backing out.
                 if (resultCode == MainActivity.RESULT_OK) {
