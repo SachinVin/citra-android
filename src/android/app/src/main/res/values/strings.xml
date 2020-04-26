@@ -168,6 +168,10 @@
     <string name="blank_input_not_allowed">Blank input is not allowed</string>
     <string name="empty_input_not_allowed">Empty input is not allowed</string>
 
+    <!-- Mii Selector -->
+    <string name="mii_selector">Mii Selector</string>
+    <string name="standard_mii">Standard Mii</string>
+
     <!-- Camera -->
     <string name="camera_select_image">Select Image</string>
     <string name="camera">Camera</string>
