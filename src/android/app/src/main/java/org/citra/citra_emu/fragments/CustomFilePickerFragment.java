@@ -17,12 +17,13 @@ import org.citra.citra_emu.R;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 
 public class CustomFilePickerFragment extends FilePickerFragment {
+    private static String ALL_FILES = "*";
     private int mTitle;
-    private static final Set<String> extensions = new HashSet<>(Arrays.asList("elf", "axf", "cci", "3ds", "cxi", "app", "3dsx", "cia"));
+    private static List<String> extensions = Collections.singletonList(ALL_FILES);
 
     @NonNull
     @Override
@@ -66,6 +67,12 @@ public class CustomFilePickerFragment extends FilePickerFragment {
         mTitle = title;
     }
 
+    public void setAllowedExtensions(String allowedExtensions) {
+        if (allowedExtensions == null)
+            return;
+
+        extensions = Arrays.asList(allowedExtensions.split(","));
+    }
 
     @Override
     protected boolean isItemVisible(@NonNull final File file) {
@@ -73,7 +80,7 @@ public class CustomFilePickerFragment extends FilePickerFragment {
         // files if the files don't show up in the file picker when mode == MODE_DIR.
         // To avoid this, show files even when the user needs to select a directory.
         return (showHiddenItems || !file.isHidden()) &&
-                (file.isDirectory() ||
+                (file.isDirectory() || extensions.contains(ALL_FILES) ||
                         extensions.contains(fileExtension(file.getName()).toLowerCase()));
     }
 

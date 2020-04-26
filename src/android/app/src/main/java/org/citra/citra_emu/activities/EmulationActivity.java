@@ -34,10 +34,16 @@ import org.citra.citra_emu.features.settings.ui.SettingsActivity;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.camera.StillImageCameraHelper;
 import org.citra.citra_emu.fragments.EmulationFragment;
+import org.citra.citra_emu.ui.main.MainActivity;
 import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
+import org.citra.citra_emu.utils.FileBrowserHelper;
+import org.citra.citra_emu.utils.FileUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Retention;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
@@ -58,7 +64,10 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_RESET_OVERLAY = 10;
     public static final int MENU_ACTION_SHOW_OVERLAY = 11;
     public static final int MENU_ACTION_OPEN_SETTINGS = 12;
+    public static final int MENU_ACTION_LOAD_AMIIBO = 13;
+    public static final int MENU_ACTION_REMOVE_AMIIBO = 14;
 
+    public static final int REQUEST_SELECT_AMIIBO = 2;
     private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
     private static SparseIntArray buttonsActionsMap = new SparseIntArray();
 
@@ -87,6 +96,10 @@ public final class EmulationActivity extends AppCompatActivity {
                 .append(R.id.menu_emulation_show_overlay, EmulationActivity.MENU_ACTION_SHOW_OVERLAY);
         buttonsActionsMap
                 .append(R.id.menu_emulation_open_settings, EmulationActivity.MENU_ACTION_OPEN_SETTINGS);
+        buttonsActionsMap
+                .append(R.id.menu_emulation_amiibo_load, EmulationActivity.MENU_ACTION_LOAD_AMIIBO);
+        buttonsActionsMap
+                .append(R.id.menu_emulation_amiibo_remove, EmulationActivity.MENU_ACTION_REMOVE_AMIIBO);
     }
 
     private View mDecorView;
@@ -375,6 +388,14 @@ public final class EmulationActivity extends AppCompatActivity {
             case MENU_ACTION_OPEN_SETTINGS:
                 SettingsActivity.launch(this, SettingsFile.FILE_NAME_CONFIG, "");
                 break;
+
+            case MENU_ACTION_LOAD_AMIIBO:
+                FileBrowserHelper.openFilePicker(this, REQUEST_SELECT_AMIIBO, R.string.select_amiibo, Collections.singletonList("bin"));
+                break;
+
+            case MENU_ACTION_REMOVE_AMIIBO:
+                RemoveAmiibo();
+                break;
         }
 
         return true;
@@ -420,6 +441,47 @@ public final class EmulationActivity extends AppCompatActivity {
         }
         InputDevice input = event.getDevice();
         return NativeLibrary.onGamePadEvent(input.getDescriptor(), button, action);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
+        switch (requestCode) {
+            case REQUEST_SELECT_AMIIBO:
+                // If the user picked a file, as opposed to just backing out.
+                if (resultCode == MainActivity.RESULT_OK) {
+                    String[] selectedFiles = FileBrowserHelper.getSelectedFiles(result);
+                    if (selectedFiles == null)
+                        return;
+
+                    onAmiiboSelected(selectedFiles[0]);
+                }
+                break;
+        }
+    }
+
+    private void onAmiiboSelected(String selectedFile) {
+        File file = new File(selectedFile);
+        boolean success = false;
+        try {
+            byte[] bytes = FileUtil.getBytesFromFile(file);
+            success = NativeLibrary.LoadAmiibo(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!success) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.amiibo_load_error)
+                    .setMessage(R.string.amiibo_load_error_message)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .create()
+                    .show();
+        }
+    }
+
+    private void RemoveAmiibo() {
+        NativeLibrary.RemoveAmiibo();
     }
 
     private void toggleControls() {
