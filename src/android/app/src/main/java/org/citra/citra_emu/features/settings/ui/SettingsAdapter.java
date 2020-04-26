@@ -196,9 +196,8 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         MainActivity.invokePremiumBilling(() -> onSingleChoiceClick(item));
     }
 
-    public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position) {
+    public void onStringSingleChoiceClick(StringSingleChoiceSetting item) {
         mClickedItem = item;
-        mClickedPosition = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mView.getActivity());
 
@@ -206,6 +205,19 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
         builder.setSingleChoiceItems(item.getChoicesId(), item.getSelectValueIndex(), this);
 
         mDialog = builder.show();
+    }
+
+    public void onStringSingleChoiceClick(StringSingleChoiceSetting item, int position) {
+        mClickedPosition = position;
+
+        if (!item.isPremium() || MainActivity.isPremiumActive()) {
+            // Setting is either not Premium, or the user has Premium
+            onStringSingleChoiceClick(item);
+            return;
+        }
+
+        // User needs Premium, invoke the billing flow
+        MainActivity.invokePremiumBilling(() -> onStringSingleChoiceClick(item));
     }
 
     DialogInterface.OnClickListener defaultCancelListener = (dialog, which) -> closeDialog();
@@ -347,15 +359,7 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingViewHolde
             closeDialog();
         } else if (mClickedItem instanceof PremiumSingleChoiceSetting) {
             PremiumSingleChoiceSetting scSetting = (PremiumSingleChoiceSetting) mClickedItem;
-
-            int value = getValueForSingleChoiceSelection(scSetting, which);
-            if (scSetting.getSelectedValue() != value) {
-                //mView.onSettingChanged();
-            }
-
-            // Get the backing Setting, which may be null (if for example it was missing from the file)
-            scSetting.setSelectedValue(value);
-
+            scSetting.setSelectedValue(getValueForSingleChoiceSelection(scSetting, which));
             closeDialog();
         } else if (mClickedItem instanceof StringSingleChoiceSetting) {
             StringSingleChoiceSetting scSetting = (StringSingleChoiceSetting) mClickedItem;
