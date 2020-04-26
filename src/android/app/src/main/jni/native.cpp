@@ -90,9 +90,24 @@ static int AlertPromptButton() {
 
 static Camera::NDK::Factory* g_ndk_factory{};
 
+static void TryShutdown() {
+    if (!window) {
+        return;
+    }
+
+    window->StopPresenting();
+    window->DoneCurrent();
+    Core::System::GetInstance().Shutdown();
+    window.reset();
+    InputManager::Shutdown();
+    MicroProfileShutdown();
+}
+
 static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
+
+    TryShutdown();
 
     LOG_INFO(Frontend, "Citra is Starting");
 
@@ -136,6 +151,9 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     pause_emulation = false;
 
     window->StartPresenting();
+
+    SCOPE_EXIT({TryShutdown();});
+
     while (is_running) {
         if (!pause_emulation) {
             system.RunLoop();
@@ -149,12 +167,6 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
             running_cv.wait(pause_lock, [] { return !pause_emulation || !is_running; });
         }
     }
-    window->StopPresenting();
-
-    system.Shutdown();
-    window.reset();
-    InputManager::Shutdown();
-    MicroProfileShutdown();
 
     return Core::System::ResultStatus::Success;
 }
