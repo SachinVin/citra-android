@@ -534,6 +534,10 @@ public final class EmulationActivity extends AppCompatActivity {
         float[] axisValuesCirclePad = {0.0f, 0.0f};
         float[] axisValuesCStick = {0.0f, 0.0f};
         float[] axisValuesDPad = {0.0f, 0.0f};
+        boolean isTriggerPressedLMapped = false;
+        boolean isTriggerPressedRMapped = false;
+        boolean isTriggerPressedZLMapped = false;
+        boolean isTriggerPressedZRMapped = false;
         boolean isTriggerPressedL = false;
         boolean isTriggerPressedR = false;
         boolean isTriggerPressedZL = false;
@@ -562,14 +566,18 @@ public final class EmulationActivity extends AppCompatActivity {
                 axisValuesCStick[guestOrientation] = value;
             } else if (nextMapping == NativeLibrary.ButtonType.DPAD) {
                 axisValuesDPad[guestOrientation] = value;
-            } else if (nextMapping == NativeLibrary.ButtonType.TRIGGER_L && value != 0.f) {
-                isTriggerPressedL = true;
-            } else if (nextMapping == NativeLibrary.ButtonType.TRIGGER_R && value != 0.f) {
-                isTriggerPressedR = true;
-            } else if (nextMapping == NativeLibrary.ButtonType.BUTTON_ZL && value != 0.f) {
-                isTriggerPressedZL = true;
-            } else if (nextMapping == NativeLibrary.ButtonType.BUTTON_ZR && value != 0.f) {
-                isTriggerPressedZR = true;
+            } else if (nextMapping == NativeLibrary.ButtonType.TRIGGER_L) {
+                isTriggerPressedLMapped = true;
+                isTriggerPressedL = value != 0.f;
+            } else if (nextMapping == NativeLibrary.ButtonType.TRIGGER_R) {
+                isTriggerPressedRMapped = true;
+                isTriggerPressedR = value != 0.f;
+            } else if (nextMapping == NativeLibrary.ButtonType.BUTTON_ZL) {
+                isTriggerPressedZLMapped = true;
+                isTriggerPressedZL = value != 0.f;
+            } else if (nextMapping == NativeLibrary.ButtonType.BUTTON_ZR) {
+                isTriggerPressedZRMapped = true;
+                isTriggerPressedZR = value != 0.f;
             }
         }
 
@@ -578,10 +586,18 @@ public final class EmulationActivity extends AppCompatActivity {
         NativeLibrary.onGamePadMoveEvent(input.getDescriptor(), NativeLibrary.ButtonType.STICK_C, axisValuesCStick[0], axisValuesCStick[1]);
 
         // Triggers L/R and ZL/ZR
-        NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.TRIGGER_L, isTriggerPressedL ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
-        NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.TRIGGER_R, isTriggerPressedR ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
-        NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.BUTTON_ZL, isTriggerPressedZL ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
-        NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.BUTTON_ZR, isTriggerPressedZR ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
+        if (isTriggerPressedLMapped) {
+            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.TRIGGER_L, isTriggerPressedL ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
+        }
+        if (isTriggerPressedRMapped) {
+            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.TRIGGER_R, isTriggerPressedR ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
+        }
+        if (isTriggerPressedZLMapped) {
+            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.BUTTON_ZL, isTriggerPressedZL ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
+        }
+        if (isTriggerPressedZRMapped) {
+            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, NativeLibrary.ButtonType.BUTTON_ZR, isTriggerPressedZR ? NativeLibrary.ButtonState.PRESSED : NativeLibrary.ButtonState.RELEASED);
+        }
 
         // Work-around to allow D-pad axis to be bound to emulated buttons
         if (axisValuesDPad[0] == 0.f) {
