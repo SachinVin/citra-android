@@ -14,6 +14,7 @@ import java.io.File;
 
 public class CustomFilePickerActivity extends FilePickerActivity {
     public static final String EXTRA_TITLE = "filepicker.intent.TITLE";
+    public static final String EXTRA_EXTENSIONS = "filepicker.intent.EXTENSIONS";
 
     @Override
     protected AbstractFilePickerFragment<File> getFragment(
@@ -29,6 +30,9 @@ public class CustomFilePickerActivity extends FilePickerActivity {
         Intent intent = getIntent();
         int title = intent == null ? 0 : intent.getIntExtra(EXTRA_TITLE, 0);
         fragment.setTitle(title);
+        String allowedExtensions = intent == null ? "*" : intent.getStringExtra(EXTRA_EXTENSIONS);
+        fragment.setAllowedExtensions(allowedExtensions);
+
         return fragment;
     }
 }
