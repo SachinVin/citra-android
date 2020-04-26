@@ -152,6 +152,10 @@ public final class SettingsFragmentPresenter {
             // Pre-Android 10 does not support System Default
             sl.add(new PremiumSingleChoiceSetting(SettingsFile.KEY_DESIGN, Settings.SECTION_PREMIUM, R.string.design, 0, R.array.designNamesOld, R.array.designValuesOld, 0, design, mView));
         }
+
+        String[] textureFilterNames = NativeLibrary.GetTextureFilterNames();
+        Setting textureFilterName = premiumSection.getSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME);
+        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME, Settings.SECTION_PREMIUM, R.string.texture_filter_name, R.string.texture_filter_description, textureFilterNames, textureFilterNames, "none", textureFilterName));
     }
 
     private void addGeneralSettings(ArrayList<SettingsItem> sl) {
@@ -335,14 +339,10 @@ public final class SettingsFragmentPresenter {
         Setting shadersAccurateMul = rendererSection.getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
         Setting resolutionFactor = rendererSection.getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
         Setting filterMode = rendererSection.getSetting(SettingsFile.KEY_FILTER_MODE);
-        Setting textureFilterName = rendererSection.getSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME);
-
-        String[] textureFilterNames = NativeLibrary.GetTextureFilterNames();
 
         sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, Settings.SECTION_RENDERER, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, false, shadersAccurateMul));
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, Settings.SECTION_RENDERER, R.string.internal_resolution, R.string.internal_resolution_description, 1, 4, "x", 1, resolutionFactor));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FILTER_MODE, Settings.SECTION_RENDERER, R.string.linear_filtering, R.string.linear_filtering_description, true, filterMode));
-        sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_TEXTURE_FILTER_NAME, Settings.SECTION_RENDERER, R.string.texture_filter_name, R.string.texture_filter_description, textureFilterNames, textureFilterNames, "none", textureFilterName));
     }
 
     private void addAudioSettings(ArrayList<SettingsItem> sl) {
