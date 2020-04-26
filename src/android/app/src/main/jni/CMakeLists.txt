@@ -1,4 +1,6 @@
 add_library(main SHARED
+    applets/mii_selector.cpp
+    applets/mii_selector.h
     applets/swkbd.cpp
     applets/swkbd.h
     button_manager.cpp
