@@ -35,6 +35,9 @@ public final class PremiumSingleChoiceSetting extends SettingsItem {
     }
 
     public int getSelectedValue() {
+        if (getSetting() == null) {
+            return 0;
+        }
         return mPreferences.getInt(getSetting().getKey(), 0);
     }
 
