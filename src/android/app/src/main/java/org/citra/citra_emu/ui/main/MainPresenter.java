@@ -1,5 +1,6 @@
 package org.citra.citra_emu.ui.main;
 
+import android.os.SystemClock;
 
 import org.citra.citra_emu.BuildConfig;
 import org.citra.citra_emu.CitraApplication;
@@ -14,6 +15,7 @@ public final class MainPresenter {
 
     private final MainView mView;
     private String mDirToAdd;
+    private long mLastClickTime = 0;
 
     public MainPresenter(MainView view) {
         mView = view;
@@ -26,6 +28,12 @@ public final class MainPresenter {
     }
 
     public boolean handleOptionSelection(int itemId) {
+        // Double-click prevention, using threshold of 500 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+            return false;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         switch (itemId) {
             case R.id.menu_settings_core:
                 mView.launchSettingsActivity(SettingsFile.FILE_NAME_CONFIG);
