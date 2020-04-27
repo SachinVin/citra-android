@@ -109,8 +109,6 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Citra core only supports a single running instance
     std::lock_guard<std::mutex> lock(running_mutex);
 
-    TryShutdown();
-
     LOG_INFO(Frontend, "Citra is Starting");
 
     MicroProfileOnThreadCreate("EmuThread");
