@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import rx.Observable;
 
@@ -147,6 +148,49 @@ public final class GameDatabase extends SQLiteOpenHelper {
         // Possibly overly defensive, but ensures that moveToNext() does not skip a row.
         folderCursor.moveToPosition(-1);
 
+        Consumer<String> AttemptToAddGame = filePath -> {
+            String name = NativeLibrary.GetTitle(filePath);
+
+            // If the game's title field is empty, use the filename.
+            if (name.isEmpty()) {
+                name = filePath.substring(filePath.lastIndexOf("/") + 1);
+            }
+
+            String gameId = NativeLibrary.GetGameId(filePath);
+
+            // If the game's ID field is empty, use the filename without extension.
+            if (gameId.isEmpty()) {
+                gameId = filePath.substring(filePath.lastIndexOf("/") + 1,
+                                            filePath.lastIndexOf("."));
+            }
+
+            ContentValues game = Game.asContentValues(name,
+                                                      NativeLibrary.GetDescription(filePath).replace("\n", " "),
+                                                      NativeLibrary.GetRegions(filePath),
+                                                      filePath,
+                                                      gameId,
+                                                      NativeLibrary.GetCompany(filePath));
+
+            // Try to update an existing game first.
+            int rowsMatched = database.update(TABLE_NAME_GAMES,    // Which table to update.
+                                              game,
+                                              // The values to fill the row with.
+                                              KEY_GAME_ID + " = ?",
+                                              // The WHERE clause used to find the right row.
+                                              new String[]{game.getAsString(
+                                                      KEY_GAME_ID)});    // The ? in WHERE clause is replaced with this,
+            // which is provided as an array because there
+            // could potentially be more than one argument.
+
+            // If update fails, insert a new game instead.
+            if (rowsMatched == 0) {
+                Log.verbose("[GameDatabase] Adding game: " + game.getAsString(KEY_GAME_TITLE));
+                database.insert(TABLE_NAME_GAMES, null, game);
+            } else {
+                Log.verbose("[GameDatabase] Updated game: " + game.getAsString(KEY_GAME_TITLE));
+            }
+        };
+
         // Iterate through all results of the DB query (i.e. all folders in the library.)
         while (folderCursor.moveToNext()) {
             String folderPath = folderCursor.getString(FOLDER_COLUMN_PATH);
@@ -168,46 +212,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
 
                             // Check that the file has an extension we care about before trying to read out of it.
                             if (allowedExtensions.contains(fileExtension.toLowerCase())) {
-                                String name = NativeLibrary.GetTitle(filePath);
-
-                                // If the game's title field is empty, use the filename.
-                                if (name.isEmpty()) {
-                                    name = filePath.substring(filePath.lastIndexOf("/") + 1);
-                                }
-
-                                String gameId = NativeLibrary.GetGameId(filePath);
-
-                                // If the game's ID field is empty, use the filename without extension.
-                                if (gameId.isEmpty()) {
-                                    gameId = filePath.substring(filePath.lastIndexOf("/") + 1,
-                                            filePath.lastIndexOf("."));
-                                }
-
-                                ContentValues game = Game.asContentValues(name,
-                                        NativeLibrary.GetDescription(filePath).replace("\n", " "),
-                                        NativeLibrary.GetRegions(filePath),
-                                        filePath,
-                                        gameId,
-                                        NativeLibrary.GetCompany(filePath));
-
-                                // Try to update an existing game first.
-                                int rowsMatched = database.update(TABLE_NAME_GAMES,    // Which table to update.
-                                        game,
-                                        // The values to fill the row with.
-                                        KEY_GAME_ID + " = ?",
-                                        // The WHERE clause used to find the right row.
-                                        new String[]{game.getAsString(
-                                                KEY_GAME_ID)});    // The ? in WHERE clause is replaced with this,
-                                // which is provided as an array because there
-                                // could potentially be more than one argument.
-
-                                // If update fails, insert a new game instead.
-                                if (rowsMatched == 0) {
-                                    Log.verbose("[GameDatabase] Adding game: " + game.getAsString(KEY_GAME_TITLE));
-                                    database.insert(TABLE_NAME_GAMES, null, game);
-                                } else {
-                                    Log.verbose("[GameDatabase] Updated game: " + game.getAsString(KEY_GAME_TITLE));
-                                }
+                                AttemptToAddGame.accept(filePath);
                             }
                         }
                     }
@@ -227,6 +232,8 @@ public final class GameDatabase extends SQLiteOpenHelper {
 
         fileCursor.close();
         folderCursor.close();
+
+        Arrays.stream(NativeLibrary.GetInstalledGamePaths()).forEach(AttemptToAddGame);
         database.close();
     }
 
