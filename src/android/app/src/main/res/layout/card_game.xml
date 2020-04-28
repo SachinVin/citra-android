@@ -57,7 +57,8 @@
             app:layout_constraintStart_toStartOf="@+id/text_game_title"
             app:layout_constraintTop_toBottomOf="@+id/text_game_title"
             app:layout_constraintVertical_bias="0.842"
-            tools:text="Nintendo" />
+            tools:text="Nintendo"
+            android:textColor="@color/header_subtext" />
 
         <TextView
             android:id="@+id/text_filename"
@@ -71,7 +72,8 @@
             app:layout_constraintStart_toStartOf="@+id/text_game_title"
             app:layout_constraintTop_toBottomOf="@+id/text_game_title"
             app:layout_constraintVertical_bias="0.0"
-            tools:text="Pilotwings_Resort.cxi" />
+            tools:text="Pilotwings_Resort.cxi"
+            android:textColor="@color/header_subtext" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
