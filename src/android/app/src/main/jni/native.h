@@ -70,6 +70,9 @@ JNIEXPORT jstring JNICALL Java_org_citra_citra_1emu_NativeLibrary_GetGitRevision
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(
     JNIEnv* env, jclass clazz, jstring j_directory);
 
+JNIEXPORT jobjectArray JNICALL
+Java_org_citra_citra_1emu_NativeLibrary_GetInstalledGamePaths(JNIEnv* env, jclass clazz);
+
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jclass clazz, jstring path_);
 
