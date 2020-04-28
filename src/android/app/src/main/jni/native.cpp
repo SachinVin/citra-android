@@ -221,6 +221,43 @@ void Java_org_citra_citra_1emu_NativeLibrary_SetUserDirectory(JNIEnv* env,
     FileUtil::SetCurrentDir(GetJString(env, j_directory));
 }
 
+jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetInstalledGamePaths(
+    JNIEnv* env, [[maybe_unused]] jclass clazz) {
+    std::vector<std::string> games;
+    const FileUtil::DirectoryEntryCallable ScanDir =
+        [&games, &ScanDir](u64*, const std::string& directory, const std::string& virtual_name) {
+            std::string path = directory + virtual_name;
+            if (FileUtil::IsDirectory(path)) {
+                path += '/';
+                FileUtil::ForeachDirectoryEntry(nullptr, path, ScanDir);
+            } else {
+                auto loader = Loader::GetLoader(path);
+                if (loader) {
+                    bool executable{};
+                    const Loader::ResultStatus result = loader->IsExecutable(executable);
+                    if (Loader::ResultStatus::Success == result && executable) {
+                        games.emplace_back(path);
+                    }
+                }
+            }
+            return true;
+        };
+    ScanDir(nullptr, "",
+            FileUtil::GetUserPath(FileUtil::UserPath::SDMCDir) +
+                "Nintendo "
+                "3DS/00000000000000000000000000000000/"
+                "00000000000000000000000000000000/title/00040000");
+    ScanDir(nullptr, "",
+            FileUtil::GetUserPath(FileUtil::UserPath::NANDDir) +
+                "00000000000000000000000000000000/title/00040010");
+    jobjectArray jgames =
+        env->NewObjectArray(static_cast<jsize>(games.size()), env->FindClass("java/lang/String"),
+                            nullptr);
+    for (jsize i = 0; i < games.size(); ++i)
+        env->SetObjectArrayElement(jgames, i, env->NewStringUTF(games[i].c_str()));
+    return jgames;
+}
+
 void Java_org_citra_citra_1emu_NativeLibrary_UnPauseEmulation(JNIEnv* env,
                                                               [[maybe_unused]] jclass clazz) {
     pause_emulation = false;
