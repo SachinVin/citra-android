@@ -146,6 +146,8 @@ public final class NativeLibrary {
      */
     public static native void SetUserDirectory(String directory);
 
+    public static native String[] GetInstalledGamePaths();
+
     // Create the config.ini file.
     public static native void CreateConfigFile();
 
