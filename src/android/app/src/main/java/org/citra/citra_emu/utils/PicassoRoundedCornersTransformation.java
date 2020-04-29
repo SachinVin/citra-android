@@ -30,7 +30,7 @@ public class PicassoRoundedCornersTransformation implements Transformation {
         paint.setAntiAlias(true);
         paint.setShader(shader);
 
-        canvas.drawRoundRect(new RectF(rect), 10,10, paint);
+        canvas.drawRoundRect(new RectF(rect), 10, 10, paint);
 
         squaredBitmap.recycle();
 
