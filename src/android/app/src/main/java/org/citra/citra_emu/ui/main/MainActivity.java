@@ -129,7 +129,8 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     public void launchFileListActivity() {
         if (PermissionsHandler.hasWriteAccess(this)) {
             FileBrowserHelper.openDirectoryPicker(this, MainPresenter.REQUEST_ADD_DIRECTORY,
-                    R.string.select_game_folder, Arrays.asList("elf", "axf", "cci", "3ds", "cxi", "app", "3dsx", "cia"));
+                    R.string.select_game_folder, Arrays.asList("elf", "axf", "cci", "3ds", "cxi", "app", "3dsx", "cia",
+                            "rar", "zip", "7z", "torrent", "tar", "gz"));
         } else {
             PermissionsHandler.checkWritePermission(this);
         }
