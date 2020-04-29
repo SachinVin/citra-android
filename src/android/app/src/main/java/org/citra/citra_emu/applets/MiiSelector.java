@@ -56,8 +56,8 @@ public final class MiiSelector {
             final Activity emulationActivity = Objects.requireNonNull(getActivity());
 
             MiiSelectorConfig config =
-                Objects.requireNonNull((MiiSelectorConfig)Objects.requireNonNull(getArguments())
-                                           .getSerializable("config"));
+                    Objects.requireNonNull((MiiSelectorConfig) Objects.requireNonNull(getArguments())
+                            .getSerializable("config"));
 
             // Note: we intentionally leave out the Standard Mii in the native code so that
             // the string can get translated
@@ -66,22 +66,24 @@ public final class MiiSelector {
             list.addAll(Arrays.asList(config.mii_names));
 
             final int initialIndex = config.initially_selected_mii_index < list.size()
-                                         ? (int)config.initially_selected_mii_index
-                                         : 0;
+                    ? (int) config.initially_selected_mii_index
+                    : 0;
             data.index = initialIndex;
             AlertDialog.Builder builder =
-                new AlertDialog.Builder(emulationActivity)
-                    .setTitle(config.title.isEmpty()
-                                  ? emulationActivity.getString(R.string.mii_selector)
-                                  : config.title)
-                    .setSingleChoiceItems(list.toArray(new String[] {}), initialIndex,
-                                          (dialog, which) -> { data.index = which; })
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        data.return_code = 0;
-                        synchronized (finishLock) {
-                            finishLock.notifyAll();
-                        }
-                    });
+                    new AlertDialog.Builder(emulationActivity)
+                            .setTitle(config.title.isEmpty()
+                                    ? emulationActivity.getString(R.string.mii_selector)
+                                    : config.title)
+                            .setSingleChoiceItems(list.toArray(new String[]{}), initialIndex,
+                                    (dialog, which) -> {
+                                        data.index = which;
+                                    })
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                data.return_code = 0;
+                                synchronized (finishLock) {
+                                    finishLock.notifyAll();
+                                }
+                            });
             if (config.enable_cancel_button) {
                 builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
                     data.return_code = 1;

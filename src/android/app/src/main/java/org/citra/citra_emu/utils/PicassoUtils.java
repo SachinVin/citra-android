@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 public class PicassoUtils {
     private static boolean mPicassoInitialized = false;
+
     public static void init() {
         if (mPicassoInitialized) {
             return;
