@@ -49,8 +49,7 @@ public class CitraApplication extends Application {
         databaseHelper = new GameDatabase(this);
     }
 
-    public static Context getAppContext()
-    {
+    public static Context getAppContext() {
         return application.getApplicationContext();
     }
 }

@@ -19,10 +19,12 @@ import androidx.annotation.Nullable;
 public final class StillImageCameraHelper {
     public static final int REQUEST_CAMERA_FILE_PICKER = 1;
     private static final Object filePickerLock = new Object();
-    private static @Nullable String filePickerPath;
+    private static @Nullable
+    String filePickerPath;
 
     // Opens file picker for camera.
-    public static @Nullable String OpenFilePicker() {
+    public static @Nullable
+    String OpenFilePicker() {
         final EmulationActivity emulationActivity = NativeLibrary.sEmulationActivity.get();
 
         // At this point, we are assuming that we already have permissions as they are
@@ -31,9 +33,9 @@ public final class StillImageCameraHelper {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
             emulationActivity.startActivityForResult(
-                Intent.createChooser(intent,
-                                     emulationActivity.getString(R.string.camera_select_image)),
-                REQUEST_CAMERA_FILE_PICKER);
+                    Intent.createChooser(intent,
+                            emulationActivity.getString(R.string.camera_select_image)),
+                    REQUEST_CAMERA_FILE_PICKER);
         });
 
         synchronized (filePickerLock) {
