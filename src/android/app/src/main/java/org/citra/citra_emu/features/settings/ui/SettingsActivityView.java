@@ -4,6 +4,7 @@ import android.content.IntentFilter;
 
 import org.citra.citra_emu.features.settings.model.Settings;
 import org.citra.citra_emu.utils.DirectoryStateReceiver;
+
 /**
  * Abstraction for the Activity that manages SettingsFragments.
  */
