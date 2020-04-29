@@ -45,6 +45,7 @@ public final class SettingsActivityPresenter {
     }
 
     public void onStart() {
+        this.mStackCount = 0;
         prepareCitraDirectoriesIfNeeded();
     }
 
@@ -64,7 +65,7 @@ public final class SettingsActivityPresenter {
     private void prepareCitraDirectoriesIfNeeded() {
         File configFile = new File(DirectoryInitialization.getUserDirectory() + "/config/" + SettingsFile.FILE_NAME_CONFIG + ".ini");
         if (!configFile.exists()) {
-
+            Log.error("Citra config file could not be found!");
         }
         if (DirectoryInitialization.areCitraDirectoriesReady()) {
             loadSettingsUI();
