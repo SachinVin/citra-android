@@ -27,8 +27,7 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
 
     private ProgressDialog dialog;
 
-    public static void launch(Context context, String menuTag, String gameId)
-    {
+    public static void launch(Context context, String menuTag, String gameId) {
         Intent settings = new Intent(context, SettingsActivity.class);
         settings.putExtra(ARG_MENU_TAG, menuTag);
         settings.putExtra(ARG_GAME_ID, gameId);
