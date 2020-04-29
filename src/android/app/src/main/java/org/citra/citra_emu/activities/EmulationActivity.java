@@ -243,19 +243,19 @@ public final class EmulationActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-        case NativeLibrary.REQUEST_CODE_NATIVE_CAMERA:
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.camera)
-                        .setMessage(R.string.camera_permission_needed)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show();
-            }
-            NativeLibrary.CameraPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
-            break;
-        default:
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            break;
+            case NativeLibrary.REQUEST_CODE_NATIVE_CAMERA:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.camera)
+                            .setMessage(R.string.camera_permission_needed)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
+                }
+                NativeLibrary.CameraPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
         }
     }
 

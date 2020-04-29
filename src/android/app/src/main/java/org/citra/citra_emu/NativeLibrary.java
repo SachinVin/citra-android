@@ -428,7 +428,8 @@ public final class NativeLibrary {
         synchronized (cameraPermissionLock) {
             try {
                 cameraPermissionLock.wait();
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            }
         }
         return cameraPermissionGranted;
     }
