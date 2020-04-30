@@ -41,7 +41,6 @@
         android:layout_gravity="center"
         android:padding="@dimen/spacing_small"
         android:background="@color/citra_orange"
-        android:textColor="@color/lb_tv_white"
         android:text="@string/emulation_done"
         android:visibility="gone"/>
 
