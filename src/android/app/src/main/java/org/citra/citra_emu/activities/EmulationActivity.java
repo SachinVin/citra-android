@@ -432,6 +432,12 @@ public final class EmulationActivity extends AppCompatActivity {
                 return false;
         }
         InputDevice input = event.getDevice();
+
+        if (input == null) {
+            // Controller was disconnected
+            return false;
+        }
+
         return NativeLibrary.onGamePadEvent(input.getDescriptor(), button, action);
     }
 
