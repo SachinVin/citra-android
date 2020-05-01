@@ -195,6 +195,11 @@ public final class InputOverlayDrawableJoystick {
         int X = getVirtBounds().centerX() + (int) ((axises[0]) * (getVirtBounds().width() / 2));
         int Y = getVirtBounds().centerY() + (int) ((axises[1]) * (getVirtBounds().height() / 2));
 
+        if (mJoystickType == ButtonType.STICK_LEFT) {
+            X += 1;
+            Y += 1;
+        }
+
         if (X > getVirtBounds().centerX() + (getVirtBounds().width() / 2))
             X = getVirtBounds().centerX() + (getVirtBounds().width() / 2);
         if (X < getVirtBounds().centerX() - (getVirtBounds().width() / 2))
