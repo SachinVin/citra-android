@@ -99,7 +99,7 @@ public class CustomFilePickerFragment extends FilePickerFragment {
         if(Environment.getExternalStorageDirectory().getPath().equals(mCurrentPath.getPath())) {
             return;
         }
-        goToDir(getParent(mCurrentPath));
+        super.goUp();
     }
 
     private static String fileExtension(@NonNull String filename) {
