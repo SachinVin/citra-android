@@ -141,6 +141,9 @@ public final class GameDatabase extends SQLiteOpenHelper {
                 null,
                 null);    // Order of folders is irrelevant.
 
+        Set<String> allowedExtensions = new HashSet<String>(Arrays.asList(
+                ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".app", ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz"));
+
         // Possibly overly defensive, but ensures that moveToNext() does not skip a row.
         folderCursor.moveToPosition(-1);
 
@@ -170,10 +173,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
         database.close();
     }
 
-    private static void addGamesRecursive(SQLiteDatabase database, File parent, int depth) {
-        Set<String> allowedExtensions = new HashSet<String>(Arrays.asList(
-                ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".app", ".rar", ".zip", ".7z", ".torrent", ".tar", ".gz"));
-
+    private static void addGamesRecursive(SQLiteDatabase database, File parent, Set<String> allowedExtensions, int depth) {
         if(depth <= 0) {
             return;
         }
@@ -186,7 +186,9 @@ public final class GameDatabase extends SQLiteOpenHelper {
                 }
 
                 if (file.isDirectory()) {
-                    addGamesRecursive(database, file, depth - 1);
+                    Set<String> newExtensions = new HashSet<>(Arrays.asList(
+                            ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".app"));
+                    addGamesRecursive(database, file, newExtensions, depth - 1);
                 }
                 else {
                     String filePath = file.getPath();
