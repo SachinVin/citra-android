@@ -89,6 +89,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
     private void onQuerySkuDetailsFinished(List<SkuDetails> skuDetailsList) {
         if (skuDetailsList == null) {
+            // This can happen when no user is signed in
             return;
         }
 
