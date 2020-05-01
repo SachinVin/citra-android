@@ -88,6 +88,10 @@ public class BillingManager implements PurchasesUpdatedListener {
     }
 
     private void onQuerySkuDetailsFinished(List<SkuDetails> skuDetailsList) {
+        if (skuDetailsList == null) {
+            return;
+        }
+
         if (skuDetailsList.isEmpty()) {
             return;
         }
