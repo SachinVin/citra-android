@@ -2,6 +2,7 @@ package org.citra.citra_emu.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,14 @@ public class CustomFilePickerFragment extends FilePickerFragment {
         // AbstractFilePickerFragment always treats files as checkable when
         // allowExistingFile == true, but we don't want files to be checkable when mode == MODE_DIR.
         return super.isCheckable(file) && !(mode == MODE_DIR && file.isFile());
+    }
+
+    @Override
+    public void goUp() {
+        if(Environment.getExternalStorageDirectory().getPath().equals(mCurrentPath.getPath())) {
+            return;
+        }
+        goToDir(getParent(mCurrentPath));
     }
 
     private static String fileExtension(@NonNull String filename) {
