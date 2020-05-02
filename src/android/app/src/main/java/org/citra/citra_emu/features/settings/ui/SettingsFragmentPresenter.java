@@ -12,6 +12,7 @@ import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.model.Setting;
 import org.citra.citra_emu.features.settings.model.SettingSection;
 import org.citra.citra_emu.features.settings.model.Settings;
+import org.citra.citra_emu.features.settings.model.StringSetting;
 import org.citra.citra_emu.features.settings.model.view.CheckBoxSetting;
 import org.citra.citra_emu.features.settings.model.view.DateTimeSetting;
 import org.citra.citra_emu.features.settings.model.view.HeaderSetting;
@@ -65,6 +66,16 @@ public final class SettingsFragmentPresenter {
 
     public void putSetting(Setting setting) {
         mSettings.getSection(setting.getSection()).putSetting(setting);
+    }
+
+    private StringSetting asStringSetting(Setting setting) {
+        if (setting == null) {
+            return null;
+        }
+
+        StringSetting stringSetting = new StringSetting(setting.getKey(), setting.getSection(), setting.getValueAsString());
+        putSetting(stringSetting);
+        return stringSetting;
     }
 
     public void loadDefaultSettings() {
@@ -215,7 +226,7 @@ public final class SettingsFragmentPresenter {
                             stringId = R.string.camera_facing_external;
                             break;
                     }
-                    supportedCameraNameList.add(String.format("%1$s (%2$s)", id, stringId));
+                    supportedCameraNameList.add(String.format("%1$s (%2$s)", id, activity.getString(stringId)));
                 }
             } catch (CameraAccessException e) {
                 Log.error("Couldn't retrieve camera list");
@@ -247,7 +258,7 @@ public final class SettingsFragmentPresenter {
         SettingSection cameraSection = mSettings.getSection(Settings.SECTION_CAMERA);
 
         Setting innerCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_NAME);
-        Setting innerCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_CONFIG);
+        Setting innerCameraConfig = asStringSetting(cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_CONFIG));
         Setting innerCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_INNER_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.inner_camera, 0));
         sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, innerCameraImageSource));
@@ -256,7 +267,7 @@ public final class SettingsFragmentPresenter {
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_INNER_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, innerCameraFlip));
 
         Setting outerLeftCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME);
-        Setting outerLeftCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_CONFIG);
+        Setting outerLeftCameraConfig = asStringSetting(cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_CONFIG));
         Setting outerLeftCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.outer_left_camera, 0));
         sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, outerLeftCameraImageSource));
@@ -265,7 +276,7 @@ public final class SettingsFragmentPresenter {
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_LEFT_FLIP, Settings.SECTION_CAMERA, R.string.image_flip, 0, R.array.cameraFlipNames, R.array.cameraFlipValues, 0, outerLeftCameraFlip));
 
         Setting outerRightCameraImageSource = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME);
-        Setting outerRightCameraConfig = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_CONFIG);
+        Setting outerRightCameraConfig = asStringSetting(cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_CONFIG));
         Setting outerRightCameraFlip = cameraSection.getSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_FLIP);
         sl.add(new HeaderSetting(null, null, R.string.outer_right_camera, 0));
         sl.add(new StringSingleChoiceSetting(SettingsFile.KEY_CAMERA_OUTER_RIGHT_NAME, Settings.SECTION_CAMERA, R.string.image_source, R.string.image_source_description, imageSourceNames, imageSourceValues, defaultImageSource, outerRightCameraImageSource));
