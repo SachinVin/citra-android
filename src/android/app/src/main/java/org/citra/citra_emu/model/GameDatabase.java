@@ -161,7 +161,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
                         new String[]{Long.toString(folderCursor.getLong(COLUMN_DB_ID))});
             }
 
-            addGamesRecursive(database, folder, 1);
+            addGamesRecursive(database, folder, allowedExtensions, 3);
         }
 
         fileCursor.close();
