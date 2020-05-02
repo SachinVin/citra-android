@@ -72,7 +72,7 @@ void TextureDownloaderES::Test() {
                 // every time the error between the real and expected value changes, log it
                 // some error is expected in D24 due to floating point precision
                 LOG_WARNING(Render_OpenGL, "difference changed at {:#X}: {:#X} -> {:#X}", idx,
-                                   original_data[idx], new_data[idx]);
+                            original_data[idx], new_data[idx]);
             }
     };
     LOG_INFO(Render_OpenGL, "GL_DEPTH24_STENCIL8 download test starting");
