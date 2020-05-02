@@ -3,9 +3,9 @@
 // Refer to the license.txt file included.
 
 #include <cstring>
+#include <map>
 #include <memory>
 #include <vector>
-#include <map>
 
 #include "common/string_util.h"
 #include "core/hle/service/am/am.h"
@@ -90,7 +90,7 @@ char16_t* GetPublisher(std::string physical_name) {
     // Get the Publisher's name from SMDH in UTF-16 format
     char16_t* publisher;
     publisher =
-            reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
+        reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
 
     LOG_INFO(Frontend, "Publisher: {}", Common::UTF16ToUTF8(publisher));
 
@@ -111,13 +111,10 @@ std::string GetRegions(std::string physical_name) {
 
     using GameRegion = Loader::SMDH::GameRegion;
     static const std::map<GameRegion, const char*> regions_map = {
-            {GameRegion::Japan, "Japan"},
-            {GameRegion::NorthAmerica, "North America"},
-            {GameRegion::Europe, "Europe"},
-            {GameRegion::Australia, "Australia"},
-            {GameRegion::China, "China"},
-            {GameRegion::Korea, "Korea"},
-            {GameRegion::Taiwan, "Taiwan"}};
+        {GameRegion::Japan, "Japan"},   {GameRegion::NorthAmerica, "North America"},
+        {GameRegion::Europe, "Europe"}, {GameRegion::Australia, "Australia"},
+        {GameRegion::China, "China"},   {GameRegion::Korea, "Korea"},
+        {GameRegion::Taiwan, "Taiwan"}};
     std::vector<GameRegion> regions = smdh.GetRegions();
 
     if (regions.empty()) {
@@ -125,9 +122,9 @@ std::string GetRegions(std::string physical_name) {
     }
 
     const bool region_free =
-            std::all_of(regions_map.begin(), regions_map.end(), [&regions](const auto& it) {
-                return std::find(regions.begin(), regions.end(), it.first) != regions.end();
-            });
+        std::all_of(regions_map.begin(), regions_map.end(), [&regions](const auto& it) {
+            return std::find(regions.begin(), regions.end(), it.first) != regions.end();
+        });
 
     if (region_free) {
         return "Region free";

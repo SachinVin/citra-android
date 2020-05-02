@@ -106,7 +106,7 @@ void Config::ReadValues() {
 
     // Premium
     Settings::values.texture_filter_name =
-            sdl2_config->GetString("Premium", "texture_filter_name", "none");
+        sdl2_config->GetString("Premium", "texture_filter_name", "none");
 
     // Renderer
     Settings::values.use_gles = sdl2_config->GetBoolean("Renderer", "use_gles", true);
