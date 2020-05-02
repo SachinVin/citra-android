@@ -44,7 +44,7 @@
             app:layout_constraintStart_toEndOf="@+id/image_game_screen"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="The Legend of Zelda\nOcarina of Time 3D"
-            android:textColor="@color/header_text"  />
+            android:textColor="@color/header_text" />
 
         <TextView
             android:id="@+id/text_company"
