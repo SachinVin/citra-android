@@ -153,7 +153,7 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     window->StartPresenting();
 
-    SCOPE_EXIT({TryShutdown();});
+    SCOPE_EXIT({ TryShutdown(); });
 
     while (is_running) {
         if (!pause_emulation) {
@@ -519,7 +519,8 @@ void Java_org_citra_citra_1emu_NativeLibrary_ReloadCameraDevices(JNIEnv* env, jc
     }
 }
 
-jboolean Java_org_citra_citra_1emu_NativeLibrary_LoadAmiibo(JNIEnv *env, jclass clazz, jbyteArray bytes) {
+jboolean Java_org_citra_citra_1emu_NativeLibrary_LoadAmiibo(JNIEnv* env, jclass clazz,
+                                                            jbyteArray bytes) {
     Core::System& system{Core::System::GetInstance()};
     Service::SM::ServiceManager& sm = system.ServiceManager();
     auto nfc = sm.GetService<Service::NFC::Module::Interface>("nfc:u");
@@ -528,15 +529,16 @@ jboolean Java_org_citra_citra_1emu_NativeLibrary_LoadAmiibo(JNIEnv *env, jclass 
     }
 
     Service::NFC::AmiiboData amiibo_data{};
-    env->GetByteArrayRegion(bytes, 0,  sizeof(Service::NFC::AmiiboData), reinterpret_cast<jbyte*>(&amiibo_data));
+    env->GetByteArrayRegion(bytes, 0, sizeof(Service::NFC::AmiiboData),
+                            reinterpret_cast<jbyte*>(&amiibo_data));
 
     nfc->LoadAmiibo(amiibo_data);
     return static_cast<jboolean>(true);
 }
 
-void Java_org_citra_citra_1emu_NativeLibrary_RemoveAmiibo(JNIEnv *env, jclass clazz) {
-    Core::System &system{Core::System::GetInstance()};
-    Service::SM::ServiceManager &sm = system.ServiceManager();
+void Java_org_citra_citra_1emu_NativeLibrary_RemoveAmiibo(JNIEnv* env, jclass clazz) {
+    Core::System& system{Core::System::GetInstance()};
+    Service::SM::ServiceManager& sm = system.ServiceManager();
     auto nfc = sm.GetService<Service::NFC::Module::Interface>("nfc:u");
     if (nfc == nullptr) {
         return;
