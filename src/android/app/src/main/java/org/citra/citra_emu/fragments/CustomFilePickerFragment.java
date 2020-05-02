@@ -96,7 +96,7 @@ public class CustomFilePickerFragment extends FilePickerFragment {
 
     @Override
     public void goUp() {
-        if(Environment.getExternalStorageDirectory().getPath().equals(mCurrentPath.getPath())) {
+        if (Environment.getExternalStorageDirectory().getPath().equals(mCurrentPath.getPath())) {
             return;
         }
         super.goUp();

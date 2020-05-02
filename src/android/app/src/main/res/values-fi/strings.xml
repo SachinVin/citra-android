@@ -93,4 +93,4 @@
     <string name="i_forgot">Unohdin</string>
     <string name="fixed_length_required">Tekstin pituus ei ole oikein (pitäisi olla %d merkkiä) </string>
     <string name="max_length_exceeded">Teksti on liian pitkä (ei pitäisi olla enempää kuin %d merkkiä)</string>
-    </resources>
+</resources>
