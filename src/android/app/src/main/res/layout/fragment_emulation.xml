@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:focusableInTouchMode="true" />
 
     <TextView
         android:id="@+id/show_fps_text"
@@ -42,6 +42,6 @@
         android:padding="@dimen/spacing_small"
         android:background="@color/citra_orange"
         android:text="@string/emulation_done"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </FrameLayout>
