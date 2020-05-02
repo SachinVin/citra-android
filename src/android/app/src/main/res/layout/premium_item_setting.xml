@@ -38,6 +38,6 @@
         android:layout_marginEnd="@dimen/spacing_large"
         android:visibility="visible"
         tools:text="@string/app_disclaimer"
-        android:textColor="@color/header_subtext"/>
+        android:textColor="@color/header_subtext" />
 
 </RelativeLayout>
