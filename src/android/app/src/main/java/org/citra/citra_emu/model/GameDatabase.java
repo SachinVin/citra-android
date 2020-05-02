@@ -168,13 +168,13 @@ public final class GameDatabase extends SQLiteOpenHelper {
         folderCursor.close();
 
         Arrays.stream(NativeLibrary.GetInstalledGamePaths())
-              .forEach(filePath -> attemptToAddGame(database, filePath));
+                .forEach(filePath -> attemptToAddGame(database, filePath));
 
         database.close();
     }
 
     private static void addGamesRecursive(SQLiteDatabase database, File parent, Set<String> allowedExtensions, int depth) {
-        if(depth <= 0) {
+        if (depth <= 0) {
             return;
         }
 
@@ -189,8 +189,7 @@ public final class GameDatabase extends SQLiteOpenHelper {
                     Set<String> newExtensions = new HashSet<>(Arrays.asList(
                             ".3ds", ".3dsx", ".elf", ".axf", ".cci", ".cxi", ".app"));
                     addGamesRecursive(database, file, newExtensions, depth - 1);
-                }
-                else {
+                } else {
                     String filePath = file.getPath();
 
                     int extensionStart = filePath.lastIndexOf('.');
@@ -224,11 +223,11 @@ public final class GameDatabase extends SQLiteOpenHelper {
         }
 
         ContentValues game = Game.asContentValues(name,
-                                                  NativeLibrary.GetDescription(filePath).replace("\n", " "),
-                                                  NativeLibrary.GetRegions(filePath),
-                                                  filePath,
-                                                  gameId,
-                                                  NativeLibrary.GetCompany(filePath));
+                NativeLibrary.GetDescription(filePath).replace("\n", " "),
+                NativeLibrary.GetRegions(filePath),
+                filePath,
+                gameId,
+                NativeLibrary.GetCompany(filePath));
 
         // Try to update an existing game first.
         int rowsMatched = database.update(TABLE_NAME_GAMES,    // Which table to update.

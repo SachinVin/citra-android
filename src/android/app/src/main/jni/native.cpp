@@ -250,9 +250,8 @@ jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetInstalledGamePaths(
     ScanDir(nullptr, "",
             FileUtil::GetUserPath(FileUtil::UserPath::NANDDir) +
                 "00000000000000000000000000000000/title/00040010");
-    jobjectArray jgames =
-        env->NewObjectArray(static_cast<jsize>(games.size()), env->FindClass("java/lang/String"),
-                            nullptr);
+    jobjectArray jgames = env->NewObjectArray(static_cast<jsize>(games.size()),
+                                              env->FindClass("java/lang/String"), nullptr);
     for (jsize i = 0; i < games.size(); ++i)
         env->SetObjectArrayElement(jgames, i, env->NewStringUTF(games[i].c_str()));
     return jgames;
