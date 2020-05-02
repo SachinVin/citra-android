@@ -135,8 +135,11 @@ void ImageCallback(void* context, AImageReader* reader) {
         that->row_stride = row_stride;
         MEDIA_CALL(AImage_getPlanePixelStride(image, 1, &that->pixel_stride));
     }
-    if (!that->ready) {
-        that->active_event.Set(); // Mark the session as active
+    {
+        std::lock_guard lock{that->status_mutex};
+        if (!that->ready) {
+            that->active_event.Set(); // Mark the session as active
+        }
     }
 }
 
@@ -153,12 +156,10 @@ static void OnReady(void* context, ACameraCaptureSession* session) {}
 static void OnActive(void* context, ACameraCaptureSession* session) {}
 
 void CaptureSession::Load(ACameraManager* manager, const std::string& id) {
-    if (ready) {
-        // If already open, we'd like to first shutdown the session
-        // session.reset();
-        // native_window.reset();
+    {
+        std::lock_guard lock{status_mutex};
+        ready = disconnected = reload_requested = false;
     }
-    ready = disconnected = reload_requested = false;
 
     device_callbacks = {
         /*context*/ this,
@@ -256,7 +257,10 @@ void CaptureSession::Load(ACameraManager* manager, const std::string& id) {
 
     // Wait until the first image comes
     active_event.Wait();
-    ready = true;
+    {
+        std::lock_guard lock{status_mutex};
+        ready = true;
+    }
 }
 
 #undef MEDIA_CALL
@@ -343,6 +347,15 @@ std::vector<u16> Interface::ReceiveFrame() {
         session->Load(factory.manager.get(), id);
     }
 
+    bool session_ready;
+    {
+        std::lock_guard lock{session->status_mutex};
+        session_ready = session->ready;
+    }
+    if (!session_ready) { // Camera was not opened
+        return std::vector<u16>(resolution.width * resolution.height);
+    }
+
     std::array<std::shared_ptr<u8>, 3> data;
     std::array<int, 3> row_stride;
     {
@@ -351,7 +364,7 @@ std::vector<u16> Interface::ReceiveFrame() {
         row_stride = session->row_stride;
     }
 
-    ASSERT_MSG(data[0] && data[1] && data[2], "Camera is not active yet");
+    ASSERT_MSG(data[0] && data[1] && data[2], "Data is not available");
 
     auto [width, height] = session->selected_resolution;
 
@@ -415,7 +428,11 @@ std::vector<u16> Interface::ReceiveFrame() {
 #undef YUV
 
 bool Interface::IsPreviewAvailable() {
-    return session && session->ready;
+    if (!session) {
+        return false;
+    }
+    std::lock_guard lock{session->status_mutex};
+    return session->ready;
 }
 
 Factory::Factory() = default;
