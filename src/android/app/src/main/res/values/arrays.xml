@@ -123,7 +123,7 @@
     </string-array>
 
     <string-array name="cameraDeviceValues">
-        <item/>
+        <item />
         <item>_front</item>
         <item>_back</item>
     </string-array>
