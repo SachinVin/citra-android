@@ -67,8 +67,7 @@ class NDKMotion final : public Input::MotionDevice {
             LOG_CRITICAL(Input, "Could not retrieve sensor manager");
             return;
         }
-        event_queue = ASensorManager_createEventQueue(
-                sensor_manager, looper, 0, nullptr, nullptr);
+        event_queue = ASensorManager_createEventQueue(sensor_manager, looper, 0, nullptr, nullptr);
         if (!event_queue) {
             LOG_ERROR(Input, "Could not create sensor event queue");
             return;
@@ -101,7 +100,7 @@ class NDKMotion final : public Input::MotionDevice {
         while (ASensorEventQueue_getEvents(event_queue, &event, 1) > 0) {
             if (event.type == ASENSOR_TYPE_ACCELEROMETER) {
                 new_accel.emplace(event.vector.x, event.vector.y, event.vector.z);
-            } else if (event.type == ASENSOR_TYPE_GYROSCOPE){
+            } else if (event.type == ASENSOR_TYPE_GYROSCOPE) {
                 new_rot.emplace(event.vector.x, event.vector.y, event.vector.z);
             }
             // occasionally the queue has ASENSOR_TYPE_ADDITIONAL_INFO events
