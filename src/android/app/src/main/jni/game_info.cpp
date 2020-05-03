@@ -19,7 +19,6 @@ namespace GameInfo {
 std::vector<u8> GetSMDHData(std::string physical_name) {
     std::unique_ptr<Loader::AppLoader> loader = Loader::GetLoader(physical_name);
     if (!loader) {
-        LOG_ERROR(Frontend, "Failed to obtain loader");
         return {};
     }
 
@@ -57,8 +56,7 @@ char16_t* GetTitle(std::string physical_name) {
     std::vector<u8> smdh_data = GetSMDHData(physical_name);
 
     if (!Loader::IsValidSMDH(smdh_data)) {
-        // SMDH is not valid, Return the file name;
-        LOG_ERROR(Frontend, "SMDH is Invalid");
+        // SMDH is not valid, Return a null
         return nullptr;
     }
 
@@ -69,8 +67,6 @@ char16_t* GetTitle(std::string physical_name) {
     char16_t* title;
     title = reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].long_title.data());
 
-    LOG_INFO(Frontend, "Title: {}", Common::UTF16ToUTF8(title));
-
     return title;
 }
 
@@ -80,7 +76,6 @@ char16_t* GetPublisher(std::string physical_name) {
 
     if (!Loader::IsValidSMDH(smdh_data)) {
         // SMDH is not valid, return null
-        LOG_ERROR(Frontend, "SMDH is Invalid");
         return nullptr;
     }
 
@@ -92,8 +87,6 @@ char16_t* GetPublisher(std::string physical_name) {
     publisher =
         reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].publisher.data());
 
-    LOG_INFO(Frontend, "Publisher: {}", Common::UTF16ToUTF8(publisher));
-
     return publisher;
 }
 
@@ -101,8 +94,7 @@ std::string GetRegions(std::string physical_name) {
     std::vector<u8> smdh_data = GetSMDHData(physical_name);
 
     if (!Loader::IsValidSMDH(smdh_data)) {
-        // SMDH is not valid, return null
-        LOG_ERROR(Frontend, "SMDH is Invalid");
+        // SMDH is not valid, return "Invalid region"
         return "Invalid region";
     }
 
@@ -136,8 +128,6 @@ std::string GetRegions(std::string physical_name) {
         result += separator + regions_map.at(*region);
     }
 
-    LOG_INFO(Frontend, "Regions: {}", result);
-
     return result;
 }
 
@@ -146,7 +136,6 @@ std::vector<u16> GetIcon(std::string physical_name) {
 
     if (!Loader::IsValidSMDH(smdh_data)) {
         // SMDH is not valid, return null
-        LOG_ERROR(Frontend, "SMDH is Invalid");
         return std::vector<u16>(0, 0);
     }
 
