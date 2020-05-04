@@ -382,7 +382,7 @@ std::vector<u16> Interface::ReceiveFrame() {
         std::swap(width, height);
     }
     YUVImage rotated(width, height);
-    libyuv::I420Rotate(YUV(converted), YUV(rotated), height, width,
+    libyuv::I420Rotate(YUV(converted), YUV(rotated), converted.width, converted.height,
                        static_cast<libyuv::RotationMode>(rotation));
     converted.Clear();
 
