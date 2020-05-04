@@ -7,7 +7,6 @@
 #include "common/logging/log.h"
 #include "core/frontend/camera/blank_camera.h"
 #include "jni/camera/still_image_camera.h"
-#include "jni/id_cache.h"
 
 static jclass s_still_image_camera_helper_class;
 static jmethodID s_open_file_picker;
@@ -29,7 +28,8 @@ void CleanupJNI(JNIEnv* env) {
     env->DeleteGlobalRef(s_still_image_camera_helper_class);
 }
 
-Interface::Interface(jstring path_, const Service::CAM::Flip& flip) : path(path_) {
+Interface::Interface(SharedGlobalRef<jstring> path_, const Service::CAM::Flip& flip)
+    : path(std::move(path_)) {
     mirror = base_mirror =
         flip == Service::CAM::Flip::Horizontal || flip == Service::CAM::Flip::Reverse;
     invert = base_invert =
@@ -37,14 +37,14 @@ Interface::Interface(jstring path_, const Service::CAM::Flip& flip) : path(path_
 }
 
 Interface::~Interface() {
-    Factory::last_path = nullptr;
+    Factory::last_path.reset();
 }
 
 void Interface::StartCapture() {
     JNIEnv* env = IDCache::GetEnvForThread();
     jobject bitmap =
-        env->CallStaticObjectMethod(s_still_image_camera_helper_class, s_load_image_from_file, path,
-                                    resolution.width, resolution.height);
+        env->CallStaticObjectMethod(s_still_image_camera_helper_class, s_load_image_from_file,
+                                    path.get(), resolution.width, resolution.height);
     if (bitmap == nullptr) {
         LOG_ERROR(Frontend, "Could not load image from file");
         opened = false;
@@ -118,7 +118,7 @@ bool Interface::IsPreviewAvailable() {
     return opened;
 }
 
-jstring Factory::last_path{};
+SharedGlobalRef<jstring> Factory::last_path{};
 
 std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
                                                  const Service::CAM::Flip& flip) {
@@ -134,8 +134,9 @@ std::unique_ptr<CameraInterface> Factory::Create(const std::string& config,
     if (path == nullptr) {
         return std::make_unique<Camera::BlankCamera>();
     } else {
-        last_path = path;
-        return std::make_unique<Interface>(path, flip);
+        auto shared_path = NewSharedGlobalRef(path);
+        last_path = shared_path;
+        return std::make_unique<Interface>(std::move(shared_path), flip);
     }
 }
 
