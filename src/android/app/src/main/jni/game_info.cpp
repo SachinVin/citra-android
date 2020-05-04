@@ -56,7 +56,7 @@ char16_t* GetTitle(std::string physical_name) {
     std::vector<u8> smdh_data = GetSMDHData(physical_name);
 
     if (!Loader::IsValidSMDH(smdh_data)) {
-        // SMDH is not valid, Return a null
+        // SMDH is not valid, return null
         return nullptr;
     }
 
