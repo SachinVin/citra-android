@@ -34,8 +34,7 @@ void AndroidMiiSelector::Setup(const Frontend::MiiSelectorConfig& config) {
 
     // List mii names
     // The 'Standard Mii' is not included here as we need Java side to translate it
-    const jclass string_class =
-        reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/lang/String")));
+    const jclass string_class = reinterpret_cast<jclass>(env->FindClass("java/lang/String"));
     const jobjectArray array =
         env->NewObjectArray(static_cast<jsize>(miis.size()), string_class, nullptr);
     for (std::size_t i = 0; i < miis.size(); ++i) {
@@ -45,7 +44,6 @@ void AndroidMiiSelector::Setup(const Frontend::MiiSelectorConfig& config) {
     env->SetObjectField(
         java_config,
         env->GetFieldID(s_mii_selector_config_class, "mii_names", "[Ljava/lang/String;"), array);
-    env->DeleteGlobalRef(string_class);
 
     // Invoke backend Execute method
     jobject data =

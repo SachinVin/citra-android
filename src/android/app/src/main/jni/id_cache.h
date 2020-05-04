@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+#include <type_traits>
 #include <jni.h>
 
 namespace IDCache {
@@ -19,3 +21,20 @@ jmethodID GetExitEmulationActivity();
 jmethodID GetRequestCameraPermission();
 
 } // namespace IDCache
+
+template <typename T = jobject>
+using SharedGlobalRef = std::shared_ptr<std::remove_pointer_t<T>>;
+
+struct SharedGlobalRefDeleter {
+    void operator()(jobject ptr) {
+        JNIEnv* env = IDCache::GetEnvForThread();
+        env->DeleteGlobalRef(ptr);
+    }
+};
+
+template <typename T = jobject>
+SharedGlobalRef<T> NewSharedGlobalRef(T object) {
+    JNIEnv* env = IDCache::GetEnvForThread();
+    auto* global_ref = reinterpret_cast<T>(env->NewGlobalRef(object));
+    return SharedGlobalRef<T>(global_ref, SharedGlobalRefDeleter());
+}
