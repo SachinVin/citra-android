@@ -41,8 +41,7 @@ static jobject ToJavaKeyboardConfig(const Frontend::KeyboardConfig& config) {
                         env->GetFieldID(s_keyboard_config_class, "hint_text", "Ljava/lang/String;"),
                         env->NewStringUTF(config.hint_text.c_str()));
     if (config.has_custom_button_text) {
-        const jclass string_class =
-            reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/lang/String")));
+        const jclass string_class = reinterpret_cast<jclass>(env->FindClass("java/lang/String"));
         const jobjectArray array =
             env->NewObjectArray(static_cast<jsize>(config.button_text.size()), string_class,
                                 env->NewStringUTF(config.button_text[0].c_str()));
@@ -53,7 +52,6 @@ static jobject ToJavaKeyboardConfig(const Frontend::KeyboardConfig& config) {
         env->SetObjectField(
             object, env->GetFieldID(s_keyboard_config_class, "button_text", "[Ljava/lang/String;"),
             array);
-        env->DeleteGlobalRef(string_class);
     }
     return object;
 }
