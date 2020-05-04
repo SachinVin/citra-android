@@ -11,12 +11,13 @@
 #include "common/common_types.h"
 #include "core/frontend/camera/factory.h"
 #include "core/frontend/camera/interface.h"
+#include "jni/id_cache.h"
 
 namespace Camera::StillImage {
 
 class Interface final : public CameraInterface {
 public:
-    Interface(jstring path, const Service::CAM::Flip& flip);
+    Interface(SharedGlobalRef<jstring> path, const Service::CAM::Flip& flip);
     ~Interface();
     void StartCapture() override;
     void StopCapture() override{};
@@ -29,7 +30,7 @@ public:
     bool IsPreviewAvailable() override;
 
 private:
-    jstring path;
+    SharedGlobalRef<jstring> path;
     Service::CAM::Resolution resolution;
 
     // Flipping parameters. mirror = horizontal, invert = vertical.
@@ -50,7 +51,7 @@ public:
 
 private:
     /// Record the path chosen to avoid multiple prompt problem
-    static jstring last_path;
+    static SharedGlobalRef<jstring> last_path;
 
     friend class Interface;
 };
