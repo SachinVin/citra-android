@@ -345,13 +345,7 @@ jintArray Java_org_citra_citra_1emu_NativeLibrary_GetIcon(JNIEnv* env,
 jstring Java_org_citra_citra_1emu_NativeLibrary_GetTitle(JNIEnv* env, [[maybe_unused]] jclass clazz,
                                                          jstring j_filename) {
     std::string filepath = GetJString(env, j_filename);
-
-    char16_t* Title = GameInfo::GetTitle(filepath);
-
-    if (!Title) {
-        return env->NewStringUTF("");
-    }
-
+    auto Title = GameInfo::GetTitle(filepath);
     return env->NewStringUTF(Common::UTF16ToUTF8(Title).data());
 }
 
@@ -381,13 +375,7 @@ jstring Java_org_citra_citra_1emu_NativeLibrary_GetCompany(JNIEnv* env,
                                                            [[maybe_unused]] jclass clazz,
                                                            jstring j_filename) {
     std::string filepath = GetJString(env, j_filename);
-
-    char16_t* publisher = GameInfo::GetPublisher(filepath);
-
-    if (!publisher) {
-        return nullptr;
-    }
-
+    auto publisher = GameInfo::GetPublisher(filepath);
     return env->NewStringUTF(Common::UTF16ToUTF8(publisher).data());
 }
 

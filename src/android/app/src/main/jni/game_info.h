@@ -10,9 +10,9 @@
 namespace GameInfo {
 std::vector<u8> GetSMDHData(std::string physical_name);
 
-char16_t* GetTitle(std::string physical_name);
+std::u16string GetTitle(std::string physical_name);
 
-char16_t* GetPublisher(std::string physical_name);
+std::u16string GetPublisher(std::string physical_name);
 
 std::string GetRegions(std::string physical_name);
 
