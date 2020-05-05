@@ -12,4 +12,6 @@
 
     <color name="header_text">#E0E0E0</color>
     <color name="header_subtext">#A0A0A0</color>
+
+    <color name="citra_logo_text_color">@color/citra_accent</color>
 </resources>
