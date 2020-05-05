@@ -16,21 +16,17 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
 
         <item name="android:colorControlHighlight">?attr/colorAccent</item>
-
-        <item name="toolbarStyle">@style/CustomToolBarStyle</item>
     </style>
 
     <!-- Same as above, but use default action bar, and mandate margins. -->
-    <style name="CitraSettingsBase" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="CitraSettingsBase" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
-
-        <item name="toolbarStyle">@style/CustomToolBarStyle</item>
     </style>
 
     <!-- Inherit from the Base Citra Dialog Theme -->
-    <style name="CitraEmulationBase" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="CitraEmulationBase" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
@@ -42,8 +38,6 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
-
-        <item name="toolbarStyle">@style/CustomToolBarStyle</item>
     </style>
 
     <!-- Inherit from a base file picker theme that handles day/night -->
@@ -67,10 +61,6 @@
         <item name="colorPrimary">@color/citra_orange</item>
         <item name="colorPrimaryDark">@color/citra_orange_dark</item>
         <item name="colorAccent">@color/citra_accent</item>
-    </style>
-
-    <style name="CustomToolBarStyle" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="titleTextColor">@color/header_text</item>
     </style>
 
 </resources>
