@@ -51,32 +51,31 @@ std::vector<u8> GetSMDHData(std::string physical_name) {
     return smdh;
 }
 
-char16_t* GetTitle(std::string physical_name) {
+std::u16string GetTitle(std::string physical_name) {
     Loader::SMDH::TitleLanguage language = Loader::SMDH::TitleLanguage::English;
     std::vector<u8> smdh_data = GetSMDHData(physical_name);
 
     if (!Loader::IsValidSMDH(smdh_data)) {
         // SMDH is not valid, return null
-        return nullptr;
+        return {};
     }
 
     Loader::SMDH smdh;
     memcpy(&smdh, smdh_data.data(), sizeof(Loader::SMDH));
 
     // Get the title from SMDH in UTF-16 format
-    char16_t* title;
-    title = reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].long_title.data());
+    std::u16string title{reinterpret_cast<char16_t*>(smdh.titles[static_cast<int>(language)].long_title.data())};
 
     return title;
 }
 
-char16_t* GetPublisher(std::string physical_name) {
+std::u16string GetPublisher(std::string physical_name) {
     Loader::SMDH::TitleLanguage language = Loader::SMDH::TitleLanguage::English;
     std::vector<u8> smdh_data = GetSMDHData(physical_name);
 
     if (!Loader::IsValidSMDH(smdh_data)) {
         // SMDH is not valid, return null
-        return nullptr;
+        return {};
     }
 
     Loader::SMDH smdh;
