@@ -97,9 +97,20 @@ public class CustomFilePickerFragment extends FilePickerFragment {
     @Override
     public void goUp() {
         if (Environment.getExternalStorageDirectory().getPath().equals(mCurrentPath.getPath())) {
+            goToDir(new File("/storage/"));
+            return;
+        }
+        if (mCurrentPath.equals(new File("/storage/"))){
             return;
         }
         super.goUp();
+    }
+
+    @Override
+    public void onClickDir(@NonNull View view, @NonNull DirViewHolder viewHolder) {
+        if(viewHolder.file.equals(new File("/storage/emulated/")))
+            viewHolder.file = new File("/storage/emulated/0/");
+        super.onClickDir(view, viewHolder);
     }
 
     private static String fileExtension(@NonNull String filename) {
