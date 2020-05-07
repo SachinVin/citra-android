@@ -42,6 +42,8 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     // Singleton to manage user billing state
     private static BillingManager mBillingManager;
 
+    private static MenuItem mPremiumButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtil.applyTheme();
@@ -98,7 +100,20 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_game_grid, menu);
+        mPremiumButton = menu.findItem(R.id.button_premium);
+
+        if (mBillingManager.isPremiumCached()) {
+            // User had premium in a previous session, hide upsell option
+            setPremiumButtonVisible(false);
+        }
+
         return true;
+    }
+
+    static public void setPremiumButtonVisible(boolean isVisible) {
+        if (mPremiumButton != null) {
+            mPremiumButton.setVisible(isVisible);
+        }
     }
 
     /**
