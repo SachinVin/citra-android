@@ -1,6 +1,8 @@
 package org.citra.citra_emu.utils;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -11,6 +13,10 @@ import com.android.billingclient.api.Purchase.PurchasesResult;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
+
+import org.citra.citra_emu.CitraApplication;
+import org.citra.citra_emu.features.settings.utils.SettingsFile;
+import org.citra.citra_emu.ui.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +31,16 @@ public class BillingManager implements PurchasesUpdatedListener {
     private boolean mIsServiceConnected = false;
     private Runnable mUpdateBillingCallback;
 
+    private static SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(CitraApplication.getAppContext());
+
     public BillingManager(Activity activity) {
         mActivity = activity;
         mBillingClient = BillingClient.newBuilder(mActivity).enablePendingPurchases().setListener(this).build();
         querySkuDetails();
+    }
+
+    static public boolean isPremiumCached() {
+        return mPreferences.getBoolean(SettingsFile.KEY_PREMIUM, false);
     }
 
     /**
@@ -58,10 +70,23 @@ public class BillingManager implements PurchasesUpdatedListener {
         mBillingClient.launchBillingFlow(mActivity, flowParams);
     }
 
+    private void updatePremiumState(boolean isPremiumActive) {
+        mIsPremiumActive = isPremiumActive;
+
+        // Cache state for synchronous UI
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(SettingsFile.KEY_PREMIUM, isPremiumActive);
+        editor.apply();
+
+        // No need to show button in action bar if Premium is active
+        MainActivity.setPremiumButtonVisible(!isPremiumActive);
+    }
+
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchaseList) {
         if (purchaseList == null || purchaseList.isEmpty()) {
             // Premium is not active, or billing is unavailable
+            updatePremiumState(false);
             return;
         }
 
@@ -74,7 +99,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
         if (premiumPurchase != null) {
             // Premium has been purchased
-            mIsPremiumActive = true;
+            updatePremiumState(true);
 
             if (mUpdateBillingCallback != null) {
                 try {
@@ -123,6 +148,7 @@ public class BillingManager implements PurchasesUpdatedListener {
     private void onQueryPurchasesFinished(PurchasesResult result) {
         // Have we been disposed of in the meantime? If so, or bad result code, then quit
         if (mBillingClient == null || result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+            updatePremiumState(false);
             return;
         }
         // Update the UI and purchases inventory with new list of purchases
