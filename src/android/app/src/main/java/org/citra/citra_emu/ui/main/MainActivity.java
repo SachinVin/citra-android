@@ -186,7 +186,9 @@ public final class MainActivity extends AppCompatActivity implements MainView {
                             .commit();
 
                     // Immediately prompt user to select a game directory on first boot
-                    findViewById(R.id.button_add_directory).callOnClick();
+                    if (mPresenter != null) {
+                        mPresenter.launchFileListActivity();
+                    }
                 } else {
                     Toast.makeText(this, R.string.write_permission_needed, Toast.LENGTH_SHORT)
                             .show();
