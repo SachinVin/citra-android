@@ -27,6 +27,12 @@ public final class MainPresenter {
         refeshGameList();
     }
 
+    public void launchFileListActivity() {
+        if (mView != null) {
+            mView.launchFileListActivity();
+        }
+    }
+
     public boolean handleOptionSelection(int itemId) {
         // Double-click prevention, using threshold of 500 ms
         if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
@@ -40,7 +46,7 @@ public final class MainPresenter {
                 return true;
 
             case R.id.button_add_directory:
-                mView.launchFileListActivity();
+                launchFileListActivity();
                 return true;
 
             case R.id.button_premium:
