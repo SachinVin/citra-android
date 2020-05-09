@@ -140,6 +140,10 @@ void ColorConsoleBackend::Write(const Entry& entry) {
     PrintColoredMessage(entry);
 }
 
+void LogcatBackend::Write(const Entry& entry) {
+    PrintMessageToLogcat(entry);
+}
+
 // _SH_DENYWR allows read only access to the file for other programs.
 // It is #defined to 0 on other platforms
 FileBackend::FileBackend(const std::string& filename)
