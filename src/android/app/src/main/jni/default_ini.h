@@ -201,6 +201,10 @@ enable_audio_stretching =
 # auto (default): Auto-select
 output_device =
 
+# Which mic input type to use.
+# 0: None, 1 (default): Real device, 2: Static noise
+mic_input_type =
+
 # Output volume.
 # 1.0 (default): 100%, 0.0; mute
 volume =

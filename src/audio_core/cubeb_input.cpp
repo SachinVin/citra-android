@@ -189,4 +189,11 @@ std::vector<std::string> ListCubebInputDevices() {
     cubeb_destroy(ctx);
     return device_list;
 }
+
+CubebFactory::~CubebFactory() = default;
+
+std::unique_ptr<Frontend::Mic::Interface> CubebFactory::Create(std::string mic_device_name) {
+    return std::make_unique<CubebInput>(std::move(mic_device_name));
+}
+
 } // namespace AudioCore

@@ -17,6 +17,7 @@
 #include "core/core.h"
 #include "core/frontend/applets/default_applets.h"
 #include "core/frontend/camera/factory.h"
+#include "core/frontend/mic.h"
 #include "core/frontend/scope_acquire_context.h"
 #include "core/hle/service/am/am.h"
 #include "core/hle/service/nfc/nfc.h"
@@ -30,6 +31,7 @@
 #include "jni/emu_window/emu_window.h"
 #include "jni/game_info.h"
 #include "jni/id_cache.h"
+#include "jni/mic.h"
 #include "jni/native.h"
 #include "jni/ndk_motion.h"
 #include "video_core/renderer_base.h"
@@ -136,6 +138,9 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     Frontend::RegisterDefaultApplets();
     system.RegisterMiiSelector(std::make_shared<MiiSelector::AndroidMiiSelector>());
     system.RegisterSoftwareKeyboard(std::make_shared<SoftwareKeyboard::AndroidKeyboard>());
+
+    // Register real Mic factory
+    Frontend::Mic::RegisterRealMicFactory(std::make_unique<Mic::AndroidFactory>());
 
     InputManager::Init();
 
