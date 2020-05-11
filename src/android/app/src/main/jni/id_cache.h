@@ -19,6 +19,7 @@ jmethodID GetIsPortraitMode();
 jmethodID GetLandscapeScreenLayout();
 jmethodID GetExitEmulationActivity();
 jmethodID GetRequestCameraPermission();
+jmethodID GetRequestMicPermission();
 
 } // namespace IDCache
 
