@@ -141,4 +141,16 @@
         <item>2</item>
         <item>3</item>
     </integer-array>
+
+    <string-array name="audioInputTypeNames">
+        <item>None</item>
+        <item>Real Device</item>
+        <item>Static Noise</item>
+    </string-array>
+
+    <integer-array name="audioInputTypeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>
