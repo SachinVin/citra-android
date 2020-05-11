@@ -27,6 +27,7 @@ import org.citra.citra_emu.utils.PermissionsHandler;
 import java.lang.ref.WeakReference;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.RECORD_AUDIO;
 
 /**
  * Class which contains methods that interact
@@ -438,6 +439,39 @@ public final class NativeLibrary {
         cameraPermissionGranted = granted;
         synchronized (cameraPermissionLock) {
             cameraPermissionLock.notify();
+        }
+    }
+
+    private static final Object micPermissionLock = new Object();
+    private static boolean micPermissionGranted = false;
+    public static final int REQUEST_CODE_NATIVE_MIC = 900;
+
+    public static boolean RequestMicPermission() {
+        final EmulationActivity emulationActivity = sEmulationActivity.get();
+        if (emulationActivity == null) {
+            Log.error("[NativeLibrary] EmulationActivity not present");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(emulationActivity, RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            // Permission already granted
+            return true;
+        }
+        emulationActivity.requestPermissions(new String[]{RECORD_AUDIO}, REQUEST_CODE_NATIVE_MIC);
+
+        // Wait until result is returned
+        synchronized (micPermissionLock) {
+            try {
+                micPermissionLock.wait();
+            } catch (InterruptedException ignored) {
+            }
+        }
+        return micPermissionGranted;
+    }
+
+    public static void MicPermissionResult(boolean granted) {
+        micPermissionGranted = granted;
+        synchronized (micPermissionLock) {
+            micPermissionLock.notify();
         }
     }
 

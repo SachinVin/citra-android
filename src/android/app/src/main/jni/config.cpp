@@ -170,7 +170,7 @@ void Config::ReadValues() {
     Settings::values.mic_input_device =
         sdl2_config->GetString("Audio", "mic_input_device", "Default");
     Settings::values.mic_input_type =
-        static_cast<Settings::MicInputType>(sdl2_config->GetInteger("Audio", "mic_input_type", 0));
+        static_cast<Settings::MicInputType>(sdl2_config->GetInteger("Audio", "mic_input_type", 1));
 
     // Data Storage
     Settings::values.use_virtual_sd =
