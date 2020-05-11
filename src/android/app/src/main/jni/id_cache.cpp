@@ -26,6 +26,7 @@ static jmethodID s_is_portrait_mode;
 static jmethodID s_landscape_screen_layout;
 static jmethodID s_exit_emulation_activity;
 static jmethodID s_request_camera_permission;
+static jmethodID s_request_mic_permission;
 
 namespace IDCache {
 
@@ -80,6 +81,10 @@ jmethodID GetRequestCameraPermission() {
     return s_request_camera_permission;
 }
 
+jmethodID GetRequestMicPermission() {
+    return s_request_mic_permission;
+}
+
 } // namespace IDCache
 
 #ifdef __cplusplus
@@ -120,6 +125,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         env->GetStaticMethodID(s_native_library_class, "exitEmulationActivity", "(I)V");
     s_request_camera_permission =
         env->GetStaticMethodID(s_native_library_class, "RequestCameraPermission", "()Z");
+    s_request_mic_permission =
+        env->GetStaticMethodID(s_native_library_class, "RequestMicPermission", "()Z");
 
     MiiSelector::InitJNI(env);
     SoftwareKeyboard::InitJNI(env);
