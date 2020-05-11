@@ -99,6 +99,7 @@
     <!-- Audio settings strings -->
     <string name="audio_stretch">Enable audio stretching</string>
     <string name="audio_stretch_description">Stretches audio to reduce stuttering. When enabled, increases audio latency and slightly reduces performance.</string>
+    <string name="audio_input_type">Audio Input Device</string>
 
     <!-- Miscellaneous -->
     <string name="clear">Clear</string>
@@ -178,4 +179,8 @@
     <string name="camera_select_image">Select Image</string>
     <string name="camera">Camera</string>
     <string name="camera_permission_needed">Citra needs to access your camera to emulate the 3DS\'s cameras.\n\nAlternatively, you can also set \"Image Source\" to \"Still Image\" in Camera Settings.</string>
+
+    <!-- Microphone -->
+    <string name="microphone">Microphone</string>
+    <string name="microphone_permission_needed">Citra needs to access your microphone to emulate the 3DS\'s microphone.\n\nAlternatively, you can also change \"Audio Input Device\" in Audio Settings.</string>
 </resources>
