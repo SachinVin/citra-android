@@ -253,6 +253,16 @@ public final class EmulationActivity extends AppCompatActivity {
                 }
                 NativeLibrary.CameraPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 break;
+            case NativeLibrary.REQUEST_CODE_NATIVE_MIC:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.microphone)
+                            .setMessage(R.string.microphone_permission_needed)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
+                }
+                NativeLibrary.MicPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 break;
