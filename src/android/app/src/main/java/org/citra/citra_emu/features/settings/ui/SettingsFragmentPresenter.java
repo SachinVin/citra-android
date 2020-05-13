@@ -363,7 +363,7 @@ public final class SettingsFragmentPresenter {
         Setting audioStretch = audioSection.getSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING);
         Setting micInputType = audioSection.getSetting(SettingsFile.KEY_MIC_INPUT_TYPE);
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_AUDIO_STRETCHING, Settings.SECTION_AUDIO, R.string.audio_stretch, R.string.audio_stretch_description, true, audioStretch));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_MIC_INPUT_TYPE, Settings.SECTION_AUDIO, R.string.audio_input_type, 0, R.array.audioInputTypeNames, R.array.audioInputTypeValues, 1, micInputType));
     }
 
