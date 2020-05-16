@@ -15,7 +15,7 @@ static std::weak_ptr<GSP_GPU> gsp_gpu;
 void SignalInterrupt(InterruptId interrupt_id) {
     auto gpu = gsp_gpu.lock();
     ASSERT(gpu != nullptr);
-    return gpu->SignalInterrupt(interrupt_id);
+    return gpu->SignalInterruptThreadSafe(interrupt_id);
 }
 
 void InstallInterfaces(Core::System& system) {
@@ -29,6 +29,12 @@ void InstallInterfaces(Core::System& system) {
 
 void SetGlobalModule(Core::System& system) {
     gsp_gpu = system.ServiceManager().GetService<GSP_GPU>("gsp::Gpu");
+}
+
+void Update() {
+    auto gpu = gsp_gpu.lock();
+    ASSERT(gpu != nullptr);
+    return gpu->Update();
 }
 
 } // namespace Service::GSP
