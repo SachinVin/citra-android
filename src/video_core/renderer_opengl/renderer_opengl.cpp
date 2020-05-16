@@ -1197,6 +1197,10 @@ VideoCore::ResultStatus RendererOpenGL::Init() {
 
     RefreshRasterizerSetting();
 
+    if (Settings::values.use_asynchronous_gpu_emulation) {
+        render_window.DoneCurrent();
+    }
+
     return VideoCore::ResultStatus::Success;
 }
 

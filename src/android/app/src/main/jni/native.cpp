@@ -30,6 +30,7 @@
 #include "jni/config.h"
 #include "jni/emu_window/emu_window.h"
 #include "jni/game_info.h"
+#include "jni/game_settings.h"
 #include "jni/id_cache.h"
 #include "jni/mic.h"
 #include "jni/native.h"
@@ -149,6 +150,12 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     if (load_result != Core::System::ResultStatus::Success) {
         return load_result;
     }
+
+    // Replace with game-specific settings
+    u64 program_id{};
+    system.GetAppLoader().ReadProgramId(program_id);
+    GameSettings::LoadOverrides(program_id);
+    Settings::Apply();
 
     auto& telemetry_session = Core::System::GetInstance().TelemetrySession();
     telemetry_session.AddField(Telemetry::FieldType::App, "Frontend", "SDL");
