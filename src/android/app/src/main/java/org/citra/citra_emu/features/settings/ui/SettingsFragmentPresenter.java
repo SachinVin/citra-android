@@ -347,13 +347,15 @@ public final class SettingsFragmentPresenter {
         mView.getActivity().setTitle(R.string.preferences_graphics);
 
         SettingSection rendererSection = mSettings.getSection(Settings.SECTION_RENDERER);
-        Setting shadersAccurateMul = rendererSection.getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
         Setting resolutionFactor = rendererSection.getSetting(SettingsFile.KEY_RESOLUTION_FACTOR);
         Setting filterMode = rendererSection.getSetting(SettingsFile.KEY_FILTER_MODE);
+        Setting useAsynchronousGpuEmulation = rendererSection.getSetting(SettingsFile.KEY_USE_ASYNCHRONOUS_GPU_EMULATION);
+        Setting shadersAccurateMul = rendererSection.getSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL);
 
-        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, Settings.SECTION_RENDERER, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, false, shadersAccurateMul));
         sl.add(new SliderSetting(SettingsFile.KEY_RESOLUTION_FACTOR, Settings.SECTION_RENDERER, R.string.internal_resolution, R.string.internal_resolution_description, 1, 4, "x", 1, resolutionFactor));
         sl.add(new CheckBoxSetting(SettingsFile.KEY_FILTER_MODE, Settings.SECTION_RENDERER, R.string.linear_filtering, R.string.linear_filtering_description, true, filterMode));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_USE_ASYNCHRONOUS_GPU_EMULATION, Settings.SECTION_RENDERER, R.string.asynchronous_gpu, R.string.asynchronous_gpu_description, true, useAsynchronousGpuEmulation));
+        sl.add(new CheckBoxSetting(SettingsFile.KEY_SHADERS_ACCURATE_MUL, Settings.SECTION_RENDERER, R.string.shaders_accurate_mul, R.string.shaders_accurate_mul_description, false, shadersAccurateMul));
     }
 
     private void addAudioSettings(ArrayList<SettingsItem> sl) {

@@ -6,6 +6,10 @@ add_library(video_core STATIC
     geometry_pipeline.cpp
     geometry_pipeline.h
     gpu_debugger.h
+    gpu.cpp
+    gpu.h
+    gpu_thread.cpp
+    gpu_thread.h
     pica.cpp
     pica.h
     pica_state.h

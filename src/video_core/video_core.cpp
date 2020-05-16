@@ -5,7 +5,10 @@
 #include <memory>
 #include "common/archives.h"
 #include "common/logging/log.h"
+#include "common/vector_math.h"
+#include "core/memory.h"
 #include "core/settings.h"
+#include "video_core/gpu.h"
 #include "video_core/pica.h"
 #include "video_core/pica_state.h"
 #include "video_core/renderer_base.h"
@@ -19,6 +22,7 @@
 namespace VideoCore {
 
 std::unique_ptr<RendererBase> g_renderer; ///< Renderer plugin
+std::unique_ptr<GPUBackend> g_gpu;
 
 std::atomic<bool> g_hw_renderer_enabled;
 std::atomic<bool> g_shader_jit_enabled;
@@ -39,13 +43,20 @@ Layout::FramebufferLayout g_screenshot_framebuffer_layout;
 Memory::MemorySystem* g_memory;
 
 /// Initialize the video core
-ResultStatus Init(Frontend::EmuWindow& emu_window, Memory::MemorySystem& memory) {
+ResultStatus Init(Core::System& system, Frontend::EmuWindow& emu_window,
+                  Memory::MemorySystem& memory) {
     g_memory = &memory;
     Pica::Init();
 
     OpenGL::GLES = Settings::values.use_gles;
 
     g_renderer = std::make_unique<OpenGL::RendererOpenGL>(emu_window);
+
+    if (Settings::values.use_asynchronous_gpu_emulation) {
+        g_gpu = std::make_unique<VideoCore::GPUParallel>(system, *g_renderer);
+    } else {
+        g_gpu = std::make_unique<VideoCore::GPUSerial>(system, *g_renderer);
+    }
     ResultStatus result = g_renderer->Init();
 
     if (result != ResultStatus::Success) {
@@ -62,6 +73,7 @@ void Shutdown() {
     Pica::Shutdown();
 
     g_renderer->ShutDown();
+    g_gpu.reset();
     g_renderer.reset();
 
     LOG_DEBUG(Render, "shutdown OK");
@@ -93,6 +105,34 @@ u16 GetResolutionScaleFactor() {
 template <class Archive>
 void serialize(Archive& ar, const unsigned int) {
     ar& Pica::g_state;
+}
+
+void ProcessCommandList(PAddr list, u32 size) {
+    g_gpu->ProcessCommandList(list, size);
+}
+
+void SwapBuffers() {
+    g_gpu->SwapBuffers();
+}
+
+void DisplayTransfer(const GPU::Regs::DisplayTransferConfig* config) {
+    g_gpu->DisplayTransfer(config);
+}
+
+void MemoryFill(const GPU::Regs::MemoryFillConfig* config, bool is_second_filler) {
+    g_gpu->MemoryFill(config, is_second_filler);
+}
+
+void FlushRegion(VAddr addr, u64 size) {
+    g_gpu->FlushRegion(addr, size);
+}
+
+void FlushAndInvalidateRegion(VAddr addr, u64 size) {
+    g_gpu->FlushAndInvalidateRegion(addr, size);
+}
+
+void InvalidateRegion(VAddr addr, u64 size) {
+    g_gpu->InvalidateRegion(addr, size);
 }
 
 } // namespace VideoCore

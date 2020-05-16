@@ -42,6 +42,27 @@ enum class MicInputType {
 
 enum class StereoRenderOption { Off, SideBySide, Anaglyph, Interlaced };
 
+enum class GpuTimingMode {
+    Skip,
+    Synch,
+    Asynch,
+    Asynch_10us,
+    Asynch_20us,
+    Asynch_40us,
+    Asynch_60us,
+    Asynch_80us,
+    Asynch_100us,
+    Asynch_200us,
+    Asynch_400us,
+    Asynch_600us,
+    Asynch_800us,
+    Asynch_1ms,
+    Asynch_2ms,
+    Asynch_4ms,
+    Asynch_6ms,
+    Asynch_8ms,
+};
+
 namespace NativeButton {
 enum Values {
     A,
@@ -196,6 +217,16 @@ struct Values {
     bool preload_textures;
 
     bool use_vsync_new;
+
+    // Asynchronous GPU parameters
+    bool use_asynchronous_gpu_emulation{};
+    GpuTimingMode gpu_timing_mode_submit_list{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_swap_buffers{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_memory_fill{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_display_transfer{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_flush{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_flush_and_invalidate{GpuTimingMode::Synch};
+    GpuTimingMode gpu_timing_mode_invalidate{GpuTimingMode::Synch};
 
     // Audio
     bool enable_dsp_lle;

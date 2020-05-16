@@ -5,8 +5,10 @@
 #pragma once
 
 #include <type_traits>
+#include <vector>
 #include "common/bit_field.h"
 #include "common/common_types.h"
+#include "core/hw/gpu.h"
 
 namespace Pica::CommandProcessor {
 
@@ -33,5 +35,18 @@ static_assert(std::is_standard_layout<CommandHeader>::value == true,
 static_assert(sizeof(CommandHeader) == sizeof(u32), "CommandHeader has incorrect size!");
 
 void ProcessCommandList(PAddr list, u32 size);
+
+void AfterCommandList();
+
+void ProcessDisplayTransfer(const GPU::Regs::DisplayTransferConfig&);
+
+void AfterDisplayTransfer();
+
+void ProcessMemoryFill(const GPU::Regs::MemoryFillConfig&);
+
+void AfterMemoryFill(bool);
+
+// TODO move somewhere else
+void AfterSwapBuffers();
 
 } // namespace Pica::CommandProcessor
