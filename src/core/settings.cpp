@@ -92,6 +92,7 @@ void LogSettings() {
     LogSetting("Renderer_TextureFilterName", Settings::values.texture_filter_name);
     LogSetting("Stereoscopy_Render3d", static_cast<int>(Settings::values.render_3d));
     LogSetting("Stereoscopy_Factor3d", Settings::values.factor_3d);
+    LogSetting("Renderer_UseAsyncGPU", Settings::values.use_asynchronous_gpu_emulation);
     LogSetting("Layout_LayoutOption", static_cast<int>(Settings::values.layout_option));
     LogSetting("Layout_SwapScreen", Settings::values.swap_screen);
     LogSetting("Layout_UprightScreen", Settings::values.upright_screen);

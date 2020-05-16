@@ -16,6 +16,8 @@ add_library(main SHARED
     emu_window/emu_window.h
     game_info.cpp
     game_info.h
+    game_settings.cpp
+    game_settings.h
     id_cache.cpp
     id_cache.h
     mic.cpp
