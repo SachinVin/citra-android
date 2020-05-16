@@ -13,6 +13,8 @@ namespace Frontend {
 class EmuWindow;
 }
 
+namespace VideoCore {
+
 class RendererBase : NonCopyable {
 public:
     explicit RendererBase(Frontend::EmuWindow& window);
@@ -75,3 +77,5 @@ protected:
 private:
     bool opengl_rasterizer_active = false;
 };
+
+} // namespace VideoCore

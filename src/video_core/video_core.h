@@ -8,12 +8,11 @@
 #include <iostream>
 #include <memory>
 #include "core/frontend/emu_window.h"
+#include "video_core/command_processor.h"
 
 namespace Frontend {
 class EmuWindow;
 }
-
-class RendererBase;
 
 namespace Memory {
 class MemorySystem;
@@ -24,7 +23,11 @@ class MemorySystem;
 
 namespace VideoCore {
 
+class GPUBackend;
+class RendererBase;
+
 extern std::unique_ptr<RendererBase> g_renderer; ///< Renderer plugin
+extern std::unique_ptr<VideoCore::GPUBackend> g_gpu;
 
 // TODO: Wrap these in a user settings struct along with any other graphics settings (often set from
 // qt ui)
@@ -53,7 +56,28 @@ enum class ResultStatus {
 };
 
 /// Initialize the video core
-ResultStatus Init(Frontend::EmuWindow& emu_window, Memory::MemorySystem& memory);
+ResultStatus Init(Core::System& system, Frontend::EmuWindow& emu_window,
+                  Memory::MemorySystem& memory);
+
+void ProcessCommandList(PAddr list, u32 size);
+
+/// Notify rasterizer that it should swap the current framebuffer
+void SwapBuffers();
+
+/// Perform a DisplayTransfer (accelerated by the rasterizer if available)
+void DisplayTransfer(const GPU::Regs::DisplayTransferConfig* config);
+
+/// Perform a MemoryFill (accelerated by the rasterizer if available)
+void MemoryFill(const GPU::Regs::MemoryFillConfig* config, bool is_second_filler);
+
+/// Notify rasterizer that any caches of the specified region should be flushed to Switch memory
+void FlushRegion(VAddr addr, u64 size);
+
+/// Notify rasterizer that any caches of the specified region should be flushed and invalidated
+void FlushAndInvalidateRegion(VAddr addr, u64 size);
+
+/// Notify rasterizer that any caches of the specified region should be invalidated
+void InvalidateRegion(VAddr addr, u64 size);
 
 /// Shutdown the video core
 void Shutdown();

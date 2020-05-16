@@ -11,6 +11,7 @@
 #include <boost/serialization/shared_ptr.hpp>
 #include "common/bit_field.h"
 #include "common/common_types.h"
+#include "common/threadsafe_queue.h"
 #include "core/hle/kernel/event.h"
 #include "core/hle/kernel/hle_ipc.h"
 #include "core/hle/result.h"
@@ -238,6 +239,18 @@ public:
      */
     FrameBufferUpdate* GetFrameBufferInfo(u32 thread_id, u32 screen_index);
 
+    void Update() {
+        while (!interrupt_queue.Empty()) {
+            InterruptId next_interrupt{};
+            interrupt_queue.Pop(next_interrupt);
+            SignalInterrupt(next_interrupt);
+        }
+    }
+
+    void SignalInterruptThreadSafe(InterruptId interrupt_id) {
+        interrupt_queue.Push(interrupt_id);
+    }
+
 private:
     /**
      * Signals that the specified interrupt type has occurred to userland code for the specified GSP
@@ -456,6 +469,8 @@ private:
     }
 
     friend class boost::serialization::access;
+
+    Common::MPSCQueue<InterruptId> interrupt_queue;
 };
 
 ResultCode SetBufferSwap(u32 screen_id, const FrameBufferInfo& info);
