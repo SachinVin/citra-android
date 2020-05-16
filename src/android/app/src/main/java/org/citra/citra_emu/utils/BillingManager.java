@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillingManager implements PurchasesUpdatedListener {
-    private final String BILLING_SKU_PREMIUM = "android.test.purchased";
+    private final String BILLING_SKU_PREMIUM = "citra.citra_emu.product_id.premium";
 
     private final Activity mActivity;
     private BillingClient mBillingClient;
