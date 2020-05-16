@@ -9,6 +9,8 @@
 #include "video_core/swrasterizer/swrasterizer.h"
 #include "video_core/video_core.h"
 
+namespace VideoCore {
+
 RendererBase::RendererBase(Frontend::EmuWindow& window) : render_window{window} {}
 RendererBase::~RendererBase() = default;
 void RendererBase::UpdateCurrentFramebufferLayout(bool is_portrait_mode) {
@@ -32,3 +34,5 @@ void RendererBase::RefreshRasterizerSetting() {
 void RendererBase::Sync() {
     rasterizer->SyncEntireState();
 }
+
+} // namespace VideoCore
