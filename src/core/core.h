@@ -57,7 +57,9 @@ namespace VideoDumper {
 class Backend;
 }
 
+namespace VideoCore {
 class RendererBase;
+}
 
 namespace Core {
 
@@ -205,7 +207,7 @@ public:
         return *dsp_core;
     }
 
-    [[nodiscard]] RendererBase& Renderer();
+    [[nodiscard]] VideoCore::RendererBase& Renderer();
 
     /**
      * Gets a reference to the service manager.

@@ -225,6 +225,7 @@ System::ResultStatus System::RunLoop(bool tight_loop) {
         GDBStub::SetCpuStepFlag(false);
     }
 
+    Service::GSP::Update();
     HW::Update();
     Reschedule();
 
@@ -417,7 +418,7 @@ System::ResultStatus System::Init(Frontend::EmuWindow& emu_window, u32 system_mo
     video_dumper = std::make_unique<VideoDumper::NullBackend>();
 #endif
 
-    VideoCore::ResultStatus result = VideoCore::Init(emu_window, *memory);
+    VideoCore::ResultStatus result = VideoCore::Init(*this, emu_window, *memory);
     if (result != VideoCore::ResultStatus::Success) {
         switch (result) {
         case VideoCore::ResultStatus::ErrorGenericDrivers:
@@ -436,7 +437,7 @@ System::ResultStatus System::Init(Frontend::EmuWindow& emu_window, u32 system_mo
     return ResultStatus::Success;
 }
 
-RendererBase& System::Renderer() {
+VideoCore::RendererBase& System::Renderer() {
     return *VideoCore::g_renderer;
 }
 
