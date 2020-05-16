@@ -86,7 +86,7 @@ void CubebInput::StartSampling(const Frontend::Mic::Parameters& params) {
     input_params.format = CUBEB_SAMPLE_S16LE;
     input_params.rate = params.sample_rate;
 
-    u32 latency_frames;
+    u32 latency_frames = 512; // Firefox default
     if (cubeb_get_min_latency(impl->ctx, &input_params, &latency_frames) != CUBEB_OK) {
         LOG_ERROR(Audio, "Could not get minimum latency");
     }
