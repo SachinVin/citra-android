@@ -33,7 +33,8 @@
 
         <activity
             android:name="org.citra.citra_emu.ui.main.MainActivity"
-            android:theme="@style/CitraBase">
+            android:theme="@style/CitraBase"
+            android:resizeableActivity="false">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
             <intent-filter>
