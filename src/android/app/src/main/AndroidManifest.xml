@@ -8,7 +8,7 @@
         android:name="android.hardware.gamepad"
         android:required="false"/>
 
-    <uses-feature android:glEsVersion="0x00030001" android:required="true" />
+    <uses-feature android:glEsVersion="0x00030002" android:required="true" />
 
     <uses-feature android:name="android.hardware.opengles.aep" android:required="true" />
     <uses-feature
