@@ -7,7 +7,7 @@
 namespace GameSettings {
 
 void LoadOverrides(u64 program_id) {
-    Settings::values.gpu_timing_mode_submit_list = Settings::GpuTimingMode::Asynch_2ms;
+    Settings::values.gpu_timing_mode_submit_list = Settings::GpuTimingMode::Asynch_1ms;
     Settings::values.gpu_timing_mode_swap_buffers = Settings::GpuTimingMode::Asynch_8ms;
     Settings::values.gpu_timing_mode_memory_fill = Settings::GpuTimingMode::Asynch_2ms;
     Settings::values.gpu_timing_mode_display_transfer = Settings::GpuTimingMode::Synch;
