@@ -10,12 +10,12 @@
     <string name="controller_c">Direcional C-Stick</string>
     <string name="controller_triggers">Gatilhos</string>
     <string name="controller_dpad">Direcional D-Pad</string>
-    <string name="controller_axis_vertical">Eixo Vertical</string>
-    <string name="controller_axis_horizontal">Eixo Horizontal</string>
+    <string name="controller_axis_vertical">Eixo vertical</string>
+    <string name="controller_axis_horizontal">Eixo horizontal</string>
     <string name="input_binding">Mapeamento de controles</string>
     <string name="input_binding_description">Pressione ou mova um botão/alavanca para mapear para %1$s.</string>
-    <string name="input_binding_description_vertical_axis">Mova seu joystick para cima ou para baixo.</string>
-    <string name="input_binding_description_horizontal_axis">Mova seu joystick para esquerda ou para direita.</string>
+    <string name="input_binding_description_vertical_axis">Mova o seu joystick para cima ou para baixo.</string>
+    <string name="input_binding_description_horizontal_axis">Mova o seu joystick para esquerda ou para direita.</string>
     <string name="input_message_analog_only">Este controle precisa ser mapeado para um eixo analógico do gamepad ou um eixo de D-pad!</string>
     <string name="input_message_button_only">Este controle deve ser mapeado para um botão do gamepad!</string>
 
@@ -24,13 +24,13 @@
 
     <!-- Premium settings strings -->
     <string name="design">Alterar tema (claro, escuro)</string>
-    <string name="design_updated">O tema será atualizado ao sair das Configurações</string>
+    <string name="design_updated">O tema será atualizado ao sair das configurações</string>
 
     <!-- Core settings strings -->
     <string name="cpu_jit">Ativar CPU JIT</string>
     <string name="cpu_jit_description">Utiliza um compilador Just-in-Time (JIT) para emulação da CPU. Quando ativado, o desempenho do jogo será consideravelmente melhorado.</string>
     <string name="init_clock">Tipo do relógio do sistema</string>
-    <string name="init_clock_description">Configura o relógio emulado do 3DS para refletir o seu dispositivo ou para começar numa data e hora simulados.</string>
+    <string name="init_clock_description">Configura o relógio emulado do 3DS para refletir o do seu dispositivo ou para começar numa data e hora simulados.</string>
 
     <!-- System settings strings -->
     <string name="init_time">Horário inicial do relógio do sistema</string>
@@ -77,9 +77,9 @@
 
     <!-- Premium strings -->
     <string name="premium_text">Premium</string>
-    <string name="premium_settings_upsell">Atualize para o Premium e ajude o Citra!</string>
-    <string name="premium_settings_upsell_description">Com o Premium, você dará o seu apoio para que os desenvolvedores continuem melhorando o Citra e também ganhará acesso a recursos exclusivos!</string>
-    <string name="premium_settings_welcome">Boas vindas ao Premium.</string>
+    <string name="premium_settings_upsell">Passe para o plano Premium e ajude o Citra!</string>
+    <string name="premium_settings_upsell_description">Com o Premium, você dará o seu apoio para que os desenvolvedores continuem a melhorar o Citra e também ganhará acesso a recursos exclusivos!</string>
+    <string name="premium_settings_welcome">Bem-vindo ao Premium.</string>
     <string name="premium_settings_welcome_description">Agradecemos pelo seu apoio!</string>
 
     <!-- Audio settings strings -->
@@ -118,7 +118,7 @@
     <!-- Emulation Menu -->
     <string name="emulation_show_fps">Mostrar FPS</string>
     <string name="emulation_configure_controls">Configurar controles</string>
-    <string name="emulation_edit_layout">Editar layout</string>
+    <string name="emulation_edit_layout">Editar esquema</string>
     <string name="emulation_done">Pronto</string>
     <string name="emulation_toggle_controls">Alternar controles</string>
     <string name="emulation_control_scale">Ajustar escala</string>
@@ -132,7 +132,7 @@
     <string name="emulation_touch_overlay_reset">Redefinir sobreposição</string>
     <string name="emulation_show_overlay">Exibir sobreposição</string>
     <string name="emulation_close_game">Fechar jogo</string>
-    <string name="emulation_close_game_message">Você deseja mesmo fechar o jogo atual?</string>
+    <string name="emulation_close_game_message">Deseja mesmo fechar o jogo atual?</string>
     <string name="menu_emulation_amiibo">Amiibo</string>
     <string name="menu_emulation_amiibo_load">Carregar</string>
     <string name="menu_emulation_amiibo_remove">Remover</string>
@@ -140,7 +140,7 @@
     <string name="amiibo_load_error">Erro ao carregar Amiibo</string>
     <string name="amiibo_load_error_message">Ocorreu um erro ao carregar o arquivo de Amiibo selecionado. Verifique se é o arquivo correto.</string>
 
-    <string name="write_permission_needed">Você precisa permitir o acesso de escrita para o armazenamento externo para que o emulador funcione</string>
+    <string name="write_permission_needed">Você precisa permitir o acesso de escrita no armazenamento externo para que o emulador funcione</string>
     <string name="load_settings">Carregando configurações...</string>
 
     <string name="external_storage_not_mounted">O armazenamento externo precisa estar disponível para que o Citra seja utilizado.</string>
@@ -151,8 +151,8 @@
     <!-- Software Keyboard -->
     <string name="software_keyboard">Teclado virtual</string>
     <string name="i_forgot">Esqueci</string>
-    <string name="fixed_length_required">Tamanho do texto não está correto (precisa ter %dcaracteres)</string>
-    <string name="max_length_exceeded">O texto é muito grande (não deve ter mais que %d caracteres)</string>
+    <string name="fixed_length_required">O tamanho do texto não está correto (precisa ter %dcaracteres)</string>
+    <string name="max_length_exceeded">O texto é muito longo (não deve ter mais que %d caracteres)</string>
     <string name="blank_input_not_allowed">Controle vazio não é permitido</string>
     <string name="empty_input_not_allowed">Controle vazio não é permitido</string>
 
