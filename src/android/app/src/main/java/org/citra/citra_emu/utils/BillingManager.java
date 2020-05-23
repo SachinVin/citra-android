@@ -3,7 +3,10 @@ package org.citra.citra_emu.utils;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -15,6 +18,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 
 import org.citra.citra_emu.CitraApplication;
+import org.citra.citra_emu.R;
 import org.citra.citra_emu.features.settings.utils.SettingsFile;
 import org.citra.citra_emu.ui.main.MainActivity;
 
@@ -97,9 +101,22 @@ public class BillingManager implements PurchasesUpdatedListener {
             }
         }
 
-        if (premiumPurchase != null) {
+        if (premiumPurchase != null && premiumPurchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
             // Premium has been purchased
             updatePremiumState(true);
+
+            // Acknowledge the purchase if it hasn't already been acknowledged.
+            if (!premiumPurchase.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams =
+                        AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(premiumPurchase.getPurchaseToken())
+                                .build();
+
+                AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener = billingResult1 -> {
+                    Toast.makeText(mActivity, R.string.premium_settings_welcome, Toast.LENGTH_SHORT).show();
+                };
+                mBillingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            }
 
             if (mUpdateBillingCallback != null) {
                 try {
