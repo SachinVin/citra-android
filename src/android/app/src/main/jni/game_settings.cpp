@@ -71,7 +71,7 @@ void LoadOverrides(u64 program_id) {
     case 0x0004000000053F00:
         // KOR / Super Mario 3D Land
     case 0x0004000000089D00:
-        Settings::values.gpu_timing_mode_submit_list = Settings::GpuTimingMode::Asynch_40us;
+        Settings::values.gpu_timing_mode_submit_list = Settings::GpuTimingMode::Synch;
         //    Settings::values.gpu_timing_mode_swap_buffers = Settings::GpuTimingMode::Asynch_4ms;
         //    Settings::values.gpu_timing_mode_memory_fill = Settings::GpuTimingMode::Asynch_40us;
         //    Settings::values.gpu_timing_mode_display_transfer =
