@@ -147,7 +147,7 @@ public final class SoftwareKeyboard {
                 case ButtonConfig.Single: {
                     final String text = config.button_text == null
                             ? emulationActivity.getString(android.R.string.ok)
-                            : config.button_text[config.button_config];
+                            : config.button_text[2];
                     builder.setPositiveButton(text, null);
                     break;
                 }
