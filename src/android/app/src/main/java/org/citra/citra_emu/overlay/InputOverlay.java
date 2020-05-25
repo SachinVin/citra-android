@@ -340,7 +340,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
         int pointerIndex = event.getActionIndex();
 
         if (mPreferences.getBoolean("isTouchEnabled", true)) {
-            switch (event.getAction()) {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_POINTER_DOWN:
                     NativeLibrary.onTouchEvent(event.getX(pointerIndex), event.getY(pointerIndex), true);
