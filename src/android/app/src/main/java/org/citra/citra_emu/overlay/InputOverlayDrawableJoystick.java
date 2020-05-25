@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.MotionEvent;
 
 import org.citra.citra_emu.NativeLibrary.ButtonType;
+import org.citra.citra_emu.utils.EmulationMenuSettings;
 
 /**
  * Custom {@link BitmapDrawable} that is capable
@@ -98,8 +99,10 @@ public final class InputOverlayDrawableJoystick {
                     mPressedState = true;
                     mOuterBitmap.setAlpha(0);
                     mBoundsBoxBitmap.setAlpha(255);
-                    getVirtBounds().offset((int) event.getX(pointerIndex) - getVirtBounds().centerX(),
-                            (int) event.getY(pointerIndex) - getVirtBounds().centerY());
+                    if (EmulationMenuSettings.getJoystickRelCenter()) {
+                        getVirtBounds().offset((int) event.getX(pointerIndex) - getVirtBounds().centerX(),
+                                (int) event.getY(pointerIndex) - getVirtBounds().centerY());
+                    }
                     mBoundsBoxBitmap.setBounds(getVirtBounds());
                     trackId = event.getPointerId(pointerIndex);
                 }
