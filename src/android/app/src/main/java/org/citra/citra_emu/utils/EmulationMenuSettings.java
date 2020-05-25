@@ -16,6 +16,16 @@ public class EmulationMenuSettings {
     public static final int LayoutOption_MobilePortrait = 4;
     public static final int LayoutOption_MobileLandscape = 5;
 
+    public static boolean getJoystickRelCenter() {
+        return mPreferences.getBoolean("EmulationMenuSettings_JoystickRelCenter", true);
+    }
+
+    public static void setJoystickRelCenter(boolean value) {
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean("EmulationMenuSettings_JoystickRelCenter", value);
+        editor.apply();
+    }
+
     public static int getLandscapeScreenLayout() {
         return mPreferences.getInt("EmulationMenuSettings_LandscapeScreenLayout", LayoutOption_MobileLandscape);
     }
