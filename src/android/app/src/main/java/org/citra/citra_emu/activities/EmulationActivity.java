@@ -1,7 +1,6 @@
 package org.citra.citra_emu.activities;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,7 +22,6 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -39,6 +37,7 @@ import org.citra.citra_emu.utils.ControllerMappingHelper;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
 import org.citra.citra_emu.utils.FileBrowserHelper;
 import org.citra.citra_emu.utils.FileUtil;
+import org.citra.citra_emu.utils.ForegroundService;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,6 +108,7 @@ public final class EmulationActivity extends AppCompatActivity {
     private EmulationFragment mEmulationFragment;
     private SharedPreferences mPreferences;
     private ControllerMappingHelper mControllerMappingHelper;
+    private Intent foregroundService;
     private boolean activityRecreated;
     private String mSelectedTitle;
     private String mPath;
@@ -121,30 +121,13 @@ public final class EmulationActivity extends AppCompatActivity {
         activity.startActivity(launcher);
     }
 
-    private void showRunningNotification() {
-        // Intent is used to resume emulation if the notification is clicked
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, EmulationActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.app_notification_channel_id))
-                .setSmallIcon(R.drawable.ic_stat_notification_logo)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.app_notification_running))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setVibrate(null)
-                .setSound(null)
-                .setContentIntent(contentIntent);
-
-        NotificationManagerCompat.from(this).notify(EMULATION_RUNNING_NOTIFICATION, builder.build());
-    }
-
     public static void tryDismissRunningNotification(Activity activity) {
         NotificationManagerCompat.from(activity).cancel(EMULATION_RUNNING_NOTIFICATION);
     }
 
     @Override
     protected void onDestroy() {
-        tryDismissRunningNotification(this);
+        stopService(foregroundService);
         super.onDestroy();
     }
 
@@ -196,7 +179,9 @@ public final class EmulationActivity extends AppCompatActivity {
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        showRunningNotification();
+        // Start a foreground service to prevent the app from getting killed in the background
+        foregroundService = new Intent(EmulationActivity.this, ForegroundService.class);
+        startForegroundService(foregroundService);
 
         // Override Citra core INI with the one set by our in game menu
         NativeLibrary.SwapScreens(EmulationMenuSettings.getSwapScreens(),
