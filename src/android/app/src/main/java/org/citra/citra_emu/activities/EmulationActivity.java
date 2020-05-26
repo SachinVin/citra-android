@@ -66,6 +66,7 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_OPEN_SETTINGS = 12;
     public static final int MENU_ACTION_LOAD_AMIIBO = 13;
     public static final int MENU_ACTION_REMOVE_AMIIBO = 14;
+    public static final int MENU_ACTION_JOYSTICK_REL_CENTER = 15;
 
     public static final int REQUEST_SELECT_AMIIBO = 2;
     private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
@@ -100,6 +101,8 @@ public final class EmulationActivity extends AppCompatActivity {
                 .append(R.id.menu_emulation_amiibo_load, EmulationActivity.MENU_ACTION_LOAD_AMIIBO);
         buttonsActionsMap
                 .append(R.id.menu_emulation_amiibo_remove, EmulationActivity.MENU_ACTION_REMOVE_AMIIBO);
+        buttonsActionsMap.append(R.id.menu_emulation_joystick_rel_center,
+                EmulationActivity.MENU_ACTION_JOYSTICK_REL_CENTER);
     }
 
     private View mDecorView;
@@ -299,6 +302,7 @@ public final class EmulationActivity extends AppCompatActivity {
         }
 
         menu.findItem(layoutOptionMenuItem).setChecked(true);
+        menu.findItem(R.id.menu_emulation_joystick_rel_center).setChecked(EmulationMenuSettings.getJoystickRelCenter());
         menu.findItem(R.id.menu_emulation_show_fps).setChecked(EmulationMenuSettings.getShowFps());
         menu.findItem(R.id.menu_emulation_swap_screens).setChecked(EmulationMenuSettings.getSwapScreens());
         menu.findItem(R.id.menu_emulation_show_overlay).setChecked(EmulationMenuSettings.getShowOverlay());
@@ -397,6 +401,12 @@ public final class EmulationActivity extends AppCompatActivity {
 
             case MENU_ACTION_REMOVE_AMIIBO:
                 RemoveAmiibo();
+                break;
+
+            case MENU_ACTION_JOYSTICK_REL_CENTER:
+                final boolean isEnabled = !EmulationMenuSettings.getJoystickRelCenter();
+                EmulationMenuSettings.setJoystickRelCenter(isEnabled);
+                item.setChecked(isEnabled);
                 break;
         }
 
