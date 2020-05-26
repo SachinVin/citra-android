@@ -113,7 +113,7 @@
 
     <!-- Add Directory Screen-->
     <string name="select_game_folder">Select Game Folder</string>
-    <string name="add_directory_title">Add Folder to Library</string>
+    <string name="install_cia_title">Install CIA</string>
 
     <!-- Preferences Screen -->
     <string name="preferences_settings">Settings</string>
