@@ -128,6 +128,14 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     // Forces a config reload on game boot, if the user changed settings in the UI
     Config{};
+    // Replace with game-specific settings
+    u64 program_id{};
+    FileUtil::SetCurrentRomPath(filepath);
+    auto app_loader = Loader::GetLoader(filepath);
+    if (app_loader) {
+        app_loader->ReadProgramId(program_id);
+        GameSettings::LoadOverrides(program_id);
+    }
     Settings::Apply();
 
     Camera::RegisterFactory("image", std::make_unique<Camera::StillImage::Factory>());
@@ -151,12 +159,6 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     if (load_result != Core::System::ResultStatus::Success) {
         return load_result;
     }
-
-    // Replace with game-specific settings
-    u64 program_id{};
-    system.GetAppLoader().ReadProgramId(program_id);
-    GameSettings::LoadOverrides(program_id);
-    Settings::Apply();
 
     auto& telemetry_session = Core::System::GetInstance().TelemetrySession();
     telemetry_session.AddField(Telemetry::FieldType::App, "Frontend", "SDL");
