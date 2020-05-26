@@ -16,6 +16,15 @@ void LoadOverrides(u64 program_id) {
     Settings::values.gpu_timing_mode_invalidate = Settings::GpuTimingMode::Synch;
 
     switch (program_id) {
+        // JAP / Dragon Quest VII: Fragments of the Forgotten Past
+        case 0x0004000000065E00:
+        // USA / Dragon Quest VII: Fragments of the Forgotten Past
+        case 0x000400000018EF00:
+        // EUR / Dragon Quest VII: Fragments of the Forgotten Past
+        case 0x000400000018F000:
+            Settings::values.use_asynchronous_gpu_emulation = false;
+            break;
+
         //// JAP / The Legend of Zelda: A Link Between Worlds
         // case 0x00040000000EC200:
         //// USA / The Legend of Zelda: A Link Between Worlds
