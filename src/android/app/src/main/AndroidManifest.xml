@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <application
@@ -55,6 +56,8 @@
             android:resizeableActivity="false"
             android:theme="@style/CitraEmulationBase"
             android:launchMode="singleTop"/>
+
+        <service android:name="org.citra.citra_emu.utils.ForegroundService"/>
 
         <activity
             android:name="org.citra.citra_emu.activities.CustomFilePickerActivity"
