@@ -20,6 +20,7 @@
                 app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/button_install_cia"
+                android:icon="@drawable/ic_cia_install"
                 android:title="@string/install_cia_title"
                 app:showAsAction="ifRoom" />
         </menu>
