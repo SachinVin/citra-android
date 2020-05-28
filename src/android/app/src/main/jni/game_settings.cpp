@@ -57,6 +57,24 @@ void LoadOverrides(u64 program_id) {
         // This game has very sensitive timings with asynchronous GPU
         Settings::values.gpu_timing_mode_submit_list = Settings::GpuTimingMode::Synch;
         break;
+
+        // USA / Mario & Luigi: Superstar Saga + Bowsers Minions
+    case 0x00040000001B8F00:
+        // EUR / Mario & Luigi: Superstar Saga + Bowsers Minions
+    case 0x00040000001B9000:
+        // JAP / Mario & Luigi: Superstar Saga + Bowsers Minions
+    case 0x0004000000194B00:
+        // This game requires accurate multiplication to render properly
+        Settings::values.shaders_accurate_mul = true;
+        break;
+
+        // USA / Mario & Luigi: Bowsers Inside Story + Bowser Jrs Journey
+    case 0x00040000001D1400:
+        // EUR / Mario & Luigi: Bowsers Inside Story + Bowser Jrs Journey
+    case 0x00040000001D1500:
+        // This game requires accurate multiplication to render properly
+        Settings::values.shaders_accurate_mul = true;
+        break;
     }
 }
 
