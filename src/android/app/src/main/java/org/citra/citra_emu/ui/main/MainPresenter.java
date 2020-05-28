@@ -74,7 +74,7 @@ public final class MainPresenter {
         mDirToAdd = dir;
     }
 
-    private void refeshGameList() {
+    public void refeshGameList() {
         GameDatabase databaseHelper = CitraApplication.databaseHelper;
         databaseHelper.scanLibrary(databaseHelper.getWritableDatabase());
         mView.refresh();
