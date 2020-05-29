@@ -514,6 +514,8 @@ public final class NativeLibrary {
         public static final int TRIGGER_L = 773;
         public static final int TRIGGER_R = 774;
         public static final int DPAD = 780;
+        public static final int BUTTON_DEBUG = 781;
+        public static final int BUTTON_GPIO14 = 782;
     }
 
     /**

@@ -61,14 +61,15 @@ public:
 
     bool ChangeButtonStatus(int button_id, bool pressed) {
         std::lock_guard<std::mutex> guard(mutex);
+        bool button_found = false;
         for (const KeyButtonPair& pair : list) {
             if (pair.button_id == button_id) {
                 pair.key_button->status.store(pressed);
-                return true;
+                button_found = true;
             }
         }
         // If we don't find the button don't consume the button press event
-        return false;
+        return button_found;
     }
 
     void ChangeAllButtonStatus(bool pressed) {
@@ -132,14 +133,15 @@ public:
 
     bool ChangeAxisValue(int axis_id, float axis) {
         std::lock_guard<std::mutex> guard(mutex);
+        bool button_found = false;
         for (const AnalogButtonPair& pair : list) {
             if (pair.axis_id == axis_id) {
                 pair.key_button->axis_val.store(axis);
-                return true;
+                button_found = true;
             }
         }
         // If we don't find the button don't consume the button press event
-        return false;
+        return button_found;
     }
 
 private:
@@ -190,14 +192,15 @@ public:
 
     bool ChangeJoystickStatus(int analog_id, float x, float y) {
         std::lock_guard<std::mutex> guard(mutex);
+        bool button_found = false;
         for (const AnalogPair& pair : list) {
             if (pair.analog_id == analog_id) {
                 pair.key_button->x_axis.store(x);
                 pair.key_button->y_axis.store(y);
-                return true;
+                button_found = true;
             }
         }
-        return false;
+        return button_found;
     }
 
 private:
