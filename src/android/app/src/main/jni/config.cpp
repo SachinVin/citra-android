@@ -55,6 +55,7 @@ static const std::array<int, Settings::NativeButton::NumButtons> default_buttons
     InputManager::N3DS_BUTTON_Y,  InputManager::N3DS_DPAD_UP,      InputManager::N3DS_DPAD_DOWN,
     InputManager::N3DS_DPAD_LEFT, InputManager::N3DS_DPAD_RIGHT,   InputManager::N3DS_TRIGGER_L,
     InputManager::N3DS_TRIGGER_R, InputManager::N3DS_BUTTON_START, InputManager::N3DS_BUTTON_SELECT,
+    InputManager::N3DS_BUTTON_DEBUG, InputManager::N3DS_BUTTON_GPIO14,
     InputManager::N3DS_BUTTON_ZL, InputManager::N3DS_BUTTON_ZR,    InputManager::N3DS_BUTTON_HOME,
 };
 
