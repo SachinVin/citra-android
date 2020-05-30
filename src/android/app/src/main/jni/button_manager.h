@@ -38,6 +38,8 @@ enum ButtonType {
     N3DS_STICK_C_RIGHT = 772,
     N3DS_TRIGGER_L = 773,
     N3DS_TRIGGER_R = 774,
+    N3DS_BUTTON_DEBUG = 781,
+    N3DS_BUTTON_GPIO14 = 782
 };
 
 class ButtonList;
