@@ -445,6 +445,15 @@ void Java_org_citra_citra_1emu_NativeLibrary_Run__Ljava_lang_String_2Ljava_lang_
 void Java_org_citra_citra_1emu_NativeLibrary_ReloadSettings(JNIEnv* env,
                                                             [[maybe_unused]] jclass clazz) {
     Config{};
+    Core::System& system{Core::System::GetInstance()};
+
+    // Replace with game-specific settings
+    if (system.IsPoweredOn()) {
+        u64 program_id{};
+        system.GetAppLoader().ReadProgramId(program_id);
+        GameSettings::LoadOverrides(program_id);
+    }
+
     Settings::Apply();
 }
 
