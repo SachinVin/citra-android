@@ -102,6 +102,7 @@ static void TryShutdown() {
         return;
     }
 
+    window->StopPresenting();
     window->DoneCurrent();
     Core::System::GetInstance().Shutdown();
     window.reset();
@@ -166,6 +167,8 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     is_running = true;
     pause_emulation = false;
 
+    window->StartPresenting();
+
     SCOPE_EXIT({ TryShutdown(); });
 
     // Audio stretching on Android is only useful with lower framerates, disable it when fullspeed
@@ -193,7 +196,6 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
             std::unique_lock<std::mutex> pause_lock(paused_mutex);
             running_cv.wait(pause_lock, [] { return !pause_emulation || !is_running; });
-            window->PollEvents();
         }
     }
 
@@ -221,13 +223,6 @@ void Java_org_citra_citra_1emu_NativeLibrary_SurfaceDestroyed(JNIEnv* env,
     if (window) {
         window->OnSurfaceChanged(s_surf);
     }
-}
-
-void Java_org_citra_citra_1emu_NativeLibrary_DoFrame(JNIEnv* env, [[maybe_unused]] jclass clazz) {
-    if (!is_running || pause_emulation) {
-        return;
-    }
-    window->TryPresenting();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_NotifyOrientationChange(JNIEnv* env,
@@ -307,7 +302,6 @@ void Java_org_citra_citra_1emu_NativeLibrary_StopEmulation(JNIEnv* env,
                                                            [[maybe_unused]] jclass clazz) {
     is_running = false;
     pause_emulation = false;
-    window->StopPresenting();
     running_cv.notify_all();
 }
 
