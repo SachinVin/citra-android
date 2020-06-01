@@ -83,6 +83,12 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (PermissionsHandler.hasWriteAccess(this)) {
+            if (getSupportFragmentManager() == null) {
+                return;
+            }
+            if (outState == null) {
+                return;
+            }
             getSupportFragmentManager().putFragment(outState, "mPlatformGamesFragment", mPlatformGamesFragment);
         }
     }
