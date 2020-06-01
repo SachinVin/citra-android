@@ -172,8 +172,6 @@ public final class NativeLibrary {
 
     public static native void SurfaceDestroyed();
 
-    public static native void DoFrame();
-
     /**
      * Unpauses emulation from a paused state.
      */
