@@ -99,6 +99,10 @@ public final class SettingsFragmentPresenter {
         }
         ArrayList<SettingsItem> sl = new ArrayList<>();
 
+        if (mMenuTag == null) {
+            return;
+        }
+
         switch (mMenuTag) {
             case SettingsFile.FILE_NAME_CONFIG:
                 addConfigSettings(sl);
