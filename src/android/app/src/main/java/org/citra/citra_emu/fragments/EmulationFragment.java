@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -31,7 +30,7 @@ import org.citra.citra_emu.utils.DirectoryStateReceiver;
 import org.citra.citra_emu.utils.EmulationMenuSettings;
 import org.citra.citra_emu.utils.Log;
 
-public final class EmulationFragment extends Fragment implements SurfaceHolder.Callback, Choreographer.FrameCallback {
+public final class EmulationFragment extends Fragment implements SurfaceHolder.Callback {
     private static final String KEY_GAMEPATH = "gamepath";
 
     private static final Handler perfStatsUpdateHandler = new Handler();
@@ -115,7 +114,6 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     @Override
     public void onResume() {
         super.onResume();
-        Choreographer.getInstance().postFrameCallback(this);
         if (DirectoryInitialization.areCitraDirectoriesReady()) {
             mEmulationState.run(activity.isActivityRecreated());
         } else {
@@ -130,11 +128,8 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
             directoryStateReceiver = null;
         }
 
-        if (mEmulationState.isRunning()) {
+        if (mEmulationState.isRunning())
             mEmulationState.pause();
-        }
-
-        Choreographer.getInstance().removeFrameCallback(this);
         super.onPause();
     }
 
@@ -230,12 +225,6 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         mEmulationState.clearSurface();
-    }
-
-    @Override
-    public void doFrame(long frameTimeNanos) {
-        Choreographer.getInstance().postFrameCallback(this);
-        NativeLibrary.DoFrame();
     }
 
     public void stopEmulation() {
@@ -353,9 +342,9 @@ public final class EmulationFragment extends Fragment implements SurfaceHolder.C
         private void runWithValidSurface() {
             mRunWhenSurfaceIsValid = false;
             if (state == State.STOPPED) {
-                NativeLibrary.SurfaceChanged(mSurface);
                 Thread mEmulationThread = new Thread(() ->
                 {
+                    NativeLibrary.SurfaceChanged(mSurface);
                     Log.debug("[EmulationFragment] Starting emulation thread.");
                     NativeLibrary.Run(mGamePath);
                 }, "NativeEmulation");
