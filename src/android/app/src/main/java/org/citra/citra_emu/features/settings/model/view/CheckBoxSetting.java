@@ -2,6 +2,7 @@ package org.citra.citra_emu.features.settings.model.view;
 
 import org.citra.citra_emu.CitraApplication;
 import org.citra.citra_emu.R;
+import org.citra.citra_emu.features.settings.model.BooleanSetting;
 import org.citra.citra_emu.features.settings.model.IntSetting;
 import org.citra.citra_emu.features.settings.model.Setting;
 import org.citra.citra_emu.features.settings.ui.SettingsFragmentView;
@@ -31,8 +32,21 @@ public final class CheckBoxSetting extends SettingsItem {
             return mDefaultValue;
         }
 
-        IntSetting setting = (IntSetting) getSetting();
-        return setting.getValue() == 1;
+        // Try integer setting
+        try {
+            IntSetting setting = (IntSetting) getSetting();
+            return setting.getValue() == 1;
+        } catch (ClassCastException exception) {
+        }
+
+        // Try boolean setting
+        try {
+            BooleanSetting setting = (BooleanSetting) getSetting();
+            return setting.getValue() == true;
+        } catch (ClassCastException exception) {
+        }
+
+        return mDefaultValue;
     }
 
     /**
