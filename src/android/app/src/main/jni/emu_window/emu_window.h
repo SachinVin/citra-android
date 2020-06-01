@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <thread>
 #include <vector>
 
 #include <EGL/egl.h>
@@ -50,8 +51,9 @@ public:
     void MakeCurrent() override;
     void DoneCurrent() override;
 
-    void TryPresenting();
+    void StartPresenting();
     void StopPresenting();
+    bool IsPresenting() const;
 
     std::unique_ptr<GraphicsContext> CreateSharedContext() const override;
 
@@ -74,10 +76,7 @@ private:
 
     std::unique_ptr<Frontend::GraphicsContext> core_context;
 
-    enum class PresentingState {
-        Initial,
-        Running,
-        Stopped,
-    };
-    PresentingState presenting_state{};
+    std::unique_ptr<std::thread> presentation_thread;
+
+    bool is_presenting{};
 };
