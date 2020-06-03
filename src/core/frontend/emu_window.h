@@ -48,7 +48,7 @@ public:
      * frame available after timeout, returns the previous frame. If there is no previous frame it
      * returns nullptr
      */
-    virtual Frontend::Frame* TryGetPresentFrame(int timeout_ms) = 0;
+    virtual Frontend::Frame* TryGetPresentFrame() = 0;
 };
 
 /**

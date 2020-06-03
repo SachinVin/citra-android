@@ -73,7 +73,7 @@ public:
 
     /// Draws the latest frame from texture mailbox to the currently bound draw framebuffer in this
     /// context
-    void TryPresent(int timeout_ms) override;
+    bool TryPresent() override;
 
     /// Prepares for video dumping (e.g. create necessary buffers, etc)
     void PrepareVideoDumping() override;
