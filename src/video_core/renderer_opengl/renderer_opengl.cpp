@@ -50,11 +50,11 @@ class OGLTextureMailbox : public Frontend::TextureMailbox {
 public:
     std::mutex swap_chain_lock;
     std::condition_variable free_cv;
-    std::condition_variable present_cv;
     std::array<Frontend::Frame, SWAP_CHAIN_SIZE> swap_chain{};
     std::queue<Frontend::Frame*> free_queue{};
     std::deque<Frontend::Frame*> present_queue{};
     Frontend::Frame* previous_frame = nullptr;
+    const std::chrono::milliseconds elapsed{100};
 
     OGLTextureMailbox() {
         for (auto& frame : swap_chain) {
@@ -68,7 +68,6 @@ public:
         std::scoped_lock lock(swap_chain_lock);
         std::queue<Frontend::Frame*>().swap(free_queue);
         present_queue.clear();
-        present_cv.notify_all();
         free_cv.notify_all();
     }
 
@@ -120,9 +119,13 @@ public:
 
         // If theres no free frames, we will reuse the oldest render frame
         if (free_queue.empty()) {
-            auto frame = present_queue.back();
-            present_queue.pop_back();
-            return frame;
+            // wait for new entries in the present_queue
+            free_cv.wait_for(lock, elapsed, [this] { return !free_queue.empty(); });
+            if (free_queue.empty()) {
+                auto frame = present_queue.back();
+                present_queue.pop_back();
+                return frame;
+            }
         }
 
         Frontend::Frame* frame = free_queue.front();
@@ -132,41 +135,25 @@ public:
 
     void ReleaseRenderFrame(Frontend::Frame* frame) override {
         std::unique_lock<std::mutex> lock(swap_chain_lock);
-        present_queue.push_front(frame);
-        present_cv.notify_one();
+        present_queue.push_back(frame);
     }
 
-    // This is virtual as it is to be overriden in OGLVideoDumpingMailbox below.
-    virtual void LoadPresentFrame() {
-        // free the previous frame and add it back to the free queue
-        if (previous_frame) {
-            free_queue.push(previous_frame);
-            free_cv.notify_one();
-        }
-
-        // the newest entries are pushed to the front of the queue
-        Frontend::Frame* frame = present_queue.front();
-        present_queue.pop_front();
-        // remove all old entries from the present queue and move them back to the free_queue
-        for (auto f : present_queue) {
-            free_queue.push(f);
-        }
-        present_queue.clear();
-        previous_frame = frame;
-    }
-
-    Frontend::Frame* TryGetPresentFrame(int timeout_ms) override {
-        std::unique_lock<std::mutex> lock(swap_chain_lock);
-        // wait for new entries in the present_queue
-        present_cv.wait_for(lock, std::chrono::milliseconds(timeout_ms),
-                            [&] { return !present_queue.empty(); });
+    Frontend::Frame* TryGetPresentFrame() override {
         if (present_queue.empty()) {
-            // timed out waiting for a frame to draw so return the previous frame
+            return nullptr;
+        } else {
+            std::unique_lock<std::mutex> lock(swap_chain_lock);
+
+            // free the previous frame and add it back to the free queue
+            if (previous_frame) {
+                free_queue.push(previous_frame);
+                free_cv.notify_one();
+            }
+
+            previous_frame = present_queue.front();
+            present_queue.pop_front();
             return previous_frame;
         }
-
-        LoadPresentFrame();
-        return previous_frame;
     }
 };
 
@@ -189,35 +176,6 @@ public:
         Frontend::Frame* frame = free_queue.front();
         free_queue.pop();
         return frame;
-    }
-
-    void LoadPresentFrame() override {
-        // free the previous frame and add it back to the free queue
-        if (previous_frame) {
-            free_queue.push(previous_frame);
-            free_cv.notify_one();
-        }
-
-        Frontend::Frame* frame = present_queue.back();
-        present_queue.pop_back();
-        previous_frame = frame;
-
-        // Do not remove entries from the present_queue, as video dumping would require
-        // that we preserve all frames
-    }
-
-    Frontend::Frame* TryGetPresentFrame(int timeout_ms) override {
-        std::unique_lock<std::mutex> lock(swap_chain_lock);
-        // wait for new entries in the present_queue
-        present_cv.wait_for(lock, std::chrono::milliseconds(timeout_ms),
-                            [&] { return !present_queue.empty(); });
-        if (present_queue.empty()) {
-            // timed out waiting for a frame
-            return nullptr;
-        }
-
-        LoadPresentFrame();
-        return previous_frame;
     }
 };
 
@@ -1056,12 +1014,12 @@ void RendererOpenGL::DrawScreens(const Layout::FramebufferLayout& layout, bool f
     }
 }
 
-void RendererOpenGL::TryPresent(int timeout_ms) {
+bool RendererOpenGL::TryPresent() {
     const auto& layout = render_window.GetFramebufferLayout();
-    auto frame = render_window.mailbox->TryGetPresentFrame(timeout_ms);
+    auto frame = render_window.mailbox->TryGetPresentFrame();
     if (!frame) {
         LOG_DEBUG(Render_OpenGL, "TryGetPresentFrame returned no frame to present");
-        return;
+        return false;
     }
 
     // Clearing before a full overwrite of a fbo can signal to drivers that they can avoid a
@@ -1089,6 +1047,8 @@ void RendererOpenGL::TryPresent(int timeout_ms) {
     glFlush();
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+    return true;
 }
 
 /// Updates the framerate
