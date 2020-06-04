@@ -230,6 +230,12 @@ void OpenGLState::Apply() const {
     }
 
     // Texture buffer LUTs
+    if (texture_buffer_lut_lf.texture_buffer != cur_state.texture_buffer_lut_lf.texture_buffer) {
+        glActiveTexture(TextureUnits::TextureBufferLUT_RG.Enum());
+        glBindTexture(GL_TEXTURE_BUFFER, texture_buffer_lut_lf.texture_buffer);
+    }
+
+    // Texture buffer LUTs
     if (texture_buffer_lut_rg.texture_buffer != cur_state.texture_buffer_lut_rg.texture_buffer) {
         glActiveTexture(TextureUnits::TextureBufferLUT_RG.Enum());
         glBindTexture(GL_TEXTURE_BUFFER, texture_buffer_lut_rg.texture_buffer);
