@@ -52,7 +52,8 @@ RasterizerOpenGL::RasterizerOpenGL()
     : is_amd(IsVendorAmd()), vertex_buffer(GL_ARRAY_BUFFER, VERTEX_BUFFER_SIZE, is_amd),
       uniform_buffer(GL_UNIFORM_BUFFER, UNIFORM_BUFFER_SIZE, false),
       index_buffer(GL_ELEMENT_ARRAY_BUFFER, INDEX_BUFFER_SIZE, false),
-      texture_buffer(GL_TEXTURE_BUFFER, TEXTURE_BUFFER_SIZE, false) {
+      texture_buffer(GL_TEXTURE_BUFFER, TEXTURE_BUFFER_SIZE, false),
+      texture_lf_buffer(GL_TEXTURE_BUFFER, TEXTURE_BUFFER_SIZE, false) {
 
     allow_shadow = GLES || (GLAD_GL_ARB_shader_image_load_store && GLAD_GL_ARB_shader_image_size &&
                             GLAD_GL_ARB_framebuffer_no_attachments);
@@ -149,11 +150,15 @@ RasterizerOpenGL::RasterizerOpenGL()
     framebuffer.Create();
 
     // Allocate and bind texture buffer lut textures
+    texture_buffer_lut_lf.Create();
     texture_buffer_lut_rg.Create();
     texture_buffer_lut_rgba.Create();
+    state.texture_buffer_lut_lf.texture_buffer = texture_buffer_lut_lf.handle;
     state.texture_buffer_lut_rg.texture_buffer = texture_buffer_lut_rg.handle;
     state.texture_buffer_lut_rgba.texture_buffer = texture_buffer_lut_rgba.handle;
     state.Apply();
+    glActiveTexture(TextureUnits::TextureBufferLUT_LF.Enum());
+    glTexBuffer(GL_TEXTURE_BUFFER, GL_RG32F, texture_lf_buffer.GetHandle());
     glActiveTexture(TextureUnits::TextureBufferLUT_RG.Enum());
     glTexBuffer(GL_TEXTURE_BUFFER, GL_RG32F, texture_buffer.GetHandle());
     glActiveTexture(TextureUnits::TextureBufferLUT_RGBA.Enum());
@@ -801,6 +806,7 @@ bool RasterizerOpenGL::Draw(bool accelerate, bool is_indexed) {
 
     // Sync the LUTs within the texture buffer
     SyncAndUploadLUTs();
+    SyncAndUploadLUTsLF();
 
     // Sync the uniform data
     UploadUniforms(accelerate);
@@ -2017,18 +2023,11 @@ void RasterizerOpenGL::SyncShadowTextureBias() {
     }
 }
 
-void RasterizerOpenGL::SyncAndUploadLUTs() {
+void RasterizerOpenGL::SyncAndUploadLUTsLF() {
     constexpr std::size_t max_size = sizeof(GLvec2) * 256 * Pica::LightingRegs::NumLightingSampler +
-                                     sizeof(GLvec2) * 128 +     // fog
-                                     sizeof(GLvec2) * 128 * 3 + // proctex: noise + color + alpha
-                                     sizeof(GLvec4) * 256 +     // proctex
-                                     sizeof(GLvec4) * 256;      // proctex diff
+                                     sizeof(GLvec2) * 128;     // fog
 
-    if (!uniform_block_data.lighting_lut_dirty_any && !uniform_block_data.fog_lut_dirty &&
-        !uniform_block_data.proctex_noise_lut_dirty &&
-        !uniform_block_data.proctex_color_map_dirty &&
-        !uniform_block_data.proctex_alpha_map_dirty && !uniform_block_data.proctex_lut_dirty &&
-        !uniform_block_data.proctex_diff_lut_dirty) {
+    if (!uniform_block_data.lighting_lut_dirty_any && !uniform_block_data.fog_lut_dirty) {
         return;
     }
 
@@ -2036,8 +2035,8 @@ void RasterizerOpenGL::SyncAndUploadLUTs() {
     GLintptr offset;
     bool invalidate;
     std::size_t bytes_used = 0;
-    glBindBuffer(GL_TEXTURE_BUFFER, texture_buffer.GetHandle());
-    std::tie(buffer, offset, invalidate) = texture_buffer.Map(max_size, sizeof(GLvec4));
+    glBindBuffer(GL_TEXTURE_BUFFER, texture_lf_buffer.GetHandle());
+    std::tie(buffer, offset, invalidate) = texture_lf_buffer.Map(max_size, sizeof(GLvec4));
 
     // Sync the lighting luts
     if (uniform_block_data.lighting_lut_dirty_any || invalidate) {
@@ -2062,8 +2061,8 @@ void RasterizerOpenGL::SyncAndUploadLUTs() {
                 uniform_block_data.lighting_lut_dirty[index] = false;
             }
         }
+        uniform_block_data.lighting_lut_dirty_any = false;
     }
-    uniform_block_data.lighting_lut_dirty_any = false;
 
     // Sync the fog lut
     if (uniform_block_data.fog_lut_dirty || invalidate) {
@@ -2084,6 +2083,28 @@ void RasterizerOpenGL::SyncAndUploadLUTs() {
         }
         uniform_block_data.fog_lut_dirty = false;
     }
+
+    texture_lf_buffer.Unmap(bytes_used);
+}
+
+void RasterizerOpenGL::SyncAndUploadLUTs() {
+    constexpr std::size_t max_size = sizeof(GLvec2) * 128 * 3 + // proctex: noise + color + alpha
+                                     sizeof(GLvec4) * 256 +     // proctex
+                                     sizeof(GLvec4) * 256;      // proctex diff
+
+    if (!uniform_block_data.proctex_noise_lut_dirty &&
+        !uniform_block_data.proctex_color_map_dirty &&
+        !uniform_block_data.proctex_alpha_map_dirty && !uniform_block_data.proctex_lut_dirty &&
+        !uniform_block_data.proctex_diff_lut_dirty) {
+        return;
+    }
+
+    u8* buffer;
+    GLintptr offset;
+    bool invalidate;
+    std::size_t bytes_used = 0;
+    glBindBuffer(GL_TEXTURE_BUFFER, texture_buffer.GetHandle());
+    std::tie(buffer, offset, invalidate) = texture_buffer.Map(max_size, sizeof(GLvec4));
 
     // helper function for SyncProcTexNoiseLUT/ColorMap/AlphaMap
     auto SyncProcTexValueLUT = [this, buffer, offset, invalidate, &bytes_used](
