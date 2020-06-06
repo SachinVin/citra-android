@@ -30,7 +30,7 @@
         android:isGame="true"
         android:banner="@mipmap/ic_launcher">
 
-        <meta-data android:name="android.max_aspect" android:value="2.1" />
+        <meta-data android:name="android.max_aspect" android:value="2.4" />
 
         <activity
             android:name="org.citra.citra_emu.ui.main.MainActivity"
