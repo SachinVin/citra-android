@@ -131,21 +131,21 @@ public final class SoftwareKeyboard {
 
             switch (config.button_config) {
                 case ButtonConfig.Triple: {
-                    final String text = config.button_text == null
+                    final String text = config.button_text[1].isEmpty()
                             ? emulationActivity.getString(R.string.i_forgot)
                             : config.button_text[1];
                     builder.setNeutralButton(text, null);
                 }
                 // fallthrough
                 case ButtonConfig.Dual: {
-                    final String text = config.button_text == null
+                    final String text = config.button_text[0].isEmpty()
                             ? emulationActivity.getString(android.R.string.cancel)
                             : config.button_text[0];
                     builder.setNegativeButton(text, null);
                 }
                 // fallthrough
                 case ButtonConfig.Single: {
-                    final String text = config.button_text == null
+                    final String text = config.button_text[2].isEmpty()
                             ? emulationActivity.getString(android.R.string.ok)
                             : config.button_text[2];
                     builder.setPositiveButton(text, null);
