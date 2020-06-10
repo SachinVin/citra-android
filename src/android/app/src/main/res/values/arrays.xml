@@ -159,6 +159,8 @@
         <item>Side by Side</item>
         <item>Anaglyph</item>
         <item>Interlaced</item>
+        <item>Reverse Interlaced</item>
+        <item>Cardboard VR</item>
     </string-array>
 
     <integer-array name="render3dValues">
@@ -166,5 +168,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </integer-array>
 </resources>

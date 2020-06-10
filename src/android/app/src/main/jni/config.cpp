@@ -138,7 +138,7 @@ void Config::ReadValues() {
     else if (Settings::values.render_3d == Settings::StereoRenderOption::Interlaced)
         default_shader = "horizontal (builtin)";
     Settings::values.pp_shader_name =
-            sdl2_config->GetString("Renderer", "pp_shader_name", default_shader);
+        sdl2_config->GetString("Renderer", "pp_shader_name", default_shader);
     Settings::values.filter_mode = sdl2_config->GetBoolean("Renderer", "filter_mode", true);
 
     Settings::values.bg_red = static_cast<float>(sdl2_config->GetReal("Renderer", "bg_red", 0.0));
@@ -166,6 +166,12 @@ void Config::ReadValues() {
         static_cast<u16>(sdl2_config->GetInteger("Layout", "custom_bottom_right", 360));
     Settings::values.custom_bottom_bottom =
         static_cast<u16>(sdl2_config->GetInteger("Layout", "custom_bottom_bottom", 480));
+    Settings::values.cardboard_screen_size =
+        static_cast<int>(sdl2_config->GetInteger("Layout", "cardboard_screen_size", 85));
+    Settings::values.cardboard_x_shift =
+        static_cast<int>(sdl2_config->GetInteger("Layout", "cardboard_x_shift", 0));
+    Settings::values.cardboard_y_shift =
+        static_cast<int>(sdl2_config->GetInteger("Layout", "cardboard_y_shift", 0));
 
     // Audio
     Settings::values.enable_dsp_lle = sdl2_config->GetBoolean("Audio", "enable_dsp_lle", false);
