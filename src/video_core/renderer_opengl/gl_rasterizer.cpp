@@ -2043,8 +2043,8 @@ void RasterizerOpenGL::SyncShadowTextureBias() {
 }
 
 void RasterizerOpenGL::SyncAndUploadLUTsLF() {
-    constexpr std::size_t max_size = sizeof(GLvec2) * 256 * Pica::LightingRegs::NumLightingSampler +
-                                     sizeof(GLvec2) * 128;     // fog
+    constexpr std::size_t max_size =
+        sizeof(GLvec2) * 256 * Pica::LightingRegs::NumLightingSampler + sizeof(GLvec2) * 128; // fog
 
     if (!uniform_block_data.lighting_lut_dirty_any && !uniform_block_data.fog_lut_dirty) {
         return;
