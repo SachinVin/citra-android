@@ -300,11 +300,13 @@ void Java_org_citra_citra_1emu_NativeLibrary_UnPauseEmulation(JNIEnv* env,
                                                               [[maybe_unused]] jclass clazz) {
     pause_emulation = false;
     running_cv.notify_all();
+    InputManager::NDKMotionHandler()->EnableSensors();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_PauseEmulation(JNIEnv* env,
                                                             [[maybe_unused]] jclass clazz) {
     pause_emulation = true;
+    InputManager::NDKMotionHandler()->DisableSensors();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_StopEmulation(JNIEnv* env,
