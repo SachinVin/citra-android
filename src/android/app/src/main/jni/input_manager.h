@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include "core/frontend/input.h"
+#include "jni/ndk_motion.h"
 
 namespace InputManager {
 
@@ -128,6 +129,9 @@ ButtonFactory* ButtonHandler();
 
 /// Gets the gamepad analog device factory.
 AnalogFactory* AnalogHandler();
+
+/// Gets the NDK Motion device factory.
+NDKMotionFactory* NDKMotionHandler();
 
 std::string GenerateButtonParamPackage(int type);
 
