@@ -40,19 +40,19 @@ static jobject ToJavaKeyboardConfig(const Frontend::KeyboardConfig& config) {
     env->SetObjectField(object,
                         env->GetFieldID(s_keyboard_config_class, "hint_text", "Ljava/lang/String;"),
                         env->NewStringUTF(config.hint_text.c_str()));
-    if (config.has_custom_button_text) {
-        const jclass string_class = reinterpret_cast<jclass>(env->FindClass("java/lang/String"));
-        const jobjectArray array =
-            env->NewObjectArray(static_cast<jsize>(config.button_text.size()), string_class,
-                                env->NewStringUTF(config.button_text[0].c_str()));
-        for (std::size_t i = 1; i < config.button_text.size(); ++i) {
-            env->SetObjectArrayElement(array, static_cast<jsize>(i),
-                                       env->NewStringUTF(config.button_text[i].c_str()));
-        }
-        env->SetObjectField(
-            object, env->GetFieldID(s_keyboard_config_class, "button_text", "[Ljava/lang/String;"),
-            array);
+
+    const jclass string_class = reinterpret_cast<jclass>(env->FindClass("java/lang/String"));
+    const jobjectArray array =
+        env->NewObjectArray(static_cast<jsize>(config.button_text.size()), string_class,
+                            env->NewStringUTF(config.button_text[0].c_str()));
+    for (std::size_t i = 1; i < config.button_text.size(); ++i) {
+        env->SetObjectArrayElement(array, static_cast<jsize>(i),
+                                   env->NewStringUTF(config.button_text[i].c_str()));
     }
+    env->SetObjectField(
+        object, env->GetFieldID(s_keyboard_config_class, "button_text", "[Ljava/lang/String;"),
+        array);
+
     return object;
 }
 
