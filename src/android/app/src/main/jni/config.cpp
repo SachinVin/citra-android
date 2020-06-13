@@ -17,10 +17,10 @@
 #include "core/settings.h"
 #include "input_common/main.h"
 #include "input_common/udp/client.h"
-#include "jni/button_manager.h"
 #include "jni/camera/ndk_camera.h"
 #include "jni/config.h"
 #include "jni/default_ini.h"
+#include "jni/input_manager.h"
 
 Config::Config() {
     // TODO: Don't hardcode the path; let the frontend decide where to put the config files.
