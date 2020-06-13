@@ -3,8 +3,8 @@ add_library(main SHARED
     applets/mii_selector.h
     applets/swkbd.cpp
     applets/swkbd.h
-    button_manager.cpp
-    button_manager.h
+    input_manager.cpp
+    input_manager.h
     camera/ndk_camera.cpp
     camera/ndk_camera.h
     camera/still_image_camera.cpp
