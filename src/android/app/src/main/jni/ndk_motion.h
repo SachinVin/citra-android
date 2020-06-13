@@ -18,5 +18,11 @@ public:
      * Creates a motion device that obtains data from device sensors
      */
     std::unique_ptr<Input::MotionDevice> Create(const Common::ParamPackage& params) override;
+
+    void EnableSensors();
+    void DisableSensors();
+
+private:
+    NDKMotion* ndk_motion_device;
 };
 } // namespace InputManager

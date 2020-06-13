@@ -307,6 +307,10 @@ std::string GenerateAnalogParamPackage(int axis_id) {
     return param.Serialize();
 }
 
+NDKMotionFactory* NDKMotionHandler() {
+    return motion.get();
+}
+
 void Init() {
     button = std::make_shared<ButtonFactory>();
     analog = std::make_shared<AnalogFactory>();
