@@ -36,7 +36,7 @@ jobs:
          KEY_ALIAS: 'dummy'
          KEY_PASS: ${{ secrets.key_pass }}
       run: |
-        apksigner sign --verbose --ks dummy.jks --ks-pass env:KEYSTORE_PASS --ks-key-alias env:KEY_ALIAS --key-pass env:KEY_PASS \
+        apksigner sign --verbose --ks dummy.jks --ks-pass env:KEYSTORE_PASS --ks-key-alias ${{ env.KEY_ALIAS }} --key-pass env:KEY_PASS \
           ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
 
     - name: Deploy on Github        
