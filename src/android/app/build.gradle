@@ -35,7 +35,6 @@ android {
         versionCode autoVersion
         versionName getVersion()
         ndk.abiFilters abiFilter
-        ndkVersion '21.2.6472646'
     }
 
     signingConfigs {

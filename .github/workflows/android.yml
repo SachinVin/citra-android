@@ -24,6 +24,7 @@ jobs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install apksigner
+        echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
 
     - name: Build with Gradle
       working-directory: ${{ env.PROJECT_LOCATION }}
@@ -49,6 +50,7 @@ jobs:
 
     - name: Create Release
       id: create_release
+      if: github.repository == 'SachinVin/citra-android'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
@@ -71,3 +73,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
         asset_name: citra-android-${{ env.VARIANT }}-${{ github.sha }}.apk
+        asset_content_type: application/zip
