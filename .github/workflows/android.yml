@@ -7,18 +7,20 @@ jobs:
     env: 
       VARIANT: release
       PROJECT_LOCATION: src/android
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
           submodules: recursive
+
     - name: set up JDK 1.8
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
 
-    - name: deps
+    - name: Deps
       run: |
         sudo apt-get -y update
         sudo apt-get -y install apksigner
@@ -26,15 +28,15 @@ jobs:
     - name: Build with Gradle
       working-directory: ${{ env.PROJECT_LOCATION }}
       run: |
-        ./gradlew bundle${{ env.VARIANT }}
+        #./gradlew bundle${{ env.VARIANT }}
         ./gradlew assemble${{ env.VARIANT }}
                 
-    - if: github.repository == 'SachinVin/citra-android'
-      name: Sign apk
+    - name: Sign apk
+      if: github.repository == 'SachinVin/citra-android'
       env:
-         KEYSTORE_PASS: ${{ secrets.keystore_pass }}
+         KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
          KEY_ALIAS: 'dummy'
-         KEY_PASS: ${{ secrets.key_pass }}
+         KEY_PASS: ${{ secrets.KEY_PASS }}
       run: |
         apksigner sign --verbose --ks dummy.jks --ks-pass env:KEYSTORE_PASS --ks-key-alias ${{ env.KEY_ALIAS }} --key-pass env:KEY_PASS \
           ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
@@ -44,3 +46,28 @@ jobs:
       with:
         name: citra-android-${{ env.VARIANT }}-${{ github.sha }}
         path: ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: true
+        prerelease: true
+        
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
+          asset_name: citra-android-${{ env.VARIANT }}-${{ github.sha }}.apk
