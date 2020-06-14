@@ -5,8 +5,8 @@ on: [ push, pull_request ]
 jobs:
   build:
     env: 
-      flavour: release
-
+      VARIANT: release
+      PROJECT_LOCATION: src/android
     runs-on: ubuntu-latest
 
     steps:
@@ -18,29 +18,29 @@ jobs:
       with:
         java-version: 1.8
 
-#    - name: deps
-#      run: |
-#        sudo apt-get -y update
-#        sudo apt-get -y install apksigner
-#        echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+    - name: deps
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install apksigner
 
     - name: Build with Gradle
-      working-directory: src/android
+      working-directory: ${{ env.PROJECT_LOCATION }}
       run: |
-        ./gradlew bundleRelease
-        ./gradlew assembleRelease
+        ./gradlew bundle${{ env.VARIANT }}
+        ./gradlew assemble${{ env.VARIANT }}
                 
     - if: github.repository == 'SachinVin/citra-android'
       name: Sign apk
       env:
-         keystore_pass: ${{ secrets.keystore_pass }}
-         key_pass: ${{ secrets.key_pass }}
+         KEYSTORE_PASS: ${{ secrets.keystore_pass }}
+         KEY_ALIAS: 'dummy'
+         KEY_PASS: ${{ secrets.key_pass }}
       run: |
-        apksigner sign --verbose --ks dummy.jks --ks-pass env:keystore_pass --key-pass env:key_pass \
-          src/android/app/build/outputs/apk/${{ env.flavour }}/app-${{ env.flavour }}.apk
+        apksigner sign --verbose --ks dummy.jks --ks-pass env:KEYSTORE_PASS --ks-key-alias env:KEY_ALIAS --key-pass env:KEY_PASS \
+          ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
 
     - name: Deploy on Github        
       uses: actions/upload-artifact@v2
       with:
-        name: citra-android-${{ env.flavour }}-${{ github.sha }}
-        path: src/android/app/build/outputs/apk/${{ env.flavour }}/app-${{ env.flavour }}.apk
+        name: citra-android-${{ env.VARIANT }}-${{ github.sha }}
+        path: ${{ env.PROJECT_LOCATION }}/app/build/outputs/apk/${{ env.VARIANT }}/app-${{ env.VARIANT }}.apk
