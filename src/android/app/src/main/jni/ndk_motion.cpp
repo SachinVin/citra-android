@@ -184,12 +184,12 @@ std::unique_ptr<Input::MotionDevice> NDKMotionFactory::Create(const Common::Para
 }
 
 void NDKMotionFactory::EnableSensors() {
-    if(ndk_motion_device)
+    if (ndk_motion_device)
         ndk_motion_device->EnableSensors();
 }
 
 void NDKMotionFactory::DisableSensors() {
-    if(ndk_motion_device)
+    if (ndk_motion_device)
         ndk_motion_device->DisableSensors();
 }
 
