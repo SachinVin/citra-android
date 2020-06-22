@@ -16,6 +16,8 @@ using Common::Vec3;
 }
 
 class NDKMotion final : public Input::MotionDevice {
+    std::chrono::microseconds update_period;
+
     ASensorManager* sensor_manager = nullptr;
     ALooper* looper = nullptr;
     ASensorEventQueue* event_queue;
@@ -60,7 +62,7 @@ class NDKMotion final : public Input::MotionDevice {
         return out;
     }
 
-    void Construct(std::chrono::microseconds update_period) {
+    void Construct() {
         sensor_manager = ASensorManager_getInstanceForPackage("org.citra.citra_emu");
         looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
         if (!sensor_manager || !looper) {
@@ -72,21 +74,8 @@ class NDKMotion final : public Input::MotionDevice {
             LOG_ERROR(Input, "Could not create sensor event queue");
             return;
         }
-        const auto init_sensor = [this, update_period](int sensor_type) {
-            ASensorRef sensor = ASensorManager_getDefaultSensor(sensor_manager, sensor_type);
-            if (!sensor) {
-                LOG_ERROR(Input, "Could not find sensor of type {}", sensor_type);
-                return;
-            }
-            int error = ASensorEventQueue_registerSensor(
-                event_queue, sensor,
-                std::max(ASensor_getMinDelay(sensor), static_cast<int>(update_period.count())), 0);
-            if (error < 0)
-                LOG_ERROR(Input, "Registering sensor returned error code {}", error);
-        };
 
-        init_sensor(ASENSOR_TYPE_ACCELEROMETER);
-        init_sensor(ASENSOR_TYPE_GYROSCOPE);
+        EnableSensors();
     }
 
     void Destruct() {
@@ -117,10 +106,11 @@ class NDKMotion final : public Input::MotionDevice {
     }
 
 public:
-    NDKMotion(std::chrono::microseconds update_period, bool asynchronous = false) {
+    NDKMotion(std::chrono::microseconds update_period_, bool asynchronous = false)
+        : update_period(update_period_) {
         if (asynchronous) {
-            poll_thread = std::thread([this, update_period] {
-                Construct(update_period);
+            poll_thread = std::thread([this] {
+                Construct();
                 auto start = std::chrono::high_resolution_clock::now();
                 while (!stop_polling) {
                     Update();
@@ -129,7 +119,7 @@ public:
                 Destruct();
             });
         } else {
-            Construct(update_period);
+            Construct();
         }
     }
 
@@ -148,11 +138,59 @@ public:
         }
         return {acceleration, rotation};
     }
+
+    void EnableSensors() {
+        const auto init_sensor = [this](int sensor_type) {
+            ASensorRef sensor = ASensorManager_getDefaultSensor(sensor_manager, sensor_type);
+            if (!sensor) {
+                LOG_ERROR(Input, "Could not find sensor of type {}", sensor_type);
+                return;
+            }
+            int error = ASensorEventQueue_registerSensor(
+                event_queue, sensor,
+                std::max(ASensor_getMinDelay(sensor), static_cast<int>(update_period.count())), 0);
+            if (error < 0)
+                LOG_ERROR(Input, "Registering sensor returned error code {}", error);
+        };
+
+        LOG_TRACE(Input, "Enabling sensors..");
+        init_sensor(ASENSOR_TYPE_ACCELEROMETER);
+        init_sensor(ASENSOR_TYPE_GYROSCOPE);
+    }
+
+    void DisableSensors() {
+        const auto disable_sensor = [this](int sensor_type) {
+            ASensorRef sensor = ASensorManager_getDefaultSensor(sensor_manager, sensor_type);
+            if (!sensor) {
+                LOG_ERROR(Input, "Could not find sensor of type {}", sensor_type);
+                return;
+            }
+            int error = ASensorEventQueue_disableSensor(event_queue, sensor);
+            if (error < 0)
+                LOG_ERROR(Input, "Disabling sensor returned error code {}", error);
+        };
+
+        LOG_TRACE(Input, "Disabling sensors..");
+        disable_sensor(ASENSOR_TYPE_ACCELEROMETER);
+        disable_sensor(ASENSOR_TYPE_GYROSCOPE);
+    }
 };
 
 std::unique_ptr<Input::MotionDevice> NDKMotionFactory::Create(const Common::ParamPackage& params) {
     std::chrono::milliseconds update_period{params.Get("update_period", 4)};
-    return std::make_unique<NDKMotion>(update_period);
+    std::unique_ptr<NDKMotion> ndk_motion = std::make_unique<NDKMotion>(update_period);
+    ndk_motion_device = ndk_motion.get();
+    return std::move(ndk_motion);
+}
+
+void NDKMotionFactory::EnableSensors() {
+    if (ndk_motion_device)
+        ndk_motion_device->EnableSensors();
+}
+
+void NDKMotionFactory::DisableSensors() {
+    if (ndk_motion_device)
+        ndk_motion_device->DisableSensors();
 }
 
 } // namespace InputManager

@@ -14,7 +14,7 @@
 #include "common/param_package.h"
 #include "input_common/main.h"
 #include "input_common/sdl/sdl.h"
-#include "jni/button_manager.h"
+#include "jni/input_manager.h"
 #include "jni/ndk_motion.h"
 
 namespace InputManager {
@@ -305,6 +305,10 @@ std::string GenerateAnalogParamPackage(int axis_id) {
         {"code", std::to_string(axis_id)},
     };
     return param.Serialize();
+}
+
+NDKMotionFactory* NDKMotionHandler() {
+    return motion.get();
 }
 
 void Init() {

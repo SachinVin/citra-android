@@ -26,7 +26,6 @@
 #include "core/settings.h"
 #include "jni/applets/mii_selector.h"
 #include "jni/applets/swkbd.h"
-#include "jni/button_manager.h"
 #include "jni/camera/ndk_camera.h"
 #include "jni/camera/still_image_camera.h"
 #include "jni/config.h"
@@ -34,6 +33,7 @@
 #include "jni/game_info.h"
 #include "jni/game_settings.h"
 #include "jni/id_cache.h"
+#include "jni/input_manager.h"
 #include "jni/mic.h"
 #include "jni/native.h"
 #include "jni/ndk_motion.h"
@@ -300,11 +300,13 @@ void Java_org_citra_citra_1emu_NativeLibrary_UnPauseEmulation(JNIEnv* env,
                                                               [[maybe_unused]] jclass clazz) {
     pause_emulation = false;
     running_cv.notify_all();
+    InputManager::NDKMotionHandler()->EnableSensors();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_PauseEmulation(JNIEnv* env,
                                                             [[maybe_unused]] jclass clazz) {
     pause_emulation = true;
+    InputManager::NDKMotionHandler()->DisableSensors();
 }
 
 void Java_org_citra_citra_1emu_NativeLibrary_StopEmulation(JNIEnv* env,
