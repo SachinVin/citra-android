@@ -52,6 +52,7 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
 
     // Stores the ID of the pointer that interacted with the 3DS touchscreen.
     private int mTouchscreenPointerId = -1;
+
     /**
      * Constructor
      *
@@ -439,60 +440,64 @@ public final class InputOverlay extends SurfaceView implements OnTouchListener {
                         boolean down = false;
                         boolean left = false;
                         boolean right = false;
-                        if (AxisY < -InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(0),
-                                    NativeLibrary.ButtonState.PRESSED);
-                            up = true;
-                        } else {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(0),
-                                    NativeLibrary.ButtonState.RELEASED);
-                        }
-                        if (AxisY > InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(1),
-                                    NativeLibrary.ButtonState.PRESSED);
-                            down = true;
-                        } else {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(1),
-                                    NativeLibrary.ButtonState.RELEASED);
-                        }
-                        if (AxisX < -InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(2),
-                                    NativeLibrary.ButtonState.PRESSED);
-                            left = true;
-                        } else {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(2),
-                                    NativeLibrary.ButtonState.RELEASED);
-                        }
-                        if (AxisX > InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(3),
-                                    NativeLibrary.ButtonState.PRESSED);
-                            right = true;
-                        } else {
-                            NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(3),
-                                    NativeLibrary.ButtonState.RELEASED);
-                        }
+                        if (EmulationMenuSettings.getDpadSlideEnable() ||
+                                (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN ||
+                                (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_DOWN) {
+                            if (AxisY < -InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(0),
+                                        NativeLibrary.ButtonState.PRESSED);
+                                up = true;
+                            } else {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(0),
+                                        NativeLibrary.ButtonState.RELEASED);
+                            }
+                            if (AxisY > InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(1),
+                                        NativeLibrary.ButtonState.PRESSED);
+                                down = true;
+                            } else {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(1),
+                                        NativeLibrary.ButtonState.RELEASED);
+                            }
+                            if (AxisX < -InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(2),
+                                        NativeLibrary.ButtonState.PRESSED);
+                                left = true;
+                            } else {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(2),
+                                        NativeLibrary.ButtonState.RELEASED);
+                            }
+                            if (AxisX > InputOverlayDrawableDpad.VIRT_AXIS_DEADZONE) {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(3),
+                                        NativeLibrary.ButtonState.PRESSED);
+                                right = true;
+                            } else {
+                                NativeLibrary.onGamePadEvent(NativeLibrary.TouchScreenDevice, dpad.getId(3),
+                                        NativeLibrary.ButtonState.RELEASED);
+                            }
 
-                        // Set state
-                        if (up) {
-                            if (left)
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP_LEFT);
-                            else if (right)
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP_RIGHT);
-                            else
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP);
-                        } else if (down) {
-                            if (left)
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN_LEFT);
-                            else if (right)
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN_RIGHT);
-                            else
-                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN);
-                        } else if (left) {
-                            dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_LEFT);
-                        } else if (right) {
-                            dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_RIGHT);
-                        } else {
-                            dpad.setState(InputOverlayDrawableDpad.STATE_DEFAULT);
+                            // Set state
+                            if (up) {
+                                if (left)
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP_LEFT);
+                                else if (right)
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP_RIGHT);
+                                else
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_UP);
+                            } else if (down) {
+                                if (left)
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN_LEFT);
+                                else if (right)
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN_RIGHT);
+                                else
+                                    dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_DOWN);
+                            } else if (left) {
+                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_LEFT);
+                            } else if (right) {
+                                dpad.setState(InputOverlayDrawableDpad.STATE_PRESSED_RIGHT);
+                            } else {
+                                dpad.setState(InputOverlayDrawableDpad.STATE_DEFAULT);
+                            }
                         }
                     }
                 }
