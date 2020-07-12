@@ -68,6 +68,7 @@ public final class EmulationActivity extends AppCompatActivity {
     public static final int MENU_ACTION_LOAD_AMIIBO = 13;
     public static final int MENU_ACTION_REMOVE_AMIIBO = 14;
     public static final int MENU_ACTION_JOYSTICK_REL_CENTER = 15;
+    public static final int MENU_ACTION_DPAD_SLIDE_ENABLE = 16;
 
     public static final int REQUEST_SELECT_AMIIBO = 2;
     private static final int EMULATION_RUNNING_NOTIFICATION = 0x1000;
@@ -104,6 +105,8 @@ public final class EmulationActivity extends AppCompatActivity {
                 .append(R.id.menu_emulation_amiibo_remove, EmulationActivity.MENU_ACTION_REMOVE_AMIIBO);
         buttonsActionsMap.append(R.id.menu_emulation_joystick_rel_center,
                 EmulationActivity.MENU_ACTION_JOYSTICK_REL_CENTER);
+        buttonsActionsMap.append(R.id.menu_emulation_dpad_slide_enable,
+                EmulationActivity.MENU_ACTION_DPAD_SLIDE_ENABLE);
     }
 
     private View mDecorView;
@@ -292,6 +295,7 @@ public final class EmulationActivity extends AppCompatActivity {
 
         menu.findItem(layoutOptionMenuItem).setChecked(true);
         menu.findItem(R.id.menu_emulation_joystick_rel_center).setChecked(EmulationMenuSettings.getJoystickRelCenter());
+        menu.findItem(R.id.menu_emulation_dpad_slide_enable).setChecked(EmulationMenuSettings.getDpadSlideEnable());
         menu.findItem(R.id.menu_emulation_show_fps).setChecked(EmulationMenuSettings.getShowFps());
         menu.findItem(R.id.menu_emulation_swap_screens).setChecked(EmulationMenuSettings.getSwapScreens());
         menu.findItem(R.id.menu_emulation_show_overlay).setChecked(EmulationMenuSettings.getShowOverlay());
@@ -395,9 +399,14 @@ public final class EmulationActivity extends AppCompatActivity {
                 break;
 
             case MENU_ACTION_JOYSTICK_REL_CENTER:
-                final boolean isEnabled = !EmulationMenuSettings.getJoystickRelCenter();
-                EmulationMenuSettings.setJoystickRelCenter(isEnabled);
-                item.setChecked(isEnabled);
+                final boolean isJoystickRelCenterEnabled = !EmulationMenuSettings.getJoystickRelCenter();
+                EmulationMenuSettings.setJoystickRelCenter(isJoystickRelCenterEnabled);
+                item.setChecked(isJoystickRelCenterEnabled);
+                break;
+            case MENU_ACTION_DPAD_SLIDE_ENABLE:
+                final boolean isDpadSlideEnabled = !EmulationMenuSettings.getDpadSlideEnable();
+                EmulationMenuSettings.setDpadSlideEnable(isDpadSlideEnabled);
+                item.setChecked(isDpadSlideEnabled);
                 break;
         }
 
