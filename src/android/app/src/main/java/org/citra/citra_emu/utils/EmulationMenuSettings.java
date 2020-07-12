@@ -26,6 +26,16 @@ public class EmulationMenuSettings {
         editor.apply();
     }
 
+    public static boolean getDpadSlideEnable() {
+        return mPreferences.getBoolean("EmulationMenuSettings_DpadSlideEnable", true);
+    }
+
+    public static void setDpadSlideEnable(boolean value) {
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean("EmulationMenuSettings_DpadSlideEnable", value);
+        editor.apply();
+    }
+
     public static int getLandscapeScreenLayout() {
         return mPreferences.getInt("EmulationMenuSettings_LandscapeScreenLayout", LayoutOption_MobileLandscape);
     }
