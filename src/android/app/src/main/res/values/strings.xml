@@ -150,7 +150,7 @@
     <string name="emulation_toggle_controls">Toggle Controls</string>
     <string name="emulation_control_scale">Adjust Scale</string>
     <string name="emulation_control_joystick_rel_center">Relative Stick Center</string>
-    <string name="emulation_control_dpad_slide_enable">Enable DPad Sliding</string>
+    <string name="emulation_control_dpad_slide_enable">Enable D-Pad Sliding</string>
     <string name="emulation_open_settings">Open Settings</string>
     <string name="emulation_switch_screen_layout">Landscape Screen Layout</string>
     <string name="emulation_screen_layout_landscape">Default</string>
