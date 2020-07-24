@@ -27,7 +27,7 @@ public final class InputOverlayDrawableDpad {
     public static final int STATE_PRESSED_UP_RIGHT = 6;
     public static final int STATE_PRESSED_DOWN_LEFT = 7;
     public static final int STATE_PRESSED_DOWN_RIGHT = 8;
-    public static final float VIRT_AXIS_DEADZONE = 0.2f;
+    public static final float VIRT_AXIS_DEADZONE = 0.5f;
     // The ID identifying what type of button this Drawable represents.
     private int[] mButtonType = new int[4];
     private int mTrackId;
