@@ -45,6 +45,8 @@ import java.lang.annotation.Retention;
 import java.util.Collections;
 import java.util.List;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.RECORD_AUDIO;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public final class EmulationActivity extends AppCompatActivity {
@@ -232,7 +234,8 @@ public final class EmulationActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case NativeLibrary.REQUEST_CODE_NATIVE_CAMERA:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED &&
+                        shouldShowRequestPermissionRationale(CAMERA)) {
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.camera)
                             .setMessage(R.string.camera_permission_needed)
@@ -242,7 +245,8 @@ public final class EmulationActivity extends AppCompatActivity {
                 NativeLibrary.CameraPermissionResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 break;
             case NativeLibrary.REQUEST_CODE_NATIVE_MIC:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED &&
+                        shouldShowRequestPermissionRationale(RECORD_AUDIO)) {
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.microphone)
                             .setMessage(R.string.microphone_permission_needed)
