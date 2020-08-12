@@ -33,9 +33,9 @@ JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onGamePadAxis
     JNIEnv* env, jclass clazz, jstring j_device, jint axis_id, jfloat axis_val);
 
 JNIEXPORT jboolean JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchEvent(JNIEnv* env,
-                                                                            jclass clazz, jfloat x,
-                                                                            jfloat y,
-                                                                            jboolean pressed);
+                                                                                jclass clazz,
+                                                                                jfloat x, jfloat y,
+                                                                                jboolean pressed);
 
 JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_onTouchMoved(JNIEnv* env,
                                                                             jclass clazz, jfloat x,
@@ -142,7 +142,18 @@ JNIEXPORT jboolean Java_org_citra_citra_1emu_NativeLibrary_LoadAmiibo(JNIEnv* en
 
 JNIEXPORT void Java_org_citra_citra_1emu_NativeLibrary_RemoveAmiibo(JNIEnv* env, jclass clazz);
 
-JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InstallCIAS(JNIEnv* env, jclass clazz, jobjectArray path);
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InstallCIAS(JNIEnv* env,
+                                                                           jclass clazz,
+                                                                           jobjectArray path);
+
+JNIEXPORT jobjectArray JNICALL
+Java_org_citra_citra_1emu_NativeLibrary_GetSavestateInfo(JNIEnv* env, jclass clazz);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env, jclass clazz,
+                                                                         jint slot);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, jclass clazz,
+                                                                         jint slot);
 
 #ifdef __cplusplus
 }

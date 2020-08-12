@@ -23,6 +23,7 @@
 #include "core/frontend/scope_acquire_context.h"
 #include "core/hle/service/am/am.h"
 #include "core/hle/service/nfc/nfc.h"
+#include "core/savestate.h"
 #include "core/settings.h"
 #include "jni/applets/mii_selector.h"
 #include "jni/applets/swkbd.h"
@@ -618,6 +619,49 @@ void Java_org_citra_citra_1emu_NativeLibrary_InstallCIAS(JNIEnv* env, [[maybe_un
                     });
     for (auto& thread : threads)
         thread.join();
+}
+
+jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetSavestateInfo(
+    JNIEnv* env, [[maybe_unused]] jclass clazz) {
+    const jclass date_class = env->FindClass("java/util/Date");
+    const auto date_constructor = env->GetMethodID(date_class, "<init>", "(J)V");
+
+    const jclass savestate_info_class = IDCache::GetSavestateInfoClass();
+    const auto slot_field = env->GetFieldID(savestate_info_class, "slot", "I");
+    const auto date_field = env->GetFieldID(savestate_info_class, "time", "Ljava/util/Date;");
+
+    const Core::System& system{Core::System::GetInstance()};
+    if (!system.IsPoweredOn()) {
+        return nullptr;
+    }
+
+    u64 title_id;
+    if (system.GetAppLoader().ReadProgramId(title_id) != Loader::ResultStatus::Success) {
+        return nullptr;
+    }
+
+    const auto savestates = Core::ListSaveStates(title_id);
+    const jobjectArray array =
+        env->NewObjectArray(static_cast<jsize>(savestates.size()), savestate_info_class, nullptr);
+    for (std::size_t i = 0; i < savestates.size(); ++i) {
+        const jobject object = env->AllocObject(savestate_info_class);
+        env->SetIntField(object, slot_field, static_cast<jint>(savestates[i].slot));
+        env->SetObjectField(object, date_field,
+                            env->NewObject(date_class, date_constructor,
+                                           static_cast<jlong>(savestates[i].time * 1000)));
+
+        env->SetObjectArrayElement(array, i, object);
+    }
+    LOG_CRITICAL(Frontend, "Called");
+    return array;
+}
+
+void Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env, jclass clazz, jint slot) {
+    Core::System::GetInstance().SendSignal(Core::System::Signal::Save, slot);
+}
+
+void Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, jclass clazz, jint slot) {
+    Core::System::GetInstance().SendSignal(Core::System::Signal::Load, slot);
 }
 
 } // extern "C"
