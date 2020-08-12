@@ -29,6 +29,7 @@ public:
     virtual void FlushRegion(VAddr addr, u64 size) = 0;
     virtual void FlushAndInvalidateRegion(VAddr addr, u64 size) = 0;
     virtual void InvalidateRegion(VAddr addr, u64 size) = 0;
+    virtual void WaitForProcessing();
 
 protected:
     VideoCore::RendererBase& renderer;
@@ -65,6 +66,7 @@ public:
     void FlushRegion(VAddr addr, u64 size) override;
     void FlushAndInvalidateRegion(VAddr addr, u64 size) override;
     void InvalidateRegion(VAddr addr, u64 size) override;
+    void WaitForProcessing() override;
 
 private:
     GPUThread::ThreadManager gpu_thread;

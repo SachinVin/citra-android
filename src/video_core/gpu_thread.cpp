@@ -32,12 +32,12 @@ static void RunThread(VideoCore::RendererBase& renderer, SynchState& state, Core
 
     Frontend::ScopeAcquireContext acquire_context{renderer.GetRenderWindow()};
 
-    CommandDataContainer next;
     while (state.is_running) {
         state.WaitForCommands();
 
-        CommandDataContainer next;
-        while (state.queue.Pop(next)) {
+        while (!state.queue.Empty()) {
+            CommandDataContainer next = state.queue.Front();
+
             auto command = &next.data;
             auto fence = next.fence;
             if (const auto submit_list = std::get_if<SubmitListCommand>(command)) {
@@ -62,6 +62,7 @@ static void RunThread(VideoCore::RendererBase& renderer, SynchState& state, Core
                 UNREACHABLE();
             }
             state.signaled_fence = next.fence;
+            state.queue.Pop();
         }
     }
 }
@@ -211,8 +212,15 @@ u64 ThreadManager::PushCommand(CommandData&& command_data) {
     return fence;
 }
 
+void ThreadManager::WaitForProcessing() {
+    state.WaitForProcessing();
+}
+
 MICROPROFILE_DEFINE(GPU_wait, "GPU", "Wait for the GPU", MP_RGB(128, 128, 192));
 void SynchState::WaitForSynchronization(u64 fence) {
+    if (fence > last_fence) { // We don't want to wait infinitely
+        return;
+    }
     if (signaled_fence >= fence) {
         return;
     }

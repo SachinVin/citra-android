@@ -246,7 +246,7 @@ void EmuWindow_Android::TryPresenting() {
         }
     }
     eglSwapInterval(egl_display, Settings::values.use_vsync_new ? 1 : 0);
-    if (VideoCore::g_renderer->TryPresent()) {
+    if (VideoCore::g_renderer && VideoCore::g_renderer->TryPresent()) {
         eglSwapBuffers(egl_display, egl_surface);
     }
 }
