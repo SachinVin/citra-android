@@ -4,6 +4,18 @@
     tools:context="org.citra.citra_emu.activities.EmulationActivity">
 
     <item
+        android:id="@+id/menu_emulation_save_state"
+        android:title="@string/emulation_save_state">
+        <menu/>
+    </item>
+
+    <item
+        android:id="@+id/menu_emulation_load_state"
+        android:title="@string/emulation_load_state">
+        <menu/>
+    </item>
+
+    <item
         android:id="@+id/menu_emulation_configure_controls"
         android:title="@string/emulation_configure_controls">
         <menu>

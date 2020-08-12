@@ -128,7 +128,7 @@ void Config::ReadValues() {
     // Work around to map Android setting for enabling the frame limiter to the format Citra expects
     if (sdl2_config->GetBoolean("Renderer", "use_frame_limit", true)) {
         Settings::values.frame_limit =
-                static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
+            static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
     } else {
         Settings::values.frame_limit = 0;
     }

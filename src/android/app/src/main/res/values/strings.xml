@@ -143,6 +143,10 @@
     <string name="loader_error_invalid_format">Invalid ROM format</string>
 
     <!-- Emulation Menu -->
+    <string name="emulation_save_state">Save State</string>
+    <string name="emulation_load_state">Load State</string>
+    <string name="emulation_empty_state_slot">Slot %1$d</string>
+    <string name="emulation_occupied_state_slot">Slot %1$d - %2$tF %2$tR</string>
     <string name="emulation_show_fps">Show FPS</string>
     <string name="emulation_configure_controls">Configure Controls</string>
     <string name="emulation_edit_layout">Edit Layout</string>

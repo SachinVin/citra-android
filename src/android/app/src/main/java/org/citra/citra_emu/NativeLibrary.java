@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
@@ -25,6 +26,7 @@ import org.citra.citra_emu.utils.Log;
 import org.citra.citra_emu.utils.PermissionsHandler;
 
 import java.lang.ref.WeakReference;
+import java.util.Date;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -486,6 +488,19 @@ public final class NativeLibrary {
     public static native void RemoveAmiibo();
 
     public static native void InstallCIAS(String[] path);
+
+    public static final int SAVESTATE_SLOT_COUNT = 10;
+
+    public static final class SavestateInfo {
+        public int slot;
+        public Date time;
+    }
+
+    @Nullable
+    public static native SavestateInfo[] GetSavestateInfo();
+
+    public static native void SaveState(int slot);
+    public static native void LoadState(int slot);
 
     /**
      * Button type for use in onTouchEvent

@@ -146,6 +146,15 @@ JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_InstallCIAS(JNIEn
                                                                            jclass clazz,
                                                                            jobjectArray path);
 
+JNIEXPORT jobjectArray JNICALL
+Java_org_citra_citra_1emu_NativeLibrary_GetSavestateInfo(JNIEnv* env, jclass clazz);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_SaveState(JNIEnv* env, jclass clazz,
+                                                                         jint slot);
+
+JNIEXPORT void JNICALL Java_org_citra_citra_1emu_NativeLibrary_LoadState(JNIEnv* env, jclass clazz,
+                                                                         jint slot);
+
 #ifdef __cplusplus
 }
 #endif
