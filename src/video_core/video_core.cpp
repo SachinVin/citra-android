@@ -104,6 +104,7 @@ u16 GetResolutionScaleFactor() {
 
 template <class Archive>
 void serialize(Archive& ar, const unsigned int) {
+    g_gpu->WaitForProcessing();
     ar& Pica::g_state;
 }
 

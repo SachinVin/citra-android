@@ -169,9 +169,14 @@ struct SynchState final {
         // commands_condition.wait(lock, [this] { return !queue.Empty(); });
     }
 
+    void WaitForProcessing() {
+        while (!queue.Empty() && is_running)
+            ;
+    }
+
     using CommandQueue = Common::SPSCQueue<CommandDataContainer>;
     CommandQueue queue;
-    u64 last_fence{};
+    std::atomic<u64> last_fence{};
     std::atomic<u64> signaled_fence{};
 };
 
@@ -194,6 +199,8 @@ public:
     void FlushAndInvalidateRegion(VAddr addr, u64 size);
 
     void InvalidateRegion(VAddr addr, u64 size);
+
+    void WaitForProcessing();
 
 private:
     void Synchronize(u64 fence, Settings::GpuTimingMode mode);

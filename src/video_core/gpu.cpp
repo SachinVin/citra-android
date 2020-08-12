@@ -13,6 +13,8 @@ GPUBackend::GPUBackend(VideoCore::RendererBase& renderer) : renderer{renderer} {
 
 GPUBackend::~GPUBackend() = default;
 
+void GPUBackend::WaitForProcessing() {}
+
 GPUSerial::GPUSerial(Core::System& system, VideoCore::RendererBase& renderer)
     : GPUBackend(renderer), system{system} {}
 
@@ -81,6 +83,10 @@ void GPUParallel::FlushAndInvalidateRegion(VAddr addr, u64 size) {
 
 void GPUParallel::InvalidateRegion(VAddr addr, u64 size) {
     gpu_thread.InvalidateRegion(addr, size);
+}
+
+void GPUParallel::WaitForProcessing() {
+    gpu_thread.WaitForProcessing();
 }
 
 } // namespace VideoCore

@@ -1212,6 +1212,10 @@ VideoCore::ResultStatus RendererOpenGL::Init() {
     }
 #endif
 
+    if (Settings::values.use_asynchronous_gpu_emulation) {
+        render_window.MakeCurrent();
+    }
+
     const char* gl_version{reinterpret_cast<char const*>(glGetString(GL_VERSION))};
     const char* gpu_vendor{reinterpret_cast<char const*>(glGetString(GL_VENDOR))};
     const char* gpu_model{reinterpret_cast<char const*>(glGetString(GL_RENDERER))};
