@@ -201,4 +201,14 @@
     <!-- Microphone -->
     <string name="microphone">Microphone</string>
     <string name="microphone_permission_needed">Citra needs to access your microphone to emulate the 3DS\'s microphone.\n\nAlternatively, you can also change \"Audio Input Device\" in Audio Settings.</string>
+
+    <!-- Core Errors -->
+    <string name="abort_button">Abort</string>
+    <string name="continue_button">Continue</string>
+    <string name="system_archive_not_found">System Archive Not Found</string>
+    <string name="system_archive_not_found_message">%s is missing. Please dump your system archives.\nContinuing emulation may result in crashes and bugs.</string>
+    <string name="system_archive_general">A system archive</string>
+    <string name="save_load_error">Save/Load Error</string>
+    <string name="fatal_error">Fatal Error</string>
+    <string name="fatal_error_message">A fatal error occurred. Check the log for details.\nContinuing emulation may result in crashes and bugs.</string>
 </resources>

@@ -211,6 +211,84 @@ public final class NativeLibrary {
      */
     public static native void SwapScreens(boolean swap_screens, int rotation);
 
+    public enum CoreError {
+        ErrorSystemFiles,
+        ErrorSavestate,
+        ErrorUnknown,
+    }
+
+    private static boolean coreErrorAlertResult = false;
+
+    /**
+     * Handles a core error.
+     * @return true: continue; false: abort
+     */
+    public static boolean OnCoreError(CoreError error, String details) {
+        final EmulationActivity emulationActivity = sEmulationActivity.get();
+        if (emulationActivity == null) {
+            Log.error("[NativeLibrary] EmulationActivity not present");
+            return false;
+        }
+
+        String title, message;
+        switch (error) {
+            case ErrorSystemFiles: {
+                title = emulationActivity.getString(R.string.system_archive_not_found);
+                message = emulationActivity.getString(R.string.system_archive_not_found_message, details.isEmpty() ? emulationActivity.getString(R.string.system_archive_general) : details);
+                break;
+            }
+            case ErrorSavestate: {
+                title = emulationActivity.getString(R.string.save_load_error);
+                message = details;
+                break;
+            }
+            case ErrorUnknown: {
+                title = emulationActivity.getString(R.string.fatal_error);
+                message = emulationActivity.getString(R.string.fatal_error_message);
+                break;
+            }
+            default: {
+                return true;
+            }
+        }
+
+        // Create object used for waiting.
+        final Object lock = new Object();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(emulationActivity)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.continue_button, (dialog, which) -> {
+                    coreErrorAlertResult = true;
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                })
+                .setNegativeButton(R.string.abort_button, (dialog, which) -> {
+                    coreErrorAlertResult = false;
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                }).setOnDismissListener(dialog -> {
+                    coreErrorAlertResult = true;
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                });
+
+        // Show the AlertDialog on the main thread.
+        emulationActivity.runOnUiThread(builder::show);
+
+        // Wait for the lock to notify that it is complete.
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (Exception ignored) {
+            }
+        }
+
+        return coreErrorAlertResult;
+    }
+
     public static boolean isPortraitMode() {
         return CitraApplication.getAppContext().getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT;
