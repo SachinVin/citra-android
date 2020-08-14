@@ -19,7 +19,9 @@ static constexpr jint JNI_VERSION = JNI_VERSION_1_6;
 static JavaVM* s_java_vm;
 
 static jclass s_native_library_class;
+static jclass s_core_error_class;
 static jclass s_savestate_info_class;
+static jmethodID s_on_core_error;
 static jmethodID s_display_alert_msg;
 static jmethodID s_display_alert_prompt;
 static jmethodID s_alert_prompt_button;
@@ -54,8 +56,16 @@ jclass GetNativeLibraryClass() {
     return s_native_library_class;
 }
 
+jclass GetCoreErrorClass() {
+    return s_core_error_class;
+}
+
 jclass GetSavestateInfoClass() {
     return s_savestate_info_class;
+}
+
+jmethodID GetOnCoreError() {
+    return s_on_core_error;
 }
 
 jmethodID GetDisplayAlertMsg() {
@@ -118,6 +128,11 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_native_library_class = reinterpret_cast<jclass>(env->NewGlobalRef(native_library_class));
     s_savestate_info_class = reinterpret_cast<jclass>(
         env->NewGlobalRef(env->FindClass("org/citra/citra_emu/NativeLibrary$SavestateInfo")));
+    s_core_error_class = reinterpret_cast<jclass>(
+        env->NewGlobalRef(env->FindClass("org/citra/citra_emu/NativeLibrary$CoreError")));
+    s_on_core_error = env->GetStaticMethodID(
+        s_native_library_class, "OnCoreError",
+        "(Lorg/citra/citra_emu/NativeLibrary$CoreError;Ljava/lang/String;)Z");
     s_display_alert_msg = env->GetStaticMethodID(s_native_library_class, "displayAlertMsg",
                                                  "(Ljava/lang/String;Ljava/lang/String;Z)Z");
     s_display_alert_prompt =
@@ -150,6 +165,7 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
 
     env->DeleteGlobalRef(s_native_library_class);
     env->DeleteGlobalRef(s_savestate_info_class);
+    env->DeleteGlobalRef(s_core_error_class);
     MiiSelector::CleanupJNI(env);
     SoftwareKeyboard::CleanupJNI(env);
     Camera::StillImage::CleanupJNI(env);

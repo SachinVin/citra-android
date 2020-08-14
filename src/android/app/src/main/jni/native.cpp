@@ -96,6 +96,29 @@ static int AlertPromptButton() {
                                                      IDCache::GetAlertPromptButton()));
 }
 
+static jobject ToJavaCoreError(Core::System::ResultStatus result) {
+    static const std::map<Core::System::ResultStatus, const char*> CoreErrorNameMap{
+        {Core::System::ResultStatus::ErrorSystemFiles, "ErrorSystemFiles"},
+        {Core::System::ResultStatus::ErrorSavestate, "ErrorSavestate"},
+        {Core::System::ResultStatus::ErrorUnknown, "ErrorUnknown"},
+    };
+
+    const auto name = CoreErrorNameMap.count(result) ? CoreErrorNameMap.at(result) : "ErrorUnknown";
+
+    JNIEnv* env = IDCache::GetEnvForThread();
+    const jclass core_error_class = IDCache::GetCoreErrorClass();
+    return env->GetStaticObjectField(
+        core_error_class, env->GetStaticFieldID(core_error_class, name,
+                                                "Lorg/citra/citra_emu/NativeLibrary$CoreError;"));
+}
+
+static bool HandleCoreError(Core::System::ResultStatus result, const std::string& details) {
+    JNIEnv* env = IDCache::GetEnvForThread();
+    return env->CallStaticBooleanMethod(IDCache::GetNativeLibraryClass(), IDCache::GetOnCoreError(),
+                                        ToJavaCoreError(result),
+                                        env->NewStringUTF(details.c_str())) != JNI_FALSE;
+}
+
 static Camera::NDK::Factory* g_ndk_factory{};
 
 static void TryShutdown() {
@@ -187,7 +210,20 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     // Start running emulation
     while (is_running) {
         if (!pause_emulation) {
-            system.RunLoop();
+            const auto result = system.RunLoop();
+            if (result == Core::System::ResultStatus::Success) {
+                continue;
+            }
+            if (result == Core::System::ResultStatus::ShutdownRequested) {
+                return result; // This also exits the emulation activity
+            } else {
+                InputManager::NDKMotionHandler()->DisableSensors();
+                if (!HandleCoreError(result, system.GetStatusDetails())) {
+                    // Frontend requests us to abort
+                    return result;
+                }
+                InputManager::NDKMotionHandler()->EnableSensors();
+            }
         } else {
             // Ensure no audio bleeds out while game is paused
             const float volume = Settings::values.volume;

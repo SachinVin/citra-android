@@ -12,7 +12,9 @@ namespace IDCache {
 
 JNIEnv* GetEnvForThread();
 jclass GetNativeLibraryClass();
+jclass GetCoreErrorClass();
 jclass GetSavestateInfoClass();
+jmethodID GetOnCoreError();
 jmethodID GetDisplayAlertMsg();
 jmethodID GetDisplayAlertPrompt();
 jmethodID GetAlertPromptButton();
