@@ -688,7 +688,6 @@ jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetSavestateInfo(
 
         env->SetObjectArrayElement(array, i, object);
     }
-    LOG_CRITICAL(Frontend, "Called");
     return array;
 }
 
