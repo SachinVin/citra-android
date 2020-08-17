@@ -13,7 +13,7 @@ workflows:
     - cache-pull@2: {}
     - script@1.1.5:
         title: Install newer cmake
-        run_if: '{{enveq "BITRISEIO_ANDROID_KEYSTORE_URL" "" | not | and enveq "BITRISE_GIT_BRANCH" "bitrise"}}'
+        run_if: '{{ if not(enveq "BITRISEIO_ANDROID_KEYSTORE_URL" "") }} false {{else}}{{enveq "BITRISE_GIT_BRANCH" "bitrise"}}{{end}}'
         inputs:
         - content: |-
             #!/bin/bash
