@@ -11,6 +11,14 @@ workflows:
   primary:
     steps:
     - cache-pull@2: {}
+    - script@1.1.5:
+        title: Install newer cmake
+        run_if: '{{enveq "BITRISEIO_ANDROID_KEYSTORE_URL" "" | not | and enveq "BITRISE_GIT_BRANCH" "bitrise"}}'
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            echo "hello!" 
     - install-missing-android-tools@2.3.3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
