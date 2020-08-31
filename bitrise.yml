@@ -7,8 +7,10 @@ trigger_map:
   workflow: primary
 - pull_request_source_branch: "*"
   workflow: primary
+- tag: "*"
+  workflow: deploy
 workflows:
-  primary:
+  deploy:
     steps:
     - cache-pull@2: {}
     - install-missing-android-tools@2.3.3:
@@ -29,7 +31,7 @@ workflows:
     - bitrise-step-export-universal-apk@0:
         run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
     - github-release@0:
-        run_if: '{{getenv "BITRISE_GIT_TAG" | ne ""}}'
+        run_if: '{{getenv "GITHUB_API_TOKEN" | ne ""}}'
         inputs:
         - api_token: "$GITHUB_API_TOKEN"
         - name: "$BITRISE_GIT_TAG"
@@ -38,6 +40,26 @@ workflows:
             $BITRISE_AAB_PATH
             $BITRISE_APK_PATH
         - username: "$BITRISEIO_GIT_REPOSITORY_OWNER"
+    - deploy-to-bitrise-io@1.3.18: 
+        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
+    - cache-push@2: {}
+    
+  primary:
+    steps:
+    - cache-pull@2: {}
+    - install-missing-android-tools@2.3.3:
+        inputs:
+        - gradlew_path: "$PROJECT_LOCATION/gradlew"
+    - android-lint@0:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - module: "$MODULE"
+        - variant: "$BUILD_VARIANT"
+    - android-build@0:
+        inputs:
+        - variant: "$BUILD_VARIANT"
+        - project_location: "$PROJECT_LOCATION"
+        - build_type: aab
     - cache-push@2: {}
 app:
   envs:
