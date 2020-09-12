@@ -11,6 +11,7 @@
 #include "common/common_types.h"
 #include "core/frontend/camera/factory.h"
 #include "core/frontend/camera/interface.h"
+#include "core/hle/service/cam/cam.h"
 
 namespace Camera::NDK {
 
