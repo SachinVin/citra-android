@@ -91,6 +91,12 @@ udp_pad_index=
 # 0: Interpreter (slow), 1 (default): JIT (fast)
 use_cpu_jit =
 
+# Change the Clock Frequency of the emulated 3DS CPU.
+# Underclocking can increase the performance of the game at the risk of freezing.
+# Overclocking may fix lag that happens on console, but also comes with the risk of freezing.
+# Range is any positive integer (but we suspect 25 - 400 is a good idea) Default is 100
+cpu_clock_percentage =
+
 [Renderer]
 # Whether to render using GLES or OpenGL
 # 0: OpenGL, 1 (default): GLES
@@ -104,6 +110,10 @@ use_hw_renderer =
 # 0: Software, 1 (default): Hardware
 use_hw_shader =
 
+# Whether to use separable shaders to emulate 3DS shaders (macOS only)
+# 0: Off (Default), 1 : On
+separable_shader =
+
 # Whether to use accurate multiplication in hardware shaders
 # 0: Off (Default. Faster, but causes issues in some games) 1: On (Slower, but correct)
 shaders_accurate_mul =
@@ -116,22 +126,35 @@ use_asynchronous_gpu_emulation =
 # 0: Interpreter (slow), 1 (default): JIT (fast)
 use_shader_jit =
 
+# Forces VSync on the display thread. Usually doesn't impact performance, but on some drivers it can
+# so only turn this off if you notice a speed difference.
+# 0: Off, 1 (default): On
+use_vsync_new =
+
+# Reduce stuttering by storing and loading generated shaders to disk
+# 0: Off, 1 (default. On)
+use_disk_shader_cache =
+
 # Resolution scale factor
 # 0: Auto (scales resolution to window size), 1: Native 3DS screen resolution, Otherwise a scale
 # factor for the 3DS resolution
 resolution_factor =
 
-# Whether to enable V-Sync (caps the framerate at 60FPS) or not.
-# 0 (default): Off, 1: On
-vsync_enabled =
+# Texture filter name
+texture_filter_name =
 
-# Turns on the frame limiter, which will limit frames output to the target game speed
-# 0: Off, 1: On (default)
-use_frame_limit =
-
-# Limits the speed of the game to run no faster than this value as a percentage of target speed
-# 1 - 9999: Speed limit as a percentage of target game speed. 100 (default)
+# Limits the speed of the game to run no faster than this value as a percentage of target speed.
+# Will not have an effect if unthrottled is enabled.
+# 5 - 995: Speed limit as a percentage of target game speed. 0 for unthrottled. 100 (default)
 frame_limit =
+
+# Overrides the frame limiter to use frame_limit_alternate instead of frame_limit.
+# 0: Off (default), 1: On
+use_frame_limit_alternate =
+
+# Alternate speed limit to be used instead of frame_limit if use_frame_limit_alternate is enabled
+# 5 - 995: Speed limit as a percentage of target game speed. 0 for unthrottled. 200 (default)
+frame_limit_alternate =
 
 # The clear color for the renderer. What shows up on the sides of the bottom screen.
 # Must be in range of 0.0-1.0. Defaults to 0.0 for all.
@@ -189,6 +212,22 @@ cardboard_screen_size =
 cardboard_x_shift =
 # -100 - 100: Screen Y-Coordinate shift as a percentage of empty space. 0 (default)
 cardboard_y_shift =
+
+# Toggle upright orientation, for book style games.
+# 0 (default): Off, 1: On
+upright_screen =
+
+# Dumps textures as PNG to dump/textures/[Title ID]/.
+# 0 (default): Off, 1: On
+dump_textures =
+
+# Reads PNG files from load/textures/[Title ID]/ and replaces textures.
+# 0 (default): Off, 1: On
+custom_textures =
+
+# Loads all custom textures into memory before booting.
+# 0 (default): Off, 1: On
+preload_textures =
 
 [Audio]
 # Whether or not to enable DSP LLE
@@ -300,5 +339,31 @@ web_api_url = https://api.citra-emu.org
 # See https://profile.citra-emu.org/ for more info
 citra_username =
 citra_token =
+
+[Video Dumping]
+# Format of the video to output, default: webm
+output_format =
+
+# Options passed to the muxer (optional)
+# This is a param package, format: [key1]:[value1],[key2]:[value2],...
+format_options =
+
+# Video encoder used, default: libvpx-vp9
+video_encoder =
+
+# Options passed to the video codec (optional)
+video_encoder_options =
+
+# Video bitrate, default: 2500000
+video_bitrate =
+
+# Audio encoder used, default: libvorbis
+audio_encoder =
+
+# Options passed to the audio codec (optional)
+audio_encoder_options =
+
+# Audio bitrate, default: 64000
+audio_bitrate =
 )";
 }

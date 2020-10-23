@@ -12,6 +12,7 @@
 #include "common/logging/log.h"
 #include "common/param_package.h"
 #include "core/core.h"
+#include "core/frontend/mic.h"
 #include "core/hle/service/cfg/cfg.h"
 #include "core/hle/service/service.h"
 #include "core/settings.h"
@@ -123,7 +124,6 @@ void Config::ReadValues() {
     Settings::values.use_shader_jit = sdl2_config->GetBoolean("Renderer", "use_shader_jit", true);
     Settings::values.resolution_factor =
         static_cast<u16>(sdl2_config->GetInteger("Renderer", "resolution_factor", 1));
-    Settings::values.use_vsync_new = sdl2_config->GetBoolean("Renderer", "use_vsync_new", true);
 
     // Work around to map Android setting for enabling the frame limiter to the format Citra expects
     if (sdl2_config->GetBoolean("Renderer", "use_frame_limit", true)) {
@@ -132,6 +132,16 @@ void Config::ReadValues() {
     } else {
         Settings::values.frame_limit = 0;
     }
+    Settings::values.use_disk_shader_cache =
+        sdl2_config->GetBoolean("Renderer", "use_disk_shader_cache", true);
+    Settings::values.frame_limit =
+        static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit", 100));
+    Settings::values.use_frame_limit_alternate =
+        sdl2_config->GetBoolean("Renderer", "use_frame_limit_alternate", false);
+    Settings::values.frame_limit_alternate =
+        static_cast<u16>(sdl2_config->GetInteger("Renderer", "frame_limit_alternate", 200));
+    Settings::values.use_vsync_new =
+        static_cast<u16>(sdl2_config->GetInteger("Renderer", "use_vsync_new", 1));
 
     Settings::values.render_3d = static_cast<Settings::StereoRenderOption>(
         sdl2_config->GetInteger("Renderer", "render_3d", 0));
@@ -143,7 +153,7 @@ void Config::ReadValues() {
     else if (Settings::values.render_3d == Settings::StereoRenderOption::Interlaced)
         default_shader = "horizontal (builtin)";
     Settings::values.pp_shader_name =
-            sdl2_config->GetString("Renderer", "pp_shader_name", default_shader);
+        sdl2_config->GetString("Renderer", "pp_shader_name", default_shader);
     Settings::values.filter_mode = sdl2_config->GetBoolean("Renderer", "filter_mode", true);
 
     Settings::values.bg_red = static_cast<float>(sdl2_config->GetReal("Renderer", "bg_red", 0.0));
@@ -154,6 +164,8 @@ void Config::ReadValues() {
     // Layout
     Settings::values.layout_option = static_cast<Settings::LayoutOption>(sdl2_config->GetInteger(
         "Layout", "layout_option", static_cast<int>(Settings::LayoutOption::MobileLandscape)));
+    Settings::values.swap_screen = sdl2_config->GetBoolean("Layout", "swap_screen", false);
+    Settings::values.upright_screen = sdl2_config->GetBoolean("Layout", "upright_screen", false);
     Settings::values.custom_layout = sdl2_config->GetBoolean("Layout", "custom_layout", false);
     Settings::values.custom_top_left =
         static_cast<u16>(sdl2_config->GetInteger("Layout", "custom_top_left", 0));
@@ -178,6 +190,12 @@ void Config::ReadValues() {
     Settings::values.cardboard_y_shift =
             static_cast<int>(sdl2_config->GetInteger("Layout", "cardboard_y_shift", 0));
 
+    // Utility
+    Settings::values.dump_textures = sdl2_config->GetBoolean("Utility", "dump_textures", false);
+    Settings::values.custom_textures = sdl2_config->GetBoolean("Utility", "custom_textures", false);
+    Settings::values.preload_textures =
+        sdl2_config->GetBoolean("Utility", "preload_textures", false);
+
     // Audio
     Settings::values.enable_dsp_lle = sdl2_config->GetBoolean("Audio", "enable_dsp_lle", false);
     Settings::values.enable_dsp_lle_multithread =
@@ -188,7 +206,7 @@ void Config::ReadValues() {
     Settings::values.audio_device_id = sdl2_config->GetString("Audio", "output_device", "auto");
     Settings::values.volume = static_cast<float>(sdl2_config->GetReal("Audio", "volume", 1));
     Settings::values.mic_input_device =
-        sdl2_config->GetString("Audio", "mic_input_device", "Default");
+        sdl2_config->GetString("Audio", "mic_input_device", Frontend::Mic::default_device_name);
     Settings::values.mic_input_type =
         static_cast<Settings::MicInputType>(sdl2_config->GetInteger("Audio", "mic_input_type", 1));
 
@@ -266,6 +284,33 @@ void Config::ReadValues() {
         sdl2_config->GetString("WebService", "web_api_url", "https://api.citra-emu.org");
     Settings::values.citra_username = sdl2_config->GetString("WebService", "citra_username", "");
     Settings::values.citra_token = sdl2_config->GetString("WebService", "citra_token", "");
+
+    // Video Dumping
+    Settings::values.output_format =
+        sdl2_config->GetString("Video Dumping", "output_format", "webm");
+    Settings::values.format_options = sdl2_config->GetString("Video Dumping", "format_options", "");
+
+    Settings::values.video_encoder =
+        sdl2_config->GetString("Video Dumping", "video_encoder", "libvpx-vp9");
+
+    // Options for variable bit rate live streaming taken from here:
+    // https://developers.google.com/media/vp9/live-encoding
+    std::string default_video_options;
+    if (Settings::values.video_encoder == "libvpx-vp9") {
+        default_video_options =
+            "quality:realtime,speed:6,tile-columns:4,frame-parallel:1,threads:8,row-mt:1";
+    }
+    Settings::values.video_encoder_options =
+        sdl2_config->GetString("Video Dumping", "video_encoder_options", default_video_options);
+    Settings::values.video_bitrate =
+        sdl2_config->GetInteger("Video Dumping", "video_bitrate", 2500000);
+
+    Settings::values.audio_encoder =
+        sdl2_config->GetString("Video Dumping", "audio_encoder", "libvorbis");
+    Settings::values.audio_encoder_options =
+        sdl2_config->GetString("Video Dumping", "audio_encoder_options", "");
+    Settings::values.audio_bitrate =
+        sdl2_config->GetInteger("Video Dumping", "audio_bitrate", 64000);
 
     // Update CFG file based on settings
     UpdateCFG();
