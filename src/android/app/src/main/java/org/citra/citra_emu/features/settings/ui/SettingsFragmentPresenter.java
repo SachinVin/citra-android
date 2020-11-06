@@ -188,15 +188,18 @@ public final class SettingsFragmentPresenter {
         mView.getActivity().setTitle(R.string.preferences_system);
 
         SettingSection systemSection = mSettings.getSection(Settings.SECTION_SYSTEM);
+        SettingSection coreSection = mSettings.getSection(Settings.SECTION_CORE);
         Setting region = systemSection.getSetting(SettingsFile.KEY_REGION_VALUE);
         Setting language = systemSection.getSetting(SettingsFile.KEY_LANGUAGE);
         Setting systemClock = systemSection.getSetting(SettingsFile.KEY_INIT_CLOCK);
         Setting dateTime = systemSection.getSetting(SettingsFile.KEY_INIT_TIME);
+        Setting cpuClockPercentage = coreSection.getSetting(SettingsFile.KEY_CPU_CLOCK_PERCENTAGE);
 
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_REGION_VALUE, Settings.SECTION_SYSTEM, R.string.emulated_region, 0, R.array.regionNames, R.array.regionValues, -1, region));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_LANGUAGE, Settings.SECTION_SYSTEM, R.string.emulated_language, 0, R.array.languageNames, R.array.languageValues, 1, language));
         sl.add(new SingleChoiceSetting(SettingsFile.KEY_INIT_CLOCK, Settings.SECTION_SYSTEM, R.string.init_clock, R.string.init_clock_description, R.array.systemClockNames, R.array.systemClockValues, 0, systemClock));
         sl.add(new DateTimeSetting(SettingsFile.KEY_INIT_TIME, Settings.SECTION_SYSTEM, R.string.init_time, R.string.init_time_description, "2000-01-01 00:00:01", dateTime));
+        sl.add(new SliderSetting(SettingsFile.KEY_CPU_CLOCK_PERCENTAGE, Settings.SECTION_CORE, R.string.cpu_clock_percentage, R.string.cpu_clock_percentage_description, 0, 200, "%", 100, cpuClockPercentage));
     }
 
     private void addCameraSettings(ArrayList<SettingsItem> sl) {

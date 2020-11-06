@@ -45,6 +45,8 @@
     <string name="cpu_jit_description">Uses the Just-in-Time (JIT) compiler for CPU emulation. When enabled, game performance will be significantly improved.</string>
     <string name="init_clock">System clock type</string>
     <string name="init_clock_description">Set the emulated 3DS clock to either reflect that of your device or start at a simulated date and time.</string>
+    <string name="cpu_clock_percentage">Emulated CPU clock</string>
+    <string name="cpu_clock_percentage_description">Change the Clock Frequency of the emulated 3DS CPU.\nUnderclocking can increase the performance of the game at the risk of freezing.\nOverclocking may fix lag that happens on console, but also comes with the risk of freezing.</string>
 
     <!-- System settings strings -->
     <string name="init_time">System clock starting time override</string>

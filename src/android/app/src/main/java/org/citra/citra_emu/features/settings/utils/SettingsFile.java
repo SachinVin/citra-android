@@ -34,6 +34,7 @@ public final class SettingsFile {
     public static final String FILE_NAME_CONFIG = "config";
 
     public static final String KEY_CPU_JIT = "use_cpu_jit";
+    public static final String KEY_CPU_CLOCK_PERCENTAGE = "cpu_clock_percentage";
 
     public static final String KEY_DESIGN = "design";
 
@@ -47,6 +48,8 @@ public final class SettingsFile {
     public static final String KEY_RESOLUTION_FACTOR = "resolution_factor";
     public static final String KEY_FRAME_LIMIT_ENABLED = "use_frame_limit";
     public static final String KEY_FRAME_LIMIT = "frame_limit";
+    public static final String KEY_USE_FRAME_LIMIT_ALTERNATE = "use_frame_limit_alternate";
+    public static final String KEY_FRAME_LIMIT_ALTERNATE = "frame_limit_alternate";
     public static final String KEY_BACKGROUND_RED = "bg_red";
     public static final String KEY_BACKGROUND_BLUE = "bg_blue";
     public static final String KEY_BACKGROUND_GREEN = "bg_green";
@@ -56,6 +59,7 @@ public final class SettingsFile {
     public static final String KEY_FILTER_MODE = "filter_mode";
     public static final String KEY_TEXTURE_FILTER_NAME = "texture_filter_name";
     public static final String KEY_USE_ASYNCHRONOUS_GPU_EMULATION = "use_asynchronous_gpu_emulation";
+    public static final String KEY_CUSTOM_TEXTURES = "custom_textures";
 
     public static final String KEY_LAYOUT_OPTION = "layout_option";
     public static final String KEY_SWAP_SCREEN = "swap_screen";
