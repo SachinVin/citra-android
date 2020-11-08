@@ -205,6 +205,7 @@ swap_screen =
 # 0 (default): Off, 1: On
 upright_screen =
 
+[Utility]
 # Dumps textures as PNG to dump/textures/[Title ID]/.
 # 0 (default): Off, 1: On
 dump_textures =
