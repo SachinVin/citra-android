@@ -44,7 +44,7 @@ void FrameDumperOpenGL::PresentLoop() {
 
     const auto& layout = GetLayout();
     while (!stop_requested.exchange(false)) {
-        auto frame = mailbox->TryGetPresentFrame();
+        auto frame = mailbox->TryGetPresentFrame(200);
         if (!frame) {
             continue;
         }
