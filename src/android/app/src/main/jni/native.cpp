@@ -333,6 +333,7 @@ jobjectArray Java_org_citra_citra_1emu_NativeLibrary_GetInstalledGamePaths(
     return jgames;
 }
 
+// TODO(xperia64): ensure these cannot be called in an invalid state (e.g. after StopEmulation)
 void Java_org_citra_citra_1emu_NativeLibrary_UnPauseEmulation(JNIEnv* env,
                                                               [[maybe_unused]] jclass clazz) {
     pause_emulation = false;

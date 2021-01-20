@@ -229,9 +229,9 @@ public final class EmulationActivity extends AppCompatActivity {
                     finish();
                 })
                 .setNegativeButton(android.R.string.cancel, (dialogInterface, i) ->
-                {
-                }).setOnDismissListener(dialogInterface ->
-                NativeLibrary.UnPauseEmulation())
+                    NativeLibrary.UnPauseEmulation())
+                .setOnCancelListener(dialogInterface ->
+                    NativeLibrary.UnPauseEmulation())
                 .create()
                 .show();
     }
