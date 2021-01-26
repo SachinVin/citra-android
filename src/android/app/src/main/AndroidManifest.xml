@@ -28,7 +28,8 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:isGame="true"
-        android:banner="@mipmap/ic_launcher">
+        android:banner="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
 
         <activity
             android:name="org.citra.citra_emu.ui.main.MainActivity"
