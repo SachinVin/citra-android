@@ -119,40 +119,12 @@ static bool HandleCoreError(Core::System::ResultStatus result, const std::string
                                         env->NewStringUTF(details.c_str())) != JNI_FALSE;
 }
 
-static jobject ToJavaLoadCallbackStage(VideoCore::LoadCallbackStage stage) {
-    const char* name;
-    switch (stage) {
-    case VideoCore::LoadCallbackStage::Prepare:
-        name = "Prepare";
-        break;
-    case VideoCore::LoadCallbackStage::Decompile:
-        name = "Decompile";
-        break;
-    case VideoCore::LoadCallbackStage::Build:
-        name = "Build";
-        break;
-    case VideoCore::LoadCallbackStage::Complete:
-        name = "Complete";
-        break;
-    default:
-        UNREACHABLE();
-    }
-
-    JNIEnv* env = IDCache::GetEnvForThread();
-
-    jclass load_callback_stage_class = IDCache::GetDiskCacheLoadCallbackStageClass();
-    return env->GetStaticObjectField(
-        load_callback_stage_class,
-        env->GetStaticFieldID(
-            load_callback_stage_class, name,
-            "Lorg/citra/citra_emu/disk_shader_cache/DiskShaderCacheProgress$LoadCallbackStage;"));
-}
-
 static void LoadDiskCacheProgress(VideoCore::LoadCallbackStage stage, int progress, int max) {
     JNIEnv* env = IDCache::GetEnvForThread();
     env->CallStaticVoidMethod(IDCache::GetDiskCacheProgressClass(),
-                              IDCache::GetDiskCacheLoadProgress(), ToJavaLoadCallbackStage(stage),
-                              (jint)progress, (jint)max);
+                              IDCache::GetDiskCacheLoadProgress(),
+                              IDCache::GetJavaLoadCallbackStage(stage), static_cast<jint>(progress),
+                              static_cast<jint>(max));
 }
 
 static Camera::NDK::Factory* g_ndk_factory{};

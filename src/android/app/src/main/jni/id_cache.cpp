@@ -34,6 +34,8 @@ static jmethodID s_request_camera_permission;
 static jmethodID s_request_mic_permission;
 static jmethodID s_disk_cache_load_progress;
 
+static std::map<VideoCore::LoadCallbackStage, jobject> s_java_load_callback_stages;
+
 namespace IDCache {
 
 JNIEnv* GetEnvForThread() {
@@ -115,6 +117,13 @@ jmethodID GetDiskCacheLoadProgress() {
     return s_disk_cache_load_progress;
 }
 
+jobject GetJavaLoadCallbackStage(VideoCore::LoadCallbackStage stage) {
+    const auto it = s_java_load_callback_stages.find(stage);
+    ASSERT_MSG(it != s_java_load_callback_stages.end(), "Invalid LoadCallbackStage: {}", stage);
+
+    return it->second;
+}
+
 } // namespace IDCache
 
 #ifdef __cplusplus
@@ -138,7 +147,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         FileUtil::GetUserPath(FileUtil::UserPath::LogDir) + LOG_FILE));
     LOG_INFO(Frontend, "Logging backend initialised");
 
-    // Initialize Java methods
+    // Initialize Java classes
     const jclass native_library_class = env->FindClass("org/citra/citra_emu/NativeLibrary");
     s_native_library_class = reinterpret_cast<jclass>(env->NewGlobalRef(native_library_class));
     s_savestate_info_class = reinterpret_cast<jclass>(
@@ -150,6 +159,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     s_load_callback_stage_class = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass(
         "org/citra/citra_emu/disk_shader_cache/DiskShaderCacheProgress$LoadCallbackStage")));
 
+    // Initialize Java methods
     s_on_core_error = env->GetStaticMethodID(
         s_native_library_class, "OnCoreError",
         "(Lorg/citra/citra_emu/NativeLibrary$CoreError;Ljava/lang/String;)Z");
@@ -173,6 +183,25 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         s_disk_cache_progress_class, "loadProgress",
         "(Lorg/citra/citra_emu/disk_shader_cache/DiskShaderCacheProgress$LoadCallbackStage;II)V");
 
+    // Initialize LoadCallbackStage map
+    const auto to_java_load_callback_stage = [env](const std::string& stage) {
+        jclass load_callback_stage_class = IDCache::GetDiskCacheLoadCallbackStageClass();
+        return env->NewGlobalRef(env->GetStaticObjectField(
+            load_callback_stage_class,
+            env->GetStaticFieldID(load_callback_stage_class, stage.c_str(),
+                                  "Lorg/citra/citra_emu/disk_shader_cache/"
+                                  "DiskShaderCacheProgress$LoadCallbackStage;")));
+    };
+
+    s_java_load_callback_stages.insert(
+        {VideoCore::LoadCallbackStage::Prepare, to_java_load_callback_stage("Prepare")});
+    s_java_load_callback_stages.insert(
+        {VideoCore::LoadCallbackStage::Decompile, to_java_load_callback_stage("Decompile")});
+    s_java_load_callback_stages.insert(
+        {VideoCore::LoadCallbackStage::Build, to_java_load_callback_stage("Build")});
+    s_java_load_callback_stages.insert(
+        {VideoCore::LoadCallbackStage::Complete, to_java_load_callback_stage("Complete")});
+
     MiiSelector::InitJNI(env);
     SoftwareKeyboard::InitJNI(env);
     Camera::StillImage::InitJNI(env);
@@ -189,6 +218,13 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
     env->DeleteGlobalRef(s_native_library_class);
     env->DeleteGlobalRef(s_savestate_info_class);
     env->DeleteGlobalRef(s_core_error_class);
+    env->DeleteGlobalRef(s_disk_cache_progress_class);
+    env->DeleteGlobalRef(s_load_callback_stage_class);
+
+    for (auto it : s_java_load_callback_stages) {
+        env->DeleteGlobalRef(it.second);
+    }
+
     MiiSelector::CleanupJNI(env);
     SoftwareKeyboard::CleanupJNI(env);
     Camera::StillImage::CleanupJNI(env);

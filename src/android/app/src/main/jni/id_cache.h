@@ -7,6 +7,7 @@
 #include <memory>
 #include <type_traits>
 #include <jni.h>
+#include "video_core/rasterizer_interface.h"
 
 namespace IDCache {
 
@@ -26,6 +27,8 @@ jmethodID GetExitEmulationActivity();
 jmethodID GetRequestCameraPermission();
 jmethodID GetRequestMicPermission();
 jmethodID GetDiskCacheLoadProgress();
+
+jobject GetJavaLoadCallbackStage(VideoCore::LoadCallbackStage stage);
 
 } // namespace IDCache
 
