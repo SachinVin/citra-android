@@ -193,14 +193,14 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
                                   "DiskShaderCacheProgress$LoadCallbackStage;")));
     };
 
-    s_java_load_callback_stages.insert(
-        {VideoCore::LoadCallbackStage::Prepare, to_java_load_callback_stage("Prepare")});
-    s_java_load_callback_stages.insert(
-        {VideoCore::LoadCallbackStage::Decompile, to_java_load_callback_stage("Decompile")});
-    s_java_load_callback_stages.insert(
-        {VideoCore::LoadCallbackStage::Build, to_java_load_callback_stage("Build")});
-    s_java_load_callback_stages.insert(
-        {VideoCore::LoadCallbackStage::Complete, to_java_load_callback_stage("Complete")});
+    s_java_load_callback_stages.emplace(VideoCore::LoadCallbackStage::Prepare,
+                                        to_java_load_callback_stage("Prepare"));
+    s_java_load_callback_stages.emplace(VideoCore::LoadCallbackStage::Decompile,
+                                        to_java_load_callback_stage("Decompile"));
+    s_java_load_callback_stages.emplace(VideoCore::LoadCallbackStage::Build,
+                                        to_java_load_callback_stage("Build"));
+    s_java_load_callback_stages.emplace(VideoCore::LoadCallbackStage::Complete,
+                                        to_java_load_callback_stage("Complete"));
 
     MiiSelector::InitJNI(env);
     SoftwareKeyboard::InitJNI(env);
