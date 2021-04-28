@@ -221,8 +221,8 @@ void JNI_OnUnload(JavaVM* vm, void* reserved) {
     env->DeleteGlobalRef(s_disk_cache_progress_class);
     env->DeleteGlobalRef(s_load_callback_stage_class);
 
-    for (auto it : s_java_load_callback_stages) {
-        env->DeleteGlobalRef(it.second);
+    for (auto& [key, object] : s_java_load_callback_stages) {
+        env->DeleteGlobalRef(object);
     }
 
     MiiSelector::CleanupJNI(env);
