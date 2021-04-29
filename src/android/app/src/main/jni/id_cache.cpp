@@ -34,7 +34,7 @@ static jmethodID s_request_camera_permission;
 static jmethodID s_request_mic_permission;
 static jmethodID s_disk_cache_load_progress;
 
-static std::map<VideoCore::LoadCallbackStage, jobject> s_java_load_callback_stages;
+static std::unordered_map<VideoCore::LoadCallbackStage, jobject> s_java_load_callback_stages;
 
 namespace IDCache {
 
