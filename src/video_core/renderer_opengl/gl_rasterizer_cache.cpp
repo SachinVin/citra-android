@@ -843,14 +843,6 @@ void CachedSurface::DownloadGLTexture(const Common::Rectangle<u32>& rect, GLuint
         return;
     }
 
-    if (GLES) {
-        if (type == SurfaceType::Depth || type == SurfaceType::DepthStencil) {
-            // TODO(bunnei): This is unsupported on GLES right now, fixme
-            LOG_WARNING(Render_OpenGL, "Unsupported depth/stencil surface download");
-            return;
-        }
-    }
-
     MICROPROFILE_SCOPE(OpenGL_TextureDL);
 
     if (gl_buffer.empty()) {
